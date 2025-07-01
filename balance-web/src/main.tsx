@@ -9,6 +9,10 @@ import AdminLayout from './pages/management/_layout.tsx'
 import MembersLayout from './pages/members/_layout.tsx'
 import DashBoard from './pages/management/dashboard.tsx'
 import MemberManagement from './pages/management/member-management.tsx'
+import MemberHome from './pages/members/member-home.tsx'
+import LedgerManagement from './pages/members/ledger-management.tsx'
+import LedgerEntryManagement from './pages/members/ledger-entry-management.tsx'
+import BalanceManagement from './pages/members/balance-management.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -26,7 +30,10 @@ createRoot(document.getElementById('root')!).render(
         </Route>
 
         <Route path='/member' element={<MembersLayout />}>
-        
+          <Route index element={<MemberHome />} />
+          <Route path='ledger' element={<LedgerManagement />} />
+          <Route path='entry/:type' element={<LedgerEntryManagement />} />
+          <Route path='balance' element={<BalanceManagement />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,0 +1,1 @@
+export type LedgerType = 'Debit' | 'Credit'
