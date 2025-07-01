@@ -1,10 +1,34 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.tsx'
+import { BrowserRouter, Route, Routes } from 'react-router'
+import AnonymousLayout from './pages/anonymous/_layout.tsx'
+import SignIn from './pages/anonymous/signin.tsx'
+import SignUp from './pages/anonymous/signup.tsx'
+import AdminLayout from './pages/management/_layout.tsx'
+import MembersLayout from './pages/members/_layout.tsx'
+import DashBoard from './pages/management/dashboard.tsx'
+import MemberManagement from './pages/management/member-management.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<AnonymousLayout />}>
+          <Route index element={<SignIn />} />
+          <Route path='signin' element={<SignIn />} />
+          <Route path='signup' element={<SignUp />} />
+        </Route>
+
+        <Route path='/admin' element={<AdminLayout />}>
+          <Route index element={<DashBoard />} />
+          <Route path='members' element={<MemberManagement />} />
+        </Route>
+
+        <Route path='/member' element={<MembersLayout />}>
+        
+        </Route>
+      </Routes>
+    </BrowserRouter>
   </StrictMode>,
 )
