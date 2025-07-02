@@ -3,7 +3,11 @@ export interface SignInForm {
     password : string
 }
 
-export interface SignInResult {
+export type SignUpForm = SignInForm & {
+    name : string
+}
+
+export interface AuthResult {
     email : string
     name : string
     role : 'Admin' | 'Member'
