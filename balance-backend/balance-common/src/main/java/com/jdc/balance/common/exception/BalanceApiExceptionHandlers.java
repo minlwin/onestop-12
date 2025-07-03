@@ -3,6 +3,10 @@ package com.jdc.balance.common.exception;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -40,5 +44,25 @@ public class BalanceApiExceptionHandlers {
 	@ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE)
 	ErrorResponse handle(ApiBusinessException e) {
 		return new ErrorResponse(List.of(e.getFiledError()));
+	}
+	
+	@ExceptionHandler
+	@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+	ErrorResponse handle(AuthenticationException e) {
+		return new ErrorResponse(List.of(ErrorMessage.withMessage(
+			switch(e) {
+			case UsernameNotFoundException une -> "Please check your login id.";
+			case BadCredentialsException bce -> "Please check your password.";
+			case AccountExpiredException ace -> "Your account is expired. Please renew your subscription.";
+			default -> "Authentication failure. Please check your login information.";
+			}
+		)));
+	}
+	
+	@ExceptionHandler
+	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+	ErrorResponse handle(Exception e) {
+		e.printStackTrace();
+		return new ErrorResponse(List.of(ErrorMessage.withMessage(e.getMessage())));
 	}
 }

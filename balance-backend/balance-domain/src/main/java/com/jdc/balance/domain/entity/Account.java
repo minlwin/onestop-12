@@ -1,6 +1,6 @@
 package com.jdc.balance.domain.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,8 +20,7 @@ public class Account {
 	@Column(nullable = false)
 	private Role role;
 	
-	private boolean expired;
-	private LocalDateTime expiredAt;
+	private LocalDate expiredAt;
 	
 	public enum Role {
 		Admin, Member
