@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jdc.balance.api.anonymous.input.SignUpForm;
 import com.jdc.balance.api.anonymous.output.AuthResult;
-import com.jdc.balance.common.security.JwtTokenProvider;
+import com.jdc.balance.common.security.token.JwtTokenProvider;
 import com.jdc.balance.service.SignUpService;
 
 import lombok.RequiredArgsConstructor;

@@ -10,8 +10,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 
 import com.jdc.balance.common.security.AppUserDetailsService;
+import com.jdc.balance.common.security.SecurityExceptionHandler;
+import com.jdc.balance.common.security.token.JwtTokenFilter;
 
 @Configuration
 public class BalanceApiSecurityConfig {
@@ -28,6 +31,13 @@ public class BalanceApiSecurityConfig {
 			request.requestMatchers("/management/**").hasAuthority("Admin");
 			request.requestMatchers("/member/**").hasAuthority("Member");
 			request.anyRequest().authenticated();
+		});
+		
+		http.addFilterAfter(jwtTokenFilter(), ExceptionTranslationFilter.class);
+		
+		http.exceptionHandling(exception -> {
+			exception.authenticationEntryPoint(securityExceptionHandler());
+			exception.accessDeniedHandler(securityExceptionHandler());
 		});
 		
 		return http.build();
@@ -49,5 +59,15 @@ public class BalanceApiSecurityConfig {
 		provider.setPasswordEncoder(passwordEncoder());
 		provider.setHideUserNotFoundExceptions(false);
 		return provider;
+	}
+	
+	@Bean
+	JwtTokenFilter jwtTokenFilter() {
+		return new JwtTokenFilter();
+	}
+	
+	@Bean
+	SecurityExceptionHandler securityExceptionHandler() {
+		return new SecurityExceptionHandler();
 	}
 }
