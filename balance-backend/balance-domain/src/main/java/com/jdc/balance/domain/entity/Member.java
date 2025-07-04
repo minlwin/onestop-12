@@ -29,4 +29,7 @@ public class Member extends AuditableEntity{
 	private String phone;
 	private String profileImage;
 	private String address;
+	
+	@OneToOne(optional = false)
+	private SubscriptionPlan plan;
 }
