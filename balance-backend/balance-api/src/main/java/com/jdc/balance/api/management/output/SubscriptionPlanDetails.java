@@ -1,5 +1,7 @@
 package com.jdc.balance.api.management.output;
 
+import com.jdc.balance.domain.entity.SubscriptionPlan;
+
 public record SubscriptionPlanDetails(
 		int id,
 		String name,
@@ -10,5 +12,19 @@ public record SubscriptionPlanDetails(
 		Integer monthlyEntry,
 		boolean defaultPaln,
 		boolean active) {
+
+	public static SubscriptionPlanDetails from(SubscriptionPlan entity) {
+		return new SubscriptionPlanDetails(
+			entity.getId(),
+			entity.getName(),
+			entity.getMonths(),
+			entity.getFees(),
+			entity.getMaxLedgers(),
+			entity.getDailyEntry(),
+			entity.getMonthlyEntry(),
+			entity.isDefaultPaln(),
+			entity.isActive()
+		);
+	}
 
 }
