@@ -33,7 +33,7 @@ public class TokenManagementApi {
 	}
 
 	@PostMapping("refresh")
-	AuthResult refresh(@RequestBody TokenRefreshForm form) {
+	AuthResult refresh(@Validated @RequestBody TokenRefreshForm form) {
 		var authentication = tokenProvider.parseRefreshToken(form.token());
 		return getResult(authentication);
 	}

@@ -30,6 +30,6 @@ public class Member extends AuditableEntity{
 	private String profileImage;
 	private String address;
 	
-	@OneToOne(optional = false)
+	@OneToOne
 	private SubscriptionPlan plan;
 }

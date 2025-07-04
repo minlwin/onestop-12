@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -40,6 +41,13 @@ public class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implem
 		return new PageResult<>(
 				contents, 
 				new Pager(page, size, count));
+	}
+
+	@Override
+	@Transactional
+	public T create(T entity) {
+		em.persist(entity);
+		return entity;
 	}
 
 }
