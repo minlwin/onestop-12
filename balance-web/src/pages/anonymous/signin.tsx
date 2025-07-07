@@ -3,17 +3,17 @@ import FormGroup from "../../ui/form-group";
 import { useForm } from "react-hook-form";
 import type { SignInForm } from "../../model/dto";
 import { signInRequest } from "../../model/client/anonymous-client";
-import { useAuthResultSetter } from "../../model/context/auth-result.context";
+import { authStore } from "../../model/store/auth-result.store";
 
 export default function SignIn() {
 
     const navigate = useNavigate()
     const {register, handleSubmit, formState : {errors}} = useForm<SignInForm>()
-    const setAuthResult = useAuthResultSetter()
+    const {setAuth} = authStore()
 
     async function signIn(form : SignInForm) {
         const result = await signInRequest(form)
-        setAuthResult(result)
+        setAuth(result)
         navigate(`/${result.role.toLocaleLowerCase()}`)
     }
 

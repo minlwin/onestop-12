@@ -13,32 +13,35 @@ import MemberHome from './pages/members/member-home.tsx'
 import LedgerManagement from './pages/members/ledger-management.tsx'
 import LedgerEntryManagement from './pages/members/ledger-entry-management.tsx'
 import BalanceManagement from './pages/members/balance-management.tsx'
-import AuthResultContextProvider from './model/context/auth-result.context.provider.tsx'
+import Subscriptions from './pages/management/subscriptions.tsx'
+import SubscriptionPlanManagement from './pages/management/master/plans.tsx'
+import PaymentMethods from './pages/management/master/payments.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <AuthResultContextProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<AnonymousLayout />}>
-            <Route index element={<SignIn />} />
-            <Route path='signin' element={<SignIn />} />
-            <Route path='signup' element={<SignUp />} />
-          </Route>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<AnonymousLayout />}>
+          <Route index element={<SignIn />} />
+          <Route path='signin' element={<SignIn />} />
+          <Route path='signup' element={<SignUp />} />
+        </Route>
 
-          <Route path='/admin' element={<AdminLayout />}>
-            <Route index element={<DashBoard />} />
-            <Route path='members' element={<MemberManagement />} />
-          </Route>
+        <Route path='/admin' element={<AdminLayout />}>
+          <Route index element={<DashBoard />} />
+          <Route path='members' element={<MemberManagement />} />
+          <Route path='subscriptions' element={<Subscriptions />} />
+          <Route path='master/plan' element={<SubscriptionPlanManagement />} />
+          <Route path='master/payment' element={<PaymentMethods />} />
+        </Route>
 
-          <Route path='/member' element={<MembersLayout />}>
-            <Route index element={<MemberHome />} />
-            <Route path='ledger' element={<LedgerManagement />} />
-            <Route path='entry/:type' element={<LedgerEntryManagement />} />
-            <Route path='balance' element={<BalanceManagement />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </AuthResultContextProvider>
+        <Route path='/member' element={<MembersLayout />}>
+          <Route index element={<MemberHome />} />
+          <Route path='ledger' element={<LedgerManagement />} />
+          <Route path='entry/:type' element={<LedgerEntryManagement />} />
+          <Route path='balance' element={<BalanceManagement />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>   
   </StrictMode>,
 )

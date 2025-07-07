@@ -4,7 +4,7 @@ export default function Page({icon, title, actions, children} : PageProperties) 
     return (
         <>
             <section className="d-flex justify-content-between align-items-center">
-                <h3>{icon} <span>{title}</span></h3>
+                <h4>{icon} <span>{title}</span></h4>
                 {actions}
             </section>
 

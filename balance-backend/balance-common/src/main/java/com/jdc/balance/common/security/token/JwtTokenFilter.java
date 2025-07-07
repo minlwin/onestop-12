@@ -24,6 +24,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 		
 		var jwtToken = request.getHeader("Authorization");
 		
+		System.out.println(request.getRequestURL());
+		
 		if(StringUtils.hasLength(jwtToken) && jwtToken.startsWith("Bearer")) {
 			var authentication = tokenProvider.parseAccessToken(jwtToken.substring("Bearer ".length()));
 			if(null != authentication) {

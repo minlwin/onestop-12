@@ -29,9 +29,31 @@ function Navigation() {
 
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                        <Link to="/admin/members" className="nav-link">
-                            <i className="bi-people"></i> Member Management
+                        <Link to="/admin/subscriptions" className="nav-link">
+                            <i className="bi-cart-plus"></i> Subscriptions
                         </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to="/admin/members" className="nav-link">
+                            <i className="bi-people"></i> Members
+                        </Link>
+                    </li>
+                    <li className="nav-item dropdown">
+                        <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" >
+                            <i className="bi-database"></i> Master Data
+                        </a>
+                        <ul className="dropdown-menu">
+                            <li>
+                                <Link to="/admin/master/plan" className="dropdown-item">
+                                    <i className="bi-bookmark-heart"></i> Subscription Plan
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/admin/master/payment" className="dropdown-item">
+                                    <i className="bi-credit-card"></i> Payment Method
+                                </Link>
+                            </li>
+                        </ul>
                     </li>
                     <li className="nav-item">
                         <a onClick={e => {
