@@ -11,4 +11,6 @@ export interface AuthResult {
     email : string
     name : string
     role : 'Admin' | 'Member'
+    accessToken : string
+    refreshToken : string
 }
