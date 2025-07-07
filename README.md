@@ -44,3 +44,40 @@ npm i react-router
 # Dependency for REST Client
 npm i axios
 ```
+
+## Prepare Database
+
+Pulling PostgreSQL Docker Image
+```
+docker pull postgres
+```
+
+Docker Compose file for PostgreSQL
+```
+networks:
+  balance-net:
+
+volumes:
+  balance-volume:
+
+services:
+  db:
+    image: postgres
+    container_name: balance-db
+    environment:
+      - TZ=Asia/Yangon
+      - POSTGRES_USER=balance
+      - POSTGRES_PASSWORD=balance
+      - POSTGRES_DB=balance
+    networks:
+      - balance-net
+    ports:
+      - 5432:5432
+    volumes:
+      - balance-volume:/var/lib/postgresql/data
+```
+
+Running Docker Compose File
+```
+docker compose up -d
+```
