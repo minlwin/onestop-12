@@ -11,21 +11,19 @@ export function anonymousClient() {
 
 export function securedClient() {
 
-    const {auth} = authStore.getState()
-    
     const instance = axios.create({
         baseURL: 'http://localhost:8080',
         timeout: 100000
     })
 
-    instance.interceptors.request.use(
-        config => {
-            if(auth) {
+    instance.interceptors.request.use(config => {
+        const {auth} = authStore.getState()
+    
+        if(auth) {
                 config?.headers.set('Authorization', `Bearer ${auth.accessToken}`)
             }
             return config
-        }, 
-        error => {
+        }, error => {
             console.log(error)
             return Promise.reject(error)
         }
@@ -47,16 +45,11 @@ export function securedClient() {
                 setAuth(refreshResult)
 
                 // Retry last request
-                instance.defaults.headers.common['Authorization'] = `Bearer ${refreshResult.refreshToken}`
                 instance(originalRequest)
             } catch(e) {
                 console.log(e)
                 window.location.href = "/"
             }
-        }
-
-        if(error.status == 401) {
-            window.location.href = "/"
         }
 
         return Promise.reject(error)

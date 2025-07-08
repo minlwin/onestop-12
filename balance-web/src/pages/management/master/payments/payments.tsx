@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
-import type { PaymentMethodListItem, PaymentMethodSearch } from "../../../model/dto";
-import Page from "../../../ui/page";
+import type { PaymentMethodListItem, PaymentMethodSearch } from "../../../../model/dto";
+import Page from "../../../../ui/page";
 import { useState } from "react";
-import { searchPaymentMethod } from "../../../model/client/management-client";
-import FormGroup from "../../../ui/form-group";
+import { searchPaymentMethod } from "../../../../model/client/management-client";
+import FormGroup from "../../../../ui/form-group";
+import { Link } from "react-router";
 
 export default function PaymentMethods() {
 
@@ -34,9 +35,13 @@ export default function PaymentMethods() {
                 </FormGroup>
 
                 <div className="col btn-wrapper">
-                    <button type="submit" className="btn btn-outline-dark">
+                    <button type="submit" className="btn btn-dark">
                         <i className="bi-search"></i> Search
                     </button>
+
+                    <Link to="edit" className="btn btn-outline-dark ms-2">
+                        <i className="bi-plus"></i> Add Payment Method
+                    </Link>
                 </div>
             </form>
 
@@ -49,6 +54,7 @@ export default function PaymentMethods() {
                         <th>Account Name</th>
                         <th>State</th>
                         <th>Payments</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -59,9 +65,14 @@ export default function PaymentMethods() {
                             <td>{item.accountNo}</td>
                             <td>{item.accountName}</td>
                             <td>
-                                <i className={item.active ? 'bi-check' : 'bi-x'}></i>
+                                {item.active ? "Active" : "Pending"}
                             </td>
                             <td>{item.payments}</td>
+                            <td className="text-center">
+                                <Link to={`/admin/master/payment/${item.id}`} className="icon-link">
+                                    <i className="bi-arrow-right"></i>
+                                </Link>
+                            </td>
                         </tr>
                     )}
                 </tbody>

@@ -14,8 +14,12 @@ import LedgerManagement from './pages/members/ledger-management.tsx'
 import LedgerEntryManagement from './pages/members/ledger-entry-management.tsx'
 import BalanceManagement from './pages/members/balance-management.tsx'
 import Subscriptions from './pages/management/subscriptions.tsx'
-import SubscriptionPlanManagement from './pages/management/master/plans.tsx'
-import PaymentMethods from './pages/management/master/payments.tsx'
+import SubscriptionPlanManagement from './pages/management/master/plans/plans.tsx'
+import PaymentMethods from './pages/management/master/payments/payments.tsx'
+import EditSubscriptionPlan from './pages/management/master/plans/plan-edit.tsx'
+import SubscriptionPlanDetails from './pages/management/master/plans/plan-details.tsx'
+import EditPaymentMethod from './pages/management/master/payments/payment-edit.tsx'
+import PaymentMethodDetails from './pages/management/master/payments/payment-details.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -32,7 +36,11 @@ createRoot(document.getElementById('root')!).render(
           <Route path='members' element={<MemberManagement />} />
           <Route path='subscriptions' element={<Subscriptions />} />
           <Route path='master/plan' element={<SubscriptionPlanManagement />} />
+          <Route path='master/plan/edit' element={<EditSubscriptionPlan />} />
+          <Route path='master/plan/:planId' element={<SubscriptionPlanDetails />} />
           <Route path='master/payment' element={<PaymentMethods />} />
+          <Route path='master/payment/edit' element={<EditPaymentMethod />} />
+          <Route path='master/payment/:paymentId' element={<PaymentMethodDetails />} />
         </Route>
 
         <Route path='/member' element={<MembersLayout />}>

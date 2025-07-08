@@ -3,8 +3,7 @@ import { securedClient } from "./_instance";
 
 export async function searchPaymentMethod(form: PaymentMethodSearch)
     :Promise<PaymentMethodListItem[]> {
-    const client = securedClient()
-    const {data} = await client.get('/management/payment', {params : form})
+    const {data} = await securedClient().get('/management/payment', {params : form})
     return data   
 }
 
