@@ -28,7 +28,7 @@ public class SubscriptionPlan extends AuditableEntity{
 	private Integer maxLedgers;
 	private Integer dailyEntry;
 	private Integer monthlyEntry;
-	private boolean defaultPaln;
+	private boolean defaultPlan;
 	private boolean active;
 	
 	@OneToMany(mappedBy = "plan")

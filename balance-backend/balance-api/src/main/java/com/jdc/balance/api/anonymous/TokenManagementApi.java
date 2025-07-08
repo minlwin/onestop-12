@@ -48,6 +48,7 @@ public class TokenManagementApi {
 				.name(account.getName())
 				.email(account.getEmail())
 				.role(account.getRole())
+				.expired(account.isExpired())
 				.accessToken(tokenProvider.generateAccessToken(authentication))
 				.refreshToken(tokenProvider.generateRefreshToken(authentication))
 				.build();

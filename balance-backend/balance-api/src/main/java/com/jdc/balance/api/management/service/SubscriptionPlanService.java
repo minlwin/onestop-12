@@ -30,12 +30,29 @@ public class SubscriptionPlanService {
 
 	@Transactional
 	public SubscriptionPlanDetails create(SubscriptionPlanForm form) {
+		
+		var activeDefaultPlans = repo.findByDefaultPlanAndActive(true, true);
+		
+		for(var plan : activeDefaultPlans) {
+			plan.setDefaultPlan(false);
+		}
+		
 		var entity = repo.save(form.entity());
 		return SubscriptionPlanDetails.from(entity);
 	}
 
 	@Transactional
 	public SubscriptionPlanDetails update(int id, SubscriptionPlanForm form) {
+		
+		if(form.active() && form.defaultPlan()) {
+			var activeDefaultPlans = repo.findByDefaultPlanAndActive(true, true);
+			for(var plan : activeDefaultPlans) {
+				if(id != plan.getId()) {
+					plan.setDefaultPlan(false);
+				}
+			}
+		}
+		
 		var entity = safeCall(repo.findById(id), ENITTY_TYPE, id);
 		form.update(entity);
 		return SubscriptionPlanDetails.from(entity);

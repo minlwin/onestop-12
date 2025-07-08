@@ -12,7 +12,7 @@ public record SubscriptionPlanForm(
 		Integer maxLedgers,
 		Integer dailyEntry,
 		Integer monthlyEntry,
-		boolean defaultPaln,
+		boolean defaultPlan,
 		boolean active) {
 
 	public SubscriptionPlan entity() {
@@ -28,7 +28,7 @@ public record SubscriptionPlanForm(
 		entity.setMaxLedgers(maxLedgers);
 		entity.setDailyEntry(dailyEntry);
 		entity.setMonthlyEntry(monthlyEntry);
-		entity.setDefaultPaln(defaultPaln);
+		entity.setDefaultPlan(defaultPlan);
 		entity.setActive(active);
 	}
 

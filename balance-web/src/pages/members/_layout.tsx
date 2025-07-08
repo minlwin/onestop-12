@@ -1,5 +1,6 @@
 import { Link, Outlet, useNavigate } from "react-router"
 import NavItem from "../../ui/nav-item"
+import { authStore } from "../../model/store/auth-result.store"
 
 export default function MembersLayout() {
     return (
@@ -15,8 +16,10 @@ export default function MembersLayout() {
 
 function Navigation() {
     const navigate = useNavigate()
+    const {setAuth} = authStore()
 
     const signOut = () => {
+        setAuth(undefined)
         navigate('/signin')
     }
 

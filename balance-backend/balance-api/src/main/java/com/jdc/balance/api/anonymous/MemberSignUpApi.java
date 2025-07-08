@@ -40,6 +40,7 @@ public class MemberSignUpApi {
 				.email(form.email())
 				.role(member.getAccount().getRole())
 				.name(member.getAccount().getName())
+				.expired(member.getAccount().isExpired())
 				.accessToken(tokenProvider.generateAccessToken(authentication))
 				.refreshToken(tokenProvider.generateRefreshToken(authentication))
 				.build();

@@ -1,4 +1,5 @@
 import { Link, Outlet, useNavigate } from "react-router"
+import { authStore } from "../../model/store/auth-result.store"
 
 export default function AdminLayout() {
     return (
@@ -15,8 +16,10 @@ export default function AdminLayout() {
 function Navigation() {
 
     const navigate = useNavigate()
+    const {setAuth} = authStore()
 
     function signOut() {
+        setAuth(undefined)
         navigate('/signin')
     }
 

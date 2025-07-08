@@ -38,6 +38,6 @@ public class Subscription extends AuditableEntity{
 	private int paymentAmount;
 	
 	public enum Status {
-		Pending, Approved, Cancel
+		Pending, Approved, Denied
 	}
 }

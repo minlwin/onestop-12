@@ -22,6 +22,19 @@ public class Account {
 	
 	private LocalDate expiredAt;
 	
+	public boolean isExpired() {
+		
+		if(role == Role.Admin) {
+			return false;
+		}
+		
+		if(null != expiredAt && expiredAt.isAfter(LocalDate.now())) {
+			return false;
+		}
+		
+		return true;
+	}
+	
 	public enum Role {
 		Admin, Member
 	}

@@ -22,7 +22,7 @@ public record SubscriptionPlanDetails(
 			entity.getMaxLedgers(),
 			entity.getDailyEntry(),
 			entity.getMonthlyEntry(),
-			entity.isDefaultPaln(),
+			entity.isDefaultPlan(),
 			entity.isActive()
 		);
 	}

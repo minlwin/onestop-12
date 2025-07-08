@@ -17,7 +17,7 @@ public record SubscriptionPlanListItem(
 		Integer maxLedgers,
 		Integer dailyEntry,
 		Integer monthlyEntry,
-		boolean defaultPaln,
+		boolean defaultPlan,
 		boolean active,
 		long subscription) {
 
@@ -34,7 +34,7 @@ public record SubscriptionPlanListItem(
 			root.get(SubscriptionPlan_.maxLedgers),
 			root.get(SubscriptionPlan_.dailyEntry),
 			root.get(SubscriptionPlan_.monthlyEntry),
-			root.get(SubscriptionPlan_.defaultPaln),
+			root.get(SubscriptionPlan_.defaultPlan),
 			root.get(SubscriptionPlan_.active),
 			cb.count(subscription.get(Subscription_.id))
 		);
@@ -47,7 +47,7 @@ public record SubscriptionPlanListItem(
 			root.get(SubscriptionPlan_.maxLedgers),
 			root.get(SubscriptionPlan_.dailyEntry),
 			root.get(SubscriptionPlan_.monthlyEntry),
-			root.get(SubscriptionPlan_.defaultPaln),
+			root.get(SubscriptionPlan_.defaultPlan),
 			root.get(SubscriptionPlan_.active)				
 		);
 	}
