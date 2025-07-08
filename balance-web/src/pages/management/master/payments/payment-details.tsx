@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router";
 import Page from "../../../../ui/page";
 import { useEffect, useState } from "react";
-import { findPaymentMethod } from "../../../../model/client/management-client";
+import { findPaymentMethod } from "../../../../model/client/management-paymentmethod-client";
 import type { PaymentMethodDetails } from "../../../../model/dto";
 import FormGroup from "../../../../ui/form-group";
 

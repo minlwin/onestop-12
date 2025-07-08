@@ -2,7 +2,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import Page from "../../../../ui/page";
 import FormGroup from "../../../../ui/form-group";
 import type { PaymentMethodForm } from "../../../../model/dto";
-import { createPaymentMethod, findPaymentMethod, updatePaymentMethod } from "../../../../model/client/management-client";
+import { createPaymentMethod, findPaymentMethod, updatePaymentMethod } from "../../../../model/client/management-paymentmethod-client";
 import { useForm } from "react-hook-form";
 import FormError from "../../../../ui/form-error";
 import { useEffect } from "react";
