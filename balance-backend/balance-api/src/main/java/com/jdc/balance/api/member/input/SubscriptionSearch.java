@@ -1,5 +1,9 @@
 package com.jdc.balance.api.member.input;
 
-public record SubscriptionSearch() {
+import java.time.LocalDate;
+
+public record SubscriptionSearch(
+		LocalDate appliedFrom,
+		LocalDate appliedTo) {
 
 }

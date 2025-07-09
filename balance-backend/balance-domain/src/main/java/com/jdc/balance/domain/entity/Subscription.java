@@ -26,11 +26,14 @@ public class Subscription extends AuditableEntity{
 	private SubscriptionPlan plan;
 	
 	@ManyToOne(optional = false)
+	@JoinColumn(name = "member_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private Member member;
 	
 	private LocalDate startAt;
 	private Status status;
+	private String reason;
 	private LocalDateTime statusChangeAt;
+	
 	
 	@ManyToOne
 	private PaymentMethod payment;

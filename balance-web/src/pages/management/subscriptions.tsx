@@ -2,6 +2,6 @@ import Page from "../../ui/page";
 
 export default function Subscriptions() {
     return (
-        <Page title="Subscription Management"></Page>
+        <Page icon={<i className="bi-cart-plus"></i>} title="Subscription Management"></Page>
     )
 }
