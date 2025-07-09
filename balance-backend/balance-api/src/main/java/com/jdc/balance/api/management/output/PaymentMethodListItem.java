@@ -1,5 +1,6 @@
 package com.jdc.balance.api.management.output;
 
+import com.jdc.balance.domain.embeddable.SubscriptionPk_;
 import com.jdc.balance.domain.entity.PaymentMethod;
 import com.jdc.balance.domain.entity.PaymentMethod_;
 import com.jdc.balance.domain.entity.Subscription_;
@@ -27,7 +28,7 @@ public record PaymentMethodListItem(
 			root.get(PaymentMethod_.accountNo),
 			root.get(PaymentMethod_.accountName),
 			root.get(PaymentMethod_.active),
-			cb.count(subscription.get(Subscription_.id))
+			cb.count(subscription.get(Subscription_.id).get(SubscriptionPk_.planId))
 		);
 		
 		cq.groupBy(
@@ -37,6 +38,8 @@ public record PaymentMethodListItem(
 			root.get(PaymentMethod_.accountName),
 			root.get(PaymentMethod_.active)
 		);
+		
+		cq.distinct(true);
 	}
 
 }

@@ -13,6 +13,7 @@ import com.jdc.balance.api.management.input.PaymentMethodSearch;
 import com.jdc.balance.api.management.output.PaymentMethodDetails;
 import com.jdc.balance.api.management.output.PaymentMethodListItem;
 import com.jdc.balance.domain.entity.PaymentMethod;
+import com.jdc.balance.domain.entity.PaymentMethod_;
 import com.jdc.balance.domain.repo.PaymentMethodRepo;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -56,6 +57,7 @@ public class PaymentMethodService {
 			var root = cq.from(PaymentMethod.class);
 			PaymentMethodListItem.select(cb, cq, root);
 			cq.where(search.where(cb, root));
+			cq.orderBy(cb.asc(root.get(PaymentMethod_.id)));
 			return cq;
 		};
 	}

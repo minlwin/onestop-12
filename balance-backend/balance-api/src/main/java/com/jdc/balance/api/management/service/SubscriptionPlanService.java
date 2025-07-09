@@ -13,6 +13,7 @@ import com.jdc.balance.api.management.input.SubscriptionPlanSearch;
 import com.jdc.balance.api.management.output.SubscriptionPlanDetails;
 import com.jdc.balance.api.management.output.SubscriptionPlanListItem;
 import com.jdc.balance.domain.entity.SubscriptionPlan;
+import com.jdc.balance.domain.entity.SubscriptionPlan_;
 import com.jdc.balance.domain.repo.SubscriptionPlanRepo;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -37,7 +38,7 @@ public class SubscriptionPlanService {
 			plan.setDefaultPlan(false);
 		}
 		
-		var entity = repo.save(form.entity());
+		var entity = repo.create(form.entity());
 		return SubscriptionPlanDetails.from(entity);
 	}
 
@@ -73,6 +74,7 @@ public class SubscriptionPlanService {
 			var root = cq.from(SubscriptionPlan.class);
 			SubscriptionPlanListItem.select(cb, cq, root);
 			cq.where(search.where(cb, root));
+			cq.orderBy(cb.asc(root.get(SubscriptionPlan_.id)));
 			return cq;
 		};
 	}

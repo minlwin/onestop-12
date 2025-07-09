@@ -5,6 +5,7 @@ import { useState } from "react";
 import { searchPaymentMethod } from "../../../../model/client/management-paymentmethod-client";
 import FormGroup from "../../../../ui/form-group";
 import { Link } from "react-router";
+import NoData from "../../../../ui/no-data";
 
 export default function PaymentMethods() {
 
@@ -40,43 +41,48 @@ export default function PaymentMethods() {
                     </button>
 
                     <Link to="edit" className="btn btn-outline-dark ms-2">
-                        <i className="bi-plus"></i> Add Payment Method
+                        <i className="bi-plus"></i> Create Payment
                     </Link>
                 </div>
             </form>
 
-            <table className="table table-bordered table-striped table-hover mt-3">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Account Number</th>
-                        <th>Account Name</th>
-                        <th>State</th>
-                        <th>Payments</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {list.map(item => 
-                        <tr key={item.id}>
-                            <td>{item.id}</td>
-                            <td>{item.name}</td>
-                            <td>{item.accountNo}</td>
-                            <td>{item.accountName}</td>
-                            <td>
-                                {item.active ? "Active" : "Pending"}
-                            </td>
-                            <td>{item.payments}</td>
-                            <td className="text-center">
-                                <Link to={`/admin/master/payment/${item.id}`} className="icon-link">
-                                    <i className="bi-arrow-right"></i>
-                                </Link>
-                            </td>
+            <section className="mt-3">
+            {list.length ? 
+                <table className="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Account Number</th>
+                            <th>Account Name</th>
+                            <th>State</th>
+                            <th>Payments</th>
+                            <th></th>
                         </tr>
-                    )}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {list.map(item => 
+                            <tr key={item.id}>
+                                <td>{item.id}</td>
+                                <td>{item.name}</td>
+                                <td>{item.accountNo}</td>
+                                <td>{item.accountName}</td>
+                                <td>
+                                    {item.active ? "Active" : "Pending"}
+                                </td>
+                                <td>{item.payments}</td>
+                                <td className="text-center">
+                                    <Link to={`/admin/master/payment/${item.id}`} className="icon-link">
+                                        <i className="bi-arrow-right"></i>
+                                    </Link>
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>  : 
+                <NoData name="Payment Method" />          
+            }                
+            </section>
         </Page>
     )
 }

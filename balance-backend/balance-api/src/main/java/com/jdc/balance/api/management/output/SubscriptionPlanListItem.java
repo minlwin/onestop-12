@@ -1,5 +1,6 @@
 package com.jdc.balance.api.management.output;
 
+import com.jdc.balance.domain.embeddable.SubscriptionPk_;
 import com.jdc.balance.domain.entity.SubscriptionPlan;
 import com.jdc.balance.domain.entity.SubscriptionPlan_;
 import com.jdc.balance.domain.entity.Subscription_;
@@ -36,7 +37,7 @@ public record SubscriptionPlanListItem(
 			root.get(SubscriptionPlan_.monthlyEntry),
 			root.get(SubscriptionPlan_.defaultPlan),
 			root.get(SubscriptionPlan_.active),
-			cb.count(subscription.get(Subscription_.id))
+			cb.count(subscription.get(Subscription_.id).get(SubscriptionPk_.planId))
 		);
 		
 		cq.groupBy(

@@ -10,7 +10,7 @@ public record SubscriptionPlanDetails(
 		Integer maxLedgers,
 		Integer dailyEntry,
 		Integer monthlyEntry,
-		boolean defaultPaln,
+		boolean defaultPlan,
 		boolean active) {
 
 	public static SubscriptionPlanDetails from(SubscriptionPlan entity) {
