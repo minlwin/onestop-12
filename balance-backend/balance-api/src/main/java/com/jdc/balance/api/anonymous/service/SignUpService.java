@@ -51,6 +51,7 @@ public class SignUpService {
 		var member = new Member();
 		member.setAccount(account);
 		member.setEnabledDate(LocalDate.now());
+		member = memberRepo.create(member);
 		
 		var defaultPlans = planRepo.findByDefaultPlanAndActive(true, true);
 		
@@ -62,7 +63,7 @@ public class SignUpService {
 			var pk = new SubscriptionPk();
 			pk.setAppliedAt(LocalDate.now());
 			pk.setPlanId(defaultPlan.getId());
-
+			pk.setMemberId(member.getId());
 			var subscription = new Subscription();
 			subscription.setId(pk);
 			subscription.setMember(member);
@@ -75,7 +76,7 @@ public class SignUpService {
 			subscriptionRepo.create(subscription);
 		}
 		
-		return memberRepo.create(member);
+		return member;
 	}
 
 }

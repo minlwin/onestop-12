@@ -1,5 +1,6 @@
 package com.jdc.balance.api.management;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,7 +38,8 @@ public class SubscriptionApi {
 	}
 	
 	@PutMapping("{code}")
-	SubscriptionDetails updateStatus(@PathVariable String code, @RequestBody SubscriptionStatusUpdateForm form) {
+	SubscriptionDetails updateStatus(@PathVariable String code, 
+			@Validated @RequestBody SubscriptionStatusUpdateForm form) {
 		return service.update(code, form);
 	}
 	
