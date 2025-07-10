@@ -2,6 +2,7 @@ package com.jdc.balance.api.member.service;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('Member')")
 public class MemberSubscriptionPlanService {
 	
 	private final SubscriptionPlanRepo repo;

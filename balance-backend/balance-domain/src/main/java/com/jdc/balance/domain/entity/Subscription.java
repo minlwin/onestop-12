@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.jdc.balance.domain.AuditableEntity;
 import com.jdc.balance.domain.embeddable.SubscriptionPk;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -25,15 +26,20 @@ public class Subscription extends AuditableEntity{
 	@JoinColumn(name = "plan_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private SubscriptionPlan plan;
 	
+	@ManyToOne
+	private SubscriptionPlan previousPlan;
+	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "member_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private Member member;
+	
+	@Column(nullable = false)
+	private Usage usage;
 	
 	private LocalDate startAt;
 	private Status status;
 	private String reason;
 	private LocalDateTime statusChangeAt;
-	
 	
 	@ManyToOne
 	private PaymentMethod payment;
@@ -42,5 +48,9 @@ public class Subscription extends AuditableEntity{
 	
 	public enum Status {
 		Pending, Approved, Denied
+	}
+	
+	public enum Usage {
+		Urgent, Extend
 	}
 }

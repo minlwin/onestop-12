@@ -4,6 +4,7 @@ import static com.jdc.balance.common.utils.EntityOperations.safeCall;
 
 import java.util.function.Function;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@PreAuthorize("hasAuthority('Admin')")
 public class SubscriptionService {
 
 	private final SubscriptionRepo repo;

@@ -2,6 +2,7 @@ package com.jdc.balance.api.management.service;
 
 import java.util.function.Function;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.jdc.balance.api.management.input.MemberSearch;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('Admin')")
 public class MemberService {
 	
 	private final MemberRepo memberRepo;

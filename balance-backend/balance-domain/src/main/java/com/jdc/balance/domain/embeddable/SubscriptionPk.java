@@ -36,6 +36,6 @@ public class SubscriptionPk {
 	}
 	
 	public String getCode() {
-		return "%s%02d%04d".formatted(appliedAt.format(DF), planId, memberId);
+		return "%s%02d%06d".formatted(appliedAt.format(DF), planId, memberId);
 	}
 }
