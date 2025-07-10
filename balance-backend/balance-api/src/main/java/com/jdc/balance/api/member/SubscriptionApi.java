@@ -42,9 +42,7 @@ public class SubscriptionApi {
 	@PostMapping
 	@PreAuthorize("authentication.name eq #form.username")
 	SubscriptionDetails create(@Validated SubscriptionForm form, HttpServletRequest req) {
-		
 		var slipDirectoryPath = req.getServletContext().getRealPath(slipDirectory);
-		
 		return service.create(form, Path.of(slipDirectoryPath));
 	}
 	

@@ -7,12 +7,12 @@ import java.util.Optional;
 import com.jdc.balance.domain.embeddable.SubscriptionPk;
 import com.jdc.balance.domain.entity.Subscription;
 import com.jdc.balance.domain.entity.Subscription.Status;
+import com.jdc.balance.domain.entity.Subscription.Usage;
 
 public record SubscriptionDetails(
         SubscriptionPk id,
         String previousPlan,
         LocalDate expiredAt,
-        int planId,
         String planName,
         LocalDate planStartAt,
         int fees,
@@ -21,6 +21,7 @@ public record SubscriptionDetails(
         String accountNo,
         String accountName,
         String paymentSlip,
+        Usage usage,
         Status status,
         String reason,
         LocalDateTime statusChangeAt) {
@@ -30,7 +31,6 @@ public record SubscriptionDetails(
 				.id(entity.getId())
 				.previousPlan(Optional.ofNullable(entity.getMember().getPlan()).map(a -> a.getName()).orElse(null))
 				.expiredAt(entity.getMember().getAccount().getExpiredAt())
-				.planId(entity.getPlan().getId())
 				.planName(entity.getPlan().getName())
 				.planStartAt(entity.getStartAt())
 				.fees(entity.getPaymentAmount())
@@ -39,18 +39,17 @@ public record SubscriptionDetails(
 				.accountNo(entity.getPayment().getAccountNo())
 				.accountName(entity.getPayment().getAccountName())
 				.paymentSlip(entity.getPaymentSlip())
+				.usage(entity.getUsage())
 				.status(entity.getStatus())
 				.reason(entity.getReason())
 				.statusChangeAt(entity.getStatusChangeAt())
 				.build();
 	}
 	
-
     public static class Builder {
         private SubscriptionPk id;
         private String previousPlan;
         private LocalDate expiredAt;
-        private int planId;
         private String planName;
         private LocalDate planStartAt;
         private int fees;
@@ -59,6 +58,7 @@ public record SubscriptionDetails(
         private String accountNo;
         private String accountName;
         private String paymentSlip;
+        private Usage usage;
         private Status status;
         private String reason;
         private LocalDateTime statusChangeAt;
@@ -75,11 +75,6 @@ public record SubscriptionDetails(
 
         public Builder expiredAt(LocalDate expiredAt) {
             this.expiredAt = expiredAt;
-            return this;
-        }
-
-        public Builder planId(int planId) {
-            this.planId = planId;
             return this;
         }
 
@@ -123,6 +118,11 @@ public record SubscriptionDetails(
             return this;
         }
 
+        public Builder usage(Usage usage) {
+            this.usage = usage;
+            return this;
+        }
+
         public Builder status(Status status) {
             this.status = status;
             return this;
@@ -143,7 +143,6 @@ public record SubscriptionDetails(
                 id,
                 previousPlan,
                 expiredAt,
-                planId,
                 planName,
                 planStartAt,
                 fees,
@@ -152,6 +151,7 @@ public record SubscriptionDetails(
                 accountNo,
                 accountName,
                 paymentSlip,
+                usage,
                 status,
                 reason,
                 statusChangeAt
