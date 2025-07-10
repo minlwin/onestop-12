@@ -15,6 +15,7 @@ import com.jdc.balance.domain.entity.Account.Role;
 import com.jdc.balance.domain.entity.Member;
 import com.jdc.balance.domain.entity.Subscription;
 import com.jdc.balance.domain.entity.Subscription.Status;
+import com.jdc.balance.domain.entity.Subscription.Usage;
 import com.jdc.balance.domain.repo.AccountRepo;
 import com.jdc.balance.domain.repo.MemberRepo;
 import com.jdc.balance.domain.repo.SubscriptionPlanRepo;
@@ -71,6 +72,7 @@ public class SignUpService {
 		subscription.setId(pk);
 		subscription.setMember(member);
 		subscription.setPlan(defaultPlan);
+		subscription.setUsage(Usage.Urgent);
 		
 		subscription.setStartAt(LocalDate.now());
 		subscription.setStatus(Status.Approved);
