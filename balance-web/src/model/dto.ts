@@ -52,6 +52,7 @@ export type SubscriptionPlanDetails = SubscriptionPlanForm & {
 
 export type SubscriptionPlanListItem = SubscriptionPlanDetails & {
     subscription : number
+    member: number
 }
 
 export type SubscriptionPlanSearch = {

@@ -3,7 +3,7 @@ import FormGroup from "../../../../ui/form-group";
 import Page from "../../../../ui/page";
 import type { SubscriptionPlanListItem, SubscriptionPlanSearch } from "../../../../model/dto";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { searchPlan } from "../../../../model/client/management-plan-client";
 import NoData from "../../../../ui/no-data";
 
@@ -16,6 +16,10 @@ export default function SubscriptionPlanManagement() {
         const result = await searchPlan(form)
         setList(result)
     }
+
+    useEffect(() => {
+        search({})
+    }, [])
 
     return (
         <Page icon={<i className="bi-bookmark-heart"></i>} title="Subscription Plan Management">
@@ -60,12 +64,10 @@ export default function SubscriptionPlanManagement() {
                                 <th>Name</th>
                                 <th>Fees</th>
                                 <th>Months</th>
-                                <th>Ledger Limit</th>
-                                <th>Daily Entry Limit</th>
-                                <th>Monthly Entry Limit</th>
                                 <th>Status</th>
                                 <th>Default</th>
                                 <th>Subscriptions</th>
+                                <th>Members</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -76,12 +78,10 @@ export default function SubscriptionPlanManagement() {
                                 <td>{item.name}</td>
                                 <td>{item.fees}</td>
                                 <td>{item.months}</td>
-                                <td>{item.maxLedgers}</td>
-                                <td>{item.dailyEntry}</td>
-                                <td>{item.monthlyEntry}</td>
                                 <td>{item.active ? "Active" : "Pending"}</td>
                                 <td>{item.defaultPlan && "Default"}</td>
                                 <td>{item.subscription}</td>
+                                <td>{item.member}</td>
                                 <td className="text-center">
                                     <Link to={`/admin/master/plan/${item.id}`} className="icon-link">
                                         <i className="bi-arrow-right"></i>

@@ -36,8 +36,12 @@ export default function EditSubscriptionPlan() {
     }, [planId, reset])
 
     async function save(form:SubscriptionPlanForm) {
-        const response = planId ? await updatePlan(planId, form) : await createPlan(form)
-        navigate(`/admin/master/plan/${response.id}`)
+        if(planId) {
+            await updatePlan(planId, form)
+        } else {
+            await createPlan(form)
+        } 
+        navigate(`/admin/master/plan`)
     }
 
     return (

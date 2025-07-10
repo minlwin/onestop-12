@@ -41,6 +41,11 @@ public class SignUpService {
 			throw new ApiBusinessException(new ErrorMessage("email", "Your email has been already used."));
 		}
 		
+		var defaultPlans = planRepo.findByDefaultPlanAndActive(true, true);
+		if(defaultPlans.isEmpty()) {
+			throw new ApiBusinessException(ErrorMessage.withMessage("The system is not available at this moment. Please try again later."));
+		}
+
 		var account = new Account();
 		account.setName(form.name());
 		account.setEmail(form.email());
@@ -53,28 +58,25 @@ public class SignUpService {
 		member.setEnabledDate(LocalDate.now());
 		member = memberRepo.create(member);
 		
-		var defaultPlans = planRepo.findByDefaultPlanAndActive(true, true);
+		var defaultPlan = defaultPlans.getFirst();
+		member.setPlan(defaultPlan);
+		account.setExpiredAt(LocalDate.now().plusMonths(defaultPlan.getMonths()));
 		
-		if(!defaultPlans.isEmpty()) {
-			var defaultPlan = defaultPlans.getFirst();
-			member.setPlan(defaultPlan);
-			account.setExpiredAt(LocalDate.now().plusMonths(defaultPlan.getMonths()));
-			
-			var pk = new SubscriptionPk();
-			pk.setAppliedAt(LocalDate.now());
-			pk.setPlanId(defaultPlan.getId());
-			pk.setMemberId(member.getId());
-			var subscription = new Subscription();
-			subscription.setId(pk);
-			subscription.setMember(member);
-			subscription.setPlan(defaultPlan);
-			
-			subscription.setStartAt(LocalDate.now());
-			subscription.setStatus(Status.Approved);
-			subscription.setStatusChangeAt(LocalDateTime.now());
-			
-			subscriptionRepo.create(subscription);
-		}
+		var pk = new SubscriptionPk();
+		pk.setAppliedAt(LocalDate.now());
+		pk.setPlanId(defaultPlan.getId());
+		pk.setMemberId(member.getId());
+		var subscription = new Subscription();
+		
+		subscription.setId(pk);
+		subscription.setMember(member);
+		subscription.setPlan(defaultPlan);
+		
+		subscription.setStartAt(LocalDate.now());
+		subscription.setStatus(Status.Approved);
+		subscription.setStatusChangeAt(LocalDateTime.now());
+		
+		subscriptionRepo.create(subscription);
 		
 		return member;
 	}

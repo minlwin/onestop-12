@@ -1,14 +1,20 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import FormGroup from "../../ui/form-group";
 import { useForm } from "react-hook-form";
 import type { SignUpForm } from "../../model/dto";
+import { signUpRequest } from "../../model/client/anonymous-client";
+import { authStore } from "../../model/store/auth-result.store";
 
 export default function SignUp() {
 
     const {register, handleSubmit, formState: {errors}} = useForm<SignUpForm>()
+    const {setAuth} = authStore()
+    const navigate = useNavigate()
 
-    function signUp(form:SignUpForm) {
-        console.log(form)
+    async function signUp(form:SignUpForm) {
+        const response = await signUpRequest(form)
+        setAuth(response)
+        navigate(`/${response.role.toLocaleLowerCase()}`)
     }
 
     return (

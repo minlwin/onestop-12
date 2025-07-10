@@ -32,10 +32,11 @@ public class SubscriptionPlanService {
 	@Transactional
 	public SubscriptionPlanDetails create(SubscriptionPlanForm form) {
 		
-		var activeDefaultPlans = repo.findByDefaultPlanAndActive(true, true);
-		
-		for(var plan : activeDefaultPlans) {
-			plan.setDefaultPlan(false);
+		if(form.active() && form.defaultPlan()) {
+			var activeDefaultPlans = repo.findByDefaultPlanAndActive(true, true);
+			for(var plan : activeDefaultPlans) {
+				plan.setDefaultPlan(false);
+			}
 		}
 		
 		var entity = repo.create(form.entity());

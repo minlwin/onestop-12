@@ -13,6 +13,7 @@ import com.jdc.balance.domain.entity.SubscriptionPlan_;
 import com.jdc.balance.domain.entity.Subscription_;
 
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Root;
 
 public record SubscriptionListItem(
@@ -30,6 +31,9 @@ public record SubscriptionListItem(
 		String reason) {
 
 	public static void select(CriteriaQuery<SubscriptionListItem> cq, Root<Subscription> root) {
+		
+		var payment = root.join(Subscription_.payment, JoinType.LEFT);
+		
 		cq.multiselect(
 			root.get(Subscription_.id),
 			root.get(Subscription_.plan).get(SubscriptionPlan_.name),
@@ -39,7 +43,7 @@ public record SubscriptionListItem(
 			root.get(Subscription_.member).get(Member_.plan).get(SubscriptionPlan_.id),
 			root.get(Subscription_.member).get(Member_.plan).get(SubscriptionPlan_.name),
 			root.get(Subscription_.member).get(Member_.account).get(Account_.expiredAt),
-			root.get(Subscription_.payment).get(PaymentMethod_.name),
+			payment.get(PaymentMethod_.name),
 			root.get(Subscription_.status),
 			root.get(Subscription_.statusChangeAt),
 			root.get(Subscription_.reason)

@@ -33,4 +33,7 @@ public class SubscriptionPlan extends AuditableEntity{
 	
 	@OneToMany(mappedBy = "plan")
 	private List<Subscription> subscription;
+	
+	@OneToMany(mappedBy = "plan")
+	private List<Member> member;
 }

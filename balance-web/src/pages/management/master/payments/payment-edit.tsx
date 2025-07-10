@@ -34,8 +34,12 @@ export default function EditPaymentMethod() {
     }, [paymentId, reset])
 
     async function save(form:PaymentMethodForm) {
-        const response = paymentId ? await updatePaymentMethod(paymentId, form) : await createPaymentMethod(form)
-        navigate(`/admin/master/payment/${response.id}`)
+        if(paymentId) {
+            await updatePaymentMethod(paymentId, form)
+        } else {
+            await createPaymentMethod(form)
+        }
+        navigate(`/admin/master/payment`)
     }
 
     return (
