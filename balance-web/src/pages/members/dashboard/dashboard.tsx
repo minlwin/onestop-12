@@ -1,4 +1,4 @@
-import Page from "../../ui/page";
+import Page from "../../../ui/page";
 
 export default function MemberHome() {
     return (
