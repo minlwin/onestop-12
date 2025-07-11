@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('Member')")
-public class MemberSubscriptionPlanService {
+public class SubscriptionPlanService {
 	
 	private final SubscriptionPlanRepo repo;
 

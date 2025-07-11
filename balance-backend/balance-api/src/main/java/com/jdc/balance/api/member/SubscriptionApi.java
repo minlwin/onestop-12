@@ -16,38 +16,47 @@ import com.jdc.balance.api.member.input.SubscriptionForm;
 import com.jdc.balance.api.member.input.SubscriptionSearch;
 import com.jdc.balance.api.member.output.SubscriptionDetails;
 import com.jdc.balance.api.member.output.SubscriptionListItem;
-import com.jdc.balance.api.member.service.MemberSubscriptionService;
+import com.jdc.balance.api.member.service.SubscriptionService;
 import com.jdc.balance.domain.PageResult;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RequestMapping("member/subscription")
+@RequestMapping("member/{username}/subscription")
 @RestController("memberSubscriptionApi")
 public class SubscriptionApi {
 	
-	private final MemberSubscriptionService service;
+	private final SubscriptionService service;
 	
 	@Value("${app.subscription.slip-directory}")
 	private String slipDirectory;
 	
 	@GetMapping
-	PageResult<SubscriptionListItem> search(SubscriptionSearch search, 
+	@PreAuthorize("authentication.name eq #username")
+	PageResult<SubscriptionListItem> search(
+			@PathVariable String username, 
+			SubscriptionSearch search, 
 			@RequestParam(defaultValue = "0") int page, 
 			@RequestParam(defaultValue = "10") int size) {
 		return service.search(search, page, size);
 	}
 	
 	@PostMapping
-	@PreAuthorize("authentication.name eq #form.username")
-	SubscriptionDetails create(@Validated SubscriptionForm form, HttpServletRequest req) {
+	@PreAuthorize("authentication.name eq #username")
+	SubscriptionDetails create(
+			@Validated SubscriptionForm form, 
+			@PathVariable String username, 
+			HttpServletRequest req) {
 		var slipDirectoryPath = req.getServletContext().getRealPath(slipDirectory);
-		return service.create(form, Path.of(slipDirectoryPath));
+		return service.create(username, form, Path.of(slipDirectoryPath));
 	}
 	
 	@GetMapping("{code}")
-	SubscriptionDetails findById(@PathVariable String code) {
+	@PreAuthorize("authentication.name eq #username")
+	SubscriptionDetails findById(
+			@PathVariable String username, 
+			@PathVariable String code) {
 		return service.findById(code);
 	}
 }

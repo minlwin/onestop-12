@@ -4,12 +4,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.jdc.balance.domain.entity.Subscription.Usage;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record SubscriptionForm(
-		@NotBlank(message = "Please enter email.")
-		String username,
 		@NotNull(message = "Please select plan.")
 		Integer planId,
 		@NotNull(message = "Please select payment.")

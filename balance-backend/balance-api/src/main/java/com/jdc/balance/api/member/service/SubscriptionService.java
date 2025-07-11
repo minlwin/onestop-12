@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @PreAuthorize("hasAuthority('Member')")
-public class MemberSubscriptionService {
+public class SubscriptionService {
 	
 	private final MemberRepo memberRepo;
 	private final PaymentMethodRepo paymentMethodRepo;
@@ -44,12 +44,12 @@ public class MemberSubscriptionService {
 	private final PaymentSlipStorageService storageService;
 
 	@Transactional
-	public SubscriptionDetails create(SubscriptionForm form, Path slipDirectory) {
+	public SubscriptionDetails create(String username, SubscriptionForm form, Path slipDirectory) {
 		
 		// Create Subscription
 		var plan = safeCall(planRepo.findById(form.planId()), "Subscription Plan", form.planId());
 		var paymentMethod = safeCall(paymentMethodRepo.findById(form.paymentId()), "Payment Method", form.paymentId());
-		var member = safeCall(memberRepo.findByAccountEmail(form.username()), "Member", form.username());
+		var member = safeCall(memberRepo.findByAccountEmail(username), "Member", username);
 		
 		var id = new SubscriptionPk();
 		id.setAppliedAt(LocalDate.now());

@@ -8,21 +8,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jdc.balance.api.management.output.SubscriptionPlanListItem;
-import com.jdc.balance.api.member.service.SubscriptionPlanService;
+import com.jdc.balance.api.member.output.PaymentMethodListItem;
+import com.jdc.balance.api.member.service.PaymentMethodService;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RequestMapping("member/{username}/plan")
-@RestController("memberSubscrptionPlanApi")
-public class SubscrptionPlanApi {
+@RequestMapping("member/{username}/payment")
+@RestController("memberPaymentMethodApi")
+public class PaymentMethodApi {
 	
-	private final SubscriptionPlanService service;
+	private final PaymentMethodService service;
 
 	@GetMapping
 	@PreAuthorize("authentication.name eq #username")
-	List<SubscriptionPlanListItem> search(@PathVariable String username) {
-		return service.getAvailableServices();
+	List<PaymentMethodListItem> search(
+			@PathVariable String username) {
+		return service.getAvailablePayments();
 	}
 }

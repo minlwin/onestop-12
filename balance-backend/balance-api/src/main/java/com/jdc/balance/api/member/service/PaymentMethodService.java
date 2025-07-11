@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('Member')")
-public class MemberPaymentMethodService {
+public class PaymentMethodService {
 	
 	private final PaymentMethodRepo repo;
 	
