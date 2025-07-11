@@ -24,7 +24,10 @@ public class BalanceReportService {
 	private final LedgerEntryRepo repo;
 	
 	public PageResult<BalanceReportListItem> search(String username, BalanceReportSearch search, int page, int size) {
-		return repo.searchPage(queryFunc(username, search), null, page, size);
+		return repo.searchPage(
+				queryFunc(username, search), 
+				countFunc(username, search), 
+				page, size);
 	}
 
 	private Function<CriteriaBuilder, CriteriaQuery<BalanceReportListItem>> queryFunc(String username, BalanceReportSearch search) {
@@ -41,4 +44,15 @@ public class BalanceReportService {
 		};
 	}
 
+	private Function<CriteriaBuilder, CriteriaQuery<Long>> countFunc(String username, BalanceReportSearch search) {
+		return cb -> {
+			var cq = cb.createQuery(Long.class);
+			var root = cq.from(LedgerEntry.class);
+			
+			cq.select(cb.count(root.get(LedgerEntry_.id)));
+			cq.where(search.where(username, cb, root));
+			
+			return cq;
+		};
+	}
 }

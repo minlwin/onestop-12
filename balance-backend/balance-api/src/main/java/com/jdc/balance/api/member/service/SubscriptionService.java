@@ -15,6 +15,7 @@ import com.jdc.balance.api.member.input.SubscriptionForm;
 import com.jdc.balance.api.member.input.SubscriptionSearch;
 import com.jdc.balance.api.member.output.SubscriptionDetails;
 import com.jdc.balance.api.member.output.SubscriptionListItem;
+import com.jdc.balance.common.dto.ModificationResult;
 import com.jdc.balance.domain.PageResult;
 import com.jdc.balance.domain.embeddable.SubscriptionPk;
 import com.jdc.balance.domain.embeddable.SubscriptionPk_;
@@ -44,7 +45,7 @@ public class SubscriptionService {
 	private final PaymentSlipStorageService storageService;
 
 	@Transactional
-	public SubscriptionDetails create(String username, SubscriptionForm form, Path slipDirectory) {
+	public ModificationResult<SubscriptionPk> create(String username, SubscriptionForm form, Path slipDirectory) {
 		
 		// Create Subscription
 		var plan = safeCall(planRepo.findById(form.planId()), "Subscription Plan", form.planId());
@@ -72,7 +73,7 @@ public class SubscriptionService {
 		
 		subscription = subscriptionRepo.save(subscription);
 		
-		return SubscriptionDetails.from(subscription);
+		return ModificationResult.success(subscription.getId());
 	}
 
 	public SubscriptionDetails findById(String code) {

@@ -17,7 +17,9 @@ import com.jdc.balance.api.member.input.SubscriptionSearch;
 import com.jdc.balance.api.member.output.SubscriptionDetails;
 import com.jdc.balance.api.member.output.SubscriptionListItem;
 import com.jdc.balance.api.member.service.SubscriptionService;
+import com.jdc.balance.common.dto.ModificationResult;
 import com.jdc.balance.domain.PageResult;
+import com.jdc.balance.domain.embeddable.SubscriptionPk;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +46,7 @@ public class SubscriptionApi {
 	
 	@PostMapping
 	@PreAuthorize("authentication.name eq #username")
-	SubscriptionDetails create(
+	ModificationResult<SubscriptionPk> create(
 			@Validated SubscriptionForm form, 
 			@PathVariable String username, 
 			HttpServletRequest req) {

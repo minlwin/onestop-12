@@ -16,6 +16,7 @@ import com.jdc.balance.api.management.input.SubscriptionPlanSearch;
 import com.jdc.balance.api.management.output.SubscriptionPlanDetails;
 import com.jdc.balance.api.management.output.SubscriptionPlanListItem;
 import com.jdc.balance.api.management.service.SubscriptionPlanService;
+import com.jdc.balance.common.dto.ModificationResult;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,12 +33,12 @@ public class SubscrptionPlanApi {
 	}
 	
 	@PostMapping
-	SubscriptionPlanDetails create(@Validated @RequestBody SubscriptionPlanForm form) {
+	ModificationResult<Integer> create(@Validated @RequestBody SubscriptionPlanForm form) {
 		return service.create(form);
 	}
 	
 	@PutMapping("{id}")
-	SubscriptionPlanDetails update(@PathVariable int id, @Validated @RequestBody SubscriptionPlanForm form) {
+	ModificationResult<Integer> update(@PathVariable int id, @Validated @RequestBody SubscriptionPlanForm form) {
 		return service.update(id, form);
 	}
 	

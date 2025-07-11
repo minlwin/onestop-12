@@ -12,6 +12,7 @@ import com.jdc.balance.api.management.input.SubscriptionSearch;
 import com.jdc.balance.api.management.input.SubscriptionStatusUpdateForm;
 import com.jdc.balance.api.management.output.SubscriptionDetails;
 import com.jdc.balance.api.management.output.SubscriptionListItem;
+import com.jdc.balance.common.dto.ModificationResult;
 import com.jdc.balance.domain.PageResult;
 import com.jdc.balance.domain.embeddable.SubscriptionPk;
 import com.jdc.balance.domain.embeddable.SubscriptionPk_;
@@ -32,13 +33,13 @@ public class SubscriptionService {
 	private final SubscriptionRepo repo;
 	
 	@Transactional
-	public SubscriptionDetails update(String code, SubscriptionStatusUpdateForm form) {
+	public ModificationResult<SubscriptionPk> update(String code, SubscriptionStatusUpdateForm form) {
 		var entity = safeCall(repo.findById(SubscriptionPk.from(code)), "Subscription", code);
 		entity.setStatus(form.status());
 		entity.setReason(form.message());
 		
 		// TODO
-		return SubscriptionDetails.from(entity);
+		return ModificationResult.success(entity.getId());
 	}
 
 	public SubscriptionDetails findById(String code) {

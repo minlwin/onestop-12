@@ -16,6 +16,7 @@ import com.jdc.balance.api.management.input.PaymentMethodSearch;
 import com.jdc.balance.api.management.output.PaymentMethodDetails;
 import com.jdc.balance.api.management.output.PaymentMethodListItem;
 import com.jdc.balance.api.management.service.PaymentMethodService;
+import com.jdc.balance.common.dto.ModificationResult;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,12 +33,12 @@ public class PaymentMethodApi {
 	}
 	
 	@PostMapping
-	PaymentMethodDetails create(@Validated @RequestBody PaymentMethodForm form) {
+	ModificationResult<Integer> create(@Validated @RequestBody PaymentMethodForm form) {
 		return service.create(form);
 	}
 	
 	@PutMapping("{id}")
-	PaymentMethodDetails update(@PathVariable int id, @Validated @RequestBody PaymentMethodForm form) {
+	ModificationResult<Integer> update(@PathVariable int id, @Validated @RequestBody PaymentMethodForm form) {
 		return service.update(id, form);
 	}
 	

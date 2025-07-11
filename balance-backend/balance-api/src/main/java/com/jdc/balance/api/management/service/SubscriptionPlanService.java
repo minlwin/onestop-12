@@ -13,6 +13,7 @@ import com.jdc.balance.api.management.input.SubscriptionPlanForm;
 import com.jdc.balance.api.management.input.SubscriptionPlanSearch;
 import com.jdc.balance.api.management.output.SubscriptionPlanDetails;
 import com.jdc.balance.api.management.output.SubscriptionPlanListItem;
+import com.jdc.balance.common.dto.ModificationResult;
 import com.jdc.balance.domain.entity.SubscriptionPlan;
 import com.jdc.balance.domain.entity.SubscriptionPlan_;
 import com.jdc.balance.domain.repo.SubscriptionPlanRepo;
@@ -32,7 +33,7 @@ public class SubscriptionPlanService {
 	private final SubscriptionPlanRepo repo;
 
 	@Transactional
-	public SubscriptionPlanDetails create(SubscriptionPlanForm form) {
+	public ModificationResult<Integer> create(SubscriptionPlanForm form) {
 		
 		if(form.active() && form.defaultPlan()) {
 			var activeDefaultPlans = repo.findByDefaultPlanAndActive(true, true);
@@ -42,11 +43,11 @@ public class SubscriptionPlanService {
 		}
 		
 		var entity = repo.create(form.entity());
-		return SubscriptionPlanDetails.from(entity);
+		return ModificationResult.success(entity.getId());
 	}
 
 	@Transactional
-	public SubscriptionPlanDetails update(int id, SubscriptionPlanForm form) {
+	public ModificationResult<Integer> update(int id, SubscriptionPlanForm form) {
 		
 		if(form.active() && form.defaultPlan()) {
 			var activeDefaultPlans = repo.findByDefaultPlanAndActive(true, true);
@@ -59,7 +60,7 @@ public class SubscriptionPlanService {
 		
 		var entity = safeCall(repo.findById(id), ENITTY_TYPE, id);
 		form.update(entity);
-		return SubscriptionPlanDetails.from(entity);
+		return ModificationResult.success(entity.getId());
 	}
 
 	public SubscriptionPlanDetails findById(int id) {

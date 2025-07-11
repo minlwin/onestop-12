@@ -13,6 +13,7 @@ import com.jdc.balance.api.management.input.PaymentMethodForm;
 import com.jdc.balance.api.management.input.PaymentMethodSearch;
 import com.jdc.balance.api.management.output.PaymentMethodDetails;
 import com.jdc.balance.api.management.output.PaymentMethodListItem;
+import com.jdc.balance.common.dto.ModificationResult;
 import com.jdc.balance.domain.entity.PaymentMethod;
 import com.jdc.balance.domain.entity.PaymentMethod_;
 import com.jdc.balance.domain.repo.PaymentMethodRepo;
@@ -32,16 +33,16 @@ public class PaymentMethodService {
 	private final PaymentMethodRepo repo;
 
 	@Transactional
-	public PaymentMethodDetails create(PaymentMethodForm form) {
+	public ModificationResult<Integer> create(PaymentMethodForm form) {
 		var entity = repo.save(form.entity());
-		return PaymentMethodDetails.from(entity);
+		return ModificationResult.success(entity.getId());
 	}
 
 	@Transactional
-	public PaymentMethodDetails update(int id, PaymentMethodForm form) {
+	public ModificationResult<Integer> update(int id, PaymentMethodForm form) {
 		var entity = safeCall(repo.findById(id), ENTITY_TYPE, id);
 		form.update(entity);
-		return PaymentMethodDetails.from(entity);
+		return ModificationResult.success(entity.getId());
 	}
 
 	public PaymentMethodDetails findById(int id) {

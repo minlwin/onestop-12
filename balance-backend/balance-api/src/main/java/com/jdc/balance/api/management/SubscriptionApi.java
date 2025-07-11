@@ -14,7 +14,9 @@ import com.jdc.balance.api.management.input.SubscriptionStatusUpdateForm;
 import com.jdc.balance.api.management.output.SubscriptionDetails;
 import com.jdc.balance.api.management.output.SubscriptionListItem;
 import com.jdc.balance.api.management.service.SubscriptionService;
+import com.jdc.balance.common.dto.ModificationResult;
 import com.jdc.balance.domain.PageResult;
+import com.jdc.balance.domain.embeddable.SubscriptionPk;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,7 +40,7 @@ public class SubscriptionApi {
 	}
 	
 	@PutMapping("{code}")
-	SubscriptionDetails updateStatus(@PathVariable String code, 
+	ModificationResult<SubscriptionPk> updateStatus(@PathVariable String code, 
 			@Validated @RequestBody SubscriptionStatusUpdateForm form) {
 		return service.update(code, form);
 	}
