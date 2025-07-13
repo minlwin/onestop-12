@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("member/{username}/ledger")
-public class LedgerManagementApi {
+public class LedgerApi {
 	
 	private final LedgerService service;
 
@@ -48,8 +48,7 @@ public class LedgerManagementApi {
 	@PreAuthorize("authentication.name eq username")
 	ModificationResult<LedgerPk> update(
 			@PathVariable String username, 
-			@PathVariable String code,
 			@RequestBody @Validated LedgerForm form) {
-		return service.update(username, code, form);
+		return service.update(username, form);
 	}
 }

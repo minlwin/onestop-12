@@ -31,7 +31,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Service("memberSubscriptionService")
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @PreAuthorize("hasAuthority('Member')")
@@ -82,7 +82,7 @@ public class SubscriptionService {
 	}
 
 	public PageResult<SubscriptionListItem> search(SubscriptionSearch search, int page, int size) {
-		return subscriptionRepo.searchPage(queryFunc(search), countFunc(search), page, size);
+		return subscriptionRepo.search(queryFunc(search), countFunc(search), page, size);
 	}
 
 	private Function<CriteriaBuilder, CriteriaQuery<SubscriptionListItem>> queryFunc(SubscriptionSearch search) {

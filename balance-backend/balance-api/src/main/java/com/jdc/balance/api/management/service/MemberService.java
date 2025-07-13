@@ -25,7 +25,7 @@ public class MemberService {
 	private final MemberRepo memberRepo;
 
 	public PageResult<MemberListItem> search(MemberSearch search, int page, int size) {
-		return memberRepo.searchPage(queryFunc(search), countFunc(search), page, size);
+		return memberRepo.search(queryFunc(search), countFunc(search), page, size);
 	}
 	
 	private Function<CriteriaBuilder, CriteriaQuery<MemberListItem>> queryFunc(MemberSearch search) {

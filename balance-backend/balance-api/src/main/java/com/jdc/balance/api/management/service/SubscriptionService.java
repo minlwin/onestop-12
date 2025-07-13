@@ -38,7 +38,8 @@ public class SubscriptionService {
 		entity.setStatus(form.status());
 		entity.setReason(form.message());
 		
-		// TODO
+		// TODO Handle Expired At Value
+		
 		return ModificationResult.success(entity.getId());
 	}
 
@@ -48,7 +49,7 @@ public class SubscriptionService {
 	}
 
 	public PageResult<SubscriptionListItem> search(SubscriptionSearch search, int page, int size) {
-		return repo.searchPage(queryFunc(search), countFunc(search), page, size);
+		return repo.search(queryFunc(search), countFunc(search), page, size);
 	}
 	
 	private Function<CriteriaBuilder, CriteriaQuery<SubscriptionListItem>> queryFunc(SubscriptionSearch search) {

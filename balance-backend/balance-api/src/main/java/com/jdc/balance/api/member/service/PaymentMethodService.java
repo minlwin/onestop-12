@@ -13,7 +13,7 @@ import com.jdc.balance.domain.repo.PaymentMethodRepo;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Service("memberPaymentMethodService")
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('Member')")
 public class PaymentMethodService {

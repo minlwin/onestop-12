@@ -24,7 +24,7 @@ public class BalanceReportService {
 	private final LedgerEntryRepo repo;
 	
 	public PageResult<BalanceReportListItem> search(String username, BalanceReportSearch search, int page, int size) {
-		return repo.searchPage(
+		return repo.search(
 				queryFunc(username, search), 
 				countFunc(username, search), 
 				page, size);

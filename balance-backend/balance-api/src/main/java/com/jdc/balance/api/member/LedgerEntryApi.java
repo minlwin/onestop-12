@@ -15,13 +15,19 @@ import com.jdc.balance.api.member.input.LedgerEntryForm;
 import com.jdc.balance.api.member.input.LedgerEntrySearch;
 import com.jdc.balance.api.member.output.LedgerEntryDetails;
 import com.jdc.balance.api.member.output.LedgerEntryListItem;
+import com.jdc.balance.api.member.service.LedgerEntryService;
 import com.jdc.balance.common.dto.ModificationResult;
 import com.jdc.balance.domain.PageResult;
 import com.jdc.balance.domain.embeddable.LedgerEntryPk;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("member/{username}/entry")
 public class LedgerEntryApi {
+	
+	private final LedgerEntryService service;
 
 	@GetMapping
 	@PreAuthorize("authentication.name eq username")
@@ -30,15 +36,15 @@ public class LedgerEntryApi {
 			LedgerEntrySearch search, 
 			@RequestParam(defaultValue = "0") int page, 
 			@RequestParam(defaultValue = "10") int size) {
-		return null;
+		return service.search(username, search, page, size);
 	}
 	
-	@GetMapping("code")
+	@GetMapping("{requestedId}")
 	@PreAuthorize("authentication.name eq username")
 	LedgerEntryDetails findById(
 			@PathVariable String username, 
-			@PathVariable String code) {
-		return null;
+			@PathVariable String requestedId) {
+		return service.findById(username, requestedId);
 	}
 	
 	@PostMapping
@@ -46,16 +52,16 @@ public class LedgerEntryApi {
 	ModificationResult<LedgerEntryPk> create(
 			@PathVariable String username,
 			@RequestBody @Validated LedgerEntryForm form) {
-		return null;
+		return service.create(username, form);
 	}
 	
-	@PutMapping("code")
+	@PutMapping("{requestedId}")
 	@PreAuthorize("authentication.name eq username")
 	ModificationResult<LedgerEntryPk> update(
 			@PathVariable String username,
-			@PathVariable String code,
+			@PathVariable String requestedId,
 			@RequestBody @Validated LedgerEntryForm form) {
-		return null;
+		return service.update(username, requestedId, form);
 	}
 	
 }

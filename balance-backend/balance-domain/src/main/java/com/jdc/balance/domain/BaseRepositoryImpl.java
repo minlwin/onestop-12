@@ -27,7 +27,7 @@ public class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implem
 	}
 
 	@Override
-	public <R> PageResult<R> searchPage(Function<CriteriaBuilder, CriteriaQuery<R>> queryFunc,
+	public <R> PageResult<R> search(Function<CriteriaBuilder, CriteriaQuery<R>> queryFunc,
 			Function<CriteriaBuilder, CriteriaQuery<Long>> countFunc, int page, int size) {
 		
 		var countQuery = em.createQuery(countFunc.apply(em.getCriteriaBuilder()));

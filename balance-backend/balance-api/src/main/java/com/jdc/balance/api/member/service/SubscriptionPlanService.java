@@ -13,7 +13,7 @@ import com.jdc.balance.domain.repo.SubscriptionPlanRepo;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
+@Service("memberSubscriptionPlanService")
 @RequiredArgsConstructor
 @PreAuthorize("hasAuthority('Member')")
 public class SubscriptionPlanService {
