@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import Page from "../../../ui/page";
 import { useEffect, useState } from "react";
-import type { LedgerType } from "../../../model/types";
+import type { LedgerType } from "../../../model/constants";
 import Loading from "../../../ui/loading";
 
 export default function LedgerEntryManagement() {

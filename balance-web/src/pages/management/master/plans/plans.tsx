@@ -1,10 +1,10 @@
 import { Link } from "react-router";
 import FormGroup from "../../../../ui/form-group";
 import Page from "../../../../ui/page";
-import type { SubscriptionPlanListItem, SubscriptionPlanSearch } from "../../../../model/dto";
+import type { SubscriptionPlanListItem, SubscriptionPlanSearch } from "../../../../model/dto/management/subscription-plan";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { searchPlan } from "../../../../model/client/management-plan-client";
+import { searchPlan } from "../../../../model/client/management/subscription-plan-client";
 import NoData from "../../../../ui/no-data";
 
 export default function SubscriptionPlanManagement() {

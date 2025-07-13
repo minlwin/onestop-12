@@ -2,8 +2,8 @@ import { useNavigate, useSearchParams } from "react-router";
 import Page from "../../../../ui/page";
 import FormGroup from "../../../../ui/form-group";
 import { useForm } from "react-hook-form";
-import type { SubscriptionPlanForm } from "../../../../model/dto";
-import { createPlan, findPlanById, updatePlan } from "../../../../model/client/management-plan-client";
+import type { SubscriptionPlanForm } from "../../../../model/dto/management/subscription-plan";
+import { createPlan, findPlanById, updatePlan } from "../../../../model/client/management/subscription-plan-client";
 import { useEffect } from "react";
 import FormError from "../../../../ui/form-error";
 

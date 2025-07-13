@@ -1,8 +1,8 @@
 import { Link, useParams } from "react-router";
 import Page from "../../../../ui/page";
 import { useEffect, useState } from "react";
-import { findPlanById } from "../../../../model/client/management-plan-client";
-import type { SubscriptionPlanDetails } from "../../../../model/dto";
+import { findPlanById } from "../../../../model/client/management/subscription-plan-client";
+import type { SubscriptionPlanDetails } from "../../../../model/dto/management/subscription-plan";
 import FormGroup from "../../../../ui/form-group";
 
 export default function SubscriptionPlanDetails() {

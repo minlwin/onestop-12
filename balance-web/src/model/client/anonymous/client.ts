@@ -1,5 +1,5 @@
-import type { AuthResult, SignInForm, SignUpForm } from "../dto";
-import { anonymousClient } from "./_instance";
+import type { AuthResult, SignInForm, SignUpForm } from "../../dto/anonymous/commons";
+import { anonymousClient } from "../_instance";
 
 export async function signInRequest(form : SignInForm):Promise<AuthResult> {
     const {data} = await anonymousClient().post('/token/generate', form)

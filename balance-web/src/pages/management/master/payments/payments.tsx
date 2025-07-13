@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
-import type { PaymentMethodListItem, PaymentMethodSearch } from "../../../../model/dto";
+import type { PaymentMethodListItem, PaymentMethodSearch } from "../../../../model/dto/management/payment-method";
 import Page from "../../../../ui/page";
 import { useEffect, useState } from "react";
-import { searchPaymentMethod } from "../../../../model/client/management-paymentmethod-client";
+import { searchPaymentMethod } from "../../../../model/client/management/paymentmethod-client";
 import FormGroup from "../../../../ui/form-group";
 import { Link } from "react-router";
 import NoData from "../../../../ui/no-data";

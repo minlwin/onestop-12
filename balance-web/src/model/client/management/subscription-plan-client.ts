@@ -1,5 +1,5 @@
-import type { SubscriptionPlanDetails, SubscriptionPlanForm, SubscriptionPlanListItem, SubscriptionPlanSearch } from "../dto";
-import { securedClient } from "./_instance";
+import type { SubscriptionPlanDetails, SubscriptionPlanForm, SubscriptionPlanListItem, SubscriptionPlanSearch } from "../../dto/management/subscription-plan";
+import { securedClient } from "../_instance";
 
 export async function searchPlan(search:SubscriptionPlanSearch):Promise<SubscriptionPlanListItem[]> {
     const {data} = await securedClient().get("/management/plan", {params: search})

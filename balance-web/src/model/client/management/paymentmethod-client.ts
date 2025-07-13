@@ -1,5 +1,5 @@
-import type { PaymentMethodDetails, PaymentMethodForm, PaymentMethodListItem, PaymentMethodSearch } from "../dto";
-import { securedClient } from "./_instance";
+import type { PaymentMethodDetails, PaymentMethodForm, PaymentMethodListItem, PaymentMethodSearch } from "../../dto/management/payment-method";
+import { securedClient } from "../_instance";
 
 export async function searchPaymentMethod(form: PaymentMethodSearch)
     :Promise<PaymentMethodListItem[]> {

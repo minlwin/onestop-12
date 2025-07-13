@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router";
 import FormGroup from "../../ui/form-group";
 import { useForm } from "react-hook-form";
-import type { SignInForm } from "../../model/dto";
-import { signInRequest } from "../../model/client/anonymous-client";
+import type { SignInForm } from "../../model/dto/anonymous/commons";
+import { signInRequest } from "../../model/client/anonymous/client";
 import { authStore } from "../../model/store/auth-result.store";
 
 export default function SignIn() {

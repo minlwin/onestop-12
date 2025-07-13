@@ -1,8 +1,8 @@
 import { Link, useParams } from "react-router";
 import Page from "../../../../ui/page";
 import { useEffect, useState } from "react";
-import { findPaymentMethod } from "../../../../model/client/management-paymentmethod-client";
-import type { PaymentMethodDetails } from "../../../../model/dto";
+import { findPaymentMethod } from "../../../../model/client/management/paymentmethod-client";
+import type { PaymentMethodDetails } from "../../../../model/dto/management/payment-method";
 import FormGroup from "../../../../ui/form-group";
 
 export default function PaymentMethodDetails() {

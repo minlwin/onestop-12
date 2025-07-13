@@ -1,6 +1,6 @@
 import axios from "axios";
 import { authStore } from "../store/auth-result.store";
-import { refreshToken } from "./anonymous-client";
+import { refreshToken } from "./anonymous/client";
 
 export function anonymousClient() {
     return axios.create({
