@@ -3,6 +3,7 @@ package com.jdc.balance.common.utils;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -27,6 +28,11 @@ public class LedgerEntryItemMapper {
 	
 	public List<LedgerEntryItem> fromJson(String json) {
 		try {
+			
+			if (!StringUtils.hasLength(json)) {
+				return List.of();
+			}
+			
 			return objectMapper.readValue(json, new TypeReference<List<LedgerEntryItem>>() {});
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException("Error converting JSON to LedgerEntryItem list", e);

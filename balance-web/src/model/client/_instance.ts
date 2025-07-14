@@ -68,7 +68,7 @@ export type Pager = {
 
 export type PageResult<T> = {
     contents : T[]
-    pager: Pager
+    pager?: Pager
 }
 
 export type ModificationResult<T> = {
