@@ -2,6 +2,7 @@ package com.jdc.balance.api.management.output;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import com.jdc.balance.domain.embeddable.SubscriptionPk;
 import com.jdc.balance.domain.entity.Subscription;
@@ -11,8 +12,9 @@ import com.jdc.balance.domain.entity.Subscription.Usage;
 public record SubscriptionDetails(
         SubscriptionPk id,
         String planName,
-        String previousPlan,
         LocalDate expiredAt,
+        String previousPlan,
+        LocalDate previousPlanExpiredAt,
         int paymentAmount,
         String paymentName,
         String paymentSlip,
@@ -33,9 +35,13 @@ public record SubscriptionDetails(
 		return new Builder()
 				.id(entity.getId())
 				.planName(entity.getPlan().getName())
-				.previousPlan(entity.getPreviousPlan().getName())
-				.expiredAt(entity.getMember().getAccount().getExpiredAt())
-				.paymentName(entity.getPayment().getName())
+				.previousPlan(Optional.ofNullable(entity.getPreviousPlan())
+						.map(plan -> plan.getName())
+						.orElse(null))
+				.expiredAt(entity.getPreviousPlanExpiredAt())
+				.paymentName(Optional.ofNullable(entity.getPayment())
+						.map(payment -> payment.getName())
+						.orElse(null))
 				.paymentAmount(entity.getPaymentAmount())
 				.paymentSlip(entity.getPaymentSlip())
 				.memberId(entity.getMember().getId())
@@ -57,8 +63,9 @@ public record SubscriptionDetails(
     public static class Builder {
         private SubscriptionPk id;
         private String planName;
-        private String previousPlan;
         private LocalDate expiredAt;
+        private String previousPlan;
+        private LocalDate previousPlanExpiredAt;
         private String paymentName;
         private int paymentAmount;
         private String paymentSlip;
@@ -85,16 +92,21 @@ public record SubscriptionDetails(
             return this;
         }
 
-        public Builder previousPlan(String previousPlan) {
-            this.previousPlan = previousPlan;
-            return this;
-        }
-
         public Builder expiredAt(LocalDate expiredAt) {
             this.expiredAt = expiredAt;
             return this;
         }
 
+        public Builder previousPlan(String previousPlan) {
+            this.previousPlan = previousPlan;
+            return this;
+        }
+        
+        public Builder previousPlanExpiredAt(LocalDate previousPlanExpiredAt) {
+			this.previousPlanExpiredAt = previousPlanExpiredAt;
+			return this;
+		}
+        
         public Builder paymentName(String paymentName) {
             this.paymentName = paymentName;
             return this;
@@ -174,8 +186,9 @@ public record SubscriptionDetails(
             return new SubscriptionDetails(
                 id,
                 planName,
-                previousPlan,
                 expiredAt,
+                previousPlan,
+                previousPlanExpiredAt,
                 paymentAmount,
                 paymentName,
                 paymentSlip,

@@ -28,6 +28,7 @@ public class Subscription extends AuditableEntity{
 	
 	@ManyToOne
 	private SubscriptionPlan previousPlan;
+	private LocalDate previousPlanExpiredAt;
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "member_id", referencedColumnName = "id", insertable = false, updatable = false)

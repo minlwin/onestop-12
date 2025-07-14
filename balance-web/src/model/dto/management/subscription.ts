@@ -24,6 +24,7 @@ export type SubscriptionListItem = {
 };
 
 export type SubscriptionDetails = SubscriptionListItem & {
+    previousPlanExpiredAt: string
     paymentSlip: string
     phone: string
     email: string
