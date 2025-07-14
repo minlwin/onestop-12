@@ -2,7 +2,8 @@ networks:
   balance-net:
 
 volumes:
-  balance-volume:
+  balance-db-volume:
+  balance-backend-volume:
 
 services:
   db:
@@ -18,4 +19,18 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - balance-volume:/var/lib/postgresql/data
+      - balance-db-volume:/var/lib/postgresql/data
+  backend:
+    build: ./balance-backend
+    container_name: balance-api
+    networks:
+      - balance-net
+    environment:
+      - TZ=Asia/Yangon
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - 8080:8080
+    volumes:
+      - balance-backend-volume:/home/spring/images
+    depends_on:
+      - db

@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.jdc.balance.domain.repo.AccountRepo;
 
+@ActiveProfiles("test")
 @SpringBootTest
 public class BalanceApiApplicationTest {
 	
@@ -17,6 +19,6 @@ public class BalanceApiApplicationTest {
 	@Test
 	public void launchApplicatio() {
 		var count = accountRepo.count();
-		assertEquals(0L, count);
+		assertEquals(1L, count);
 	}
 }
