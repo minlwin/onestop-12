@@ -11,9 +11,8 @@ import com.jdc.balance.domain.entity.Subscription.Usage;
 
 public record SubscriptionDetails(
         SubscriptionPk id,
-        String planName,
-        LocalDate expiredAt,
-        String previousPlan,
+        PlanInfo plan,
+        PlanInfo previousPlan,
         LocalDate previousPlanExpiredAt,
         int paymentAmount,
         String paymentName,
@@ -34,11 +33,11 @@ public record SubscriptionDetails(
 	public static SubscriptionDetails from(Subscription entity) {
 		return new Builder()
 				.id(entity.getId())
-				.planName(entity.getPlan().getName())
+				.plan(new PlanInfo(entity.getPlan()))
 				.previousPlan(Optional.ofNullable(entity.getPreviousPlan())
-						.map(plan -> plan.getName())
+						.map(PlanInfo::new)
 						.orElse(null))
-				.expiredAt(entity.getPreviousPlanExpiredAt())
+				.previousPlanExpiredAt(entity.getPreviousPlanExpiredAt())
 				.paymentName(Optional.ofNullable(entity.getPayment())
 						.map(payment -> payment.getName())
 						.orElse(null))
@@ -62,9 +61,8 @@ public record SubscriptionDetails(
 
     public static class Builder {
         private SubscriptionPk id;
-        private String planName;
-        private LocalDate expiredAt;
-        private String previousPlan;
+        private PlanInfo plan;
+        private PlanInfo previousPlan;
         private LocalDate previousPlanExpiredAt;
         private String paymentName;
         private int paymentAmount;
@@ -87,17 +85,12 @@ public record SubscriptionDetails(
             return this;
         }
 
-        public Builder planName(String planName) {
-            this.planName = planName;
+        public Builder plan(PlanInfo plan) {
+            this.plan = plan;
             return this;
         }
 
-        public Builder expiredAt(LocalDate expiredAt) {
-            this.expiredAt = expiredAt;
-            return this;
-        }
-
-        public Builder previousPlan(String previousPlan) {
+        public Builder previousPlan(PlanInfo previousPlan) {
             this.previousPlan = previousPlan;
             return this;
         }
@@ -185,8 +178,7 @@ public record SubscriptionDetails(
         public SubscriptionDetails build() {
             return new SubscriptionDetails(
                 id,
-                planName,
-                expiredAt,
+                plan,
                 previousPlan,
                 previousPlanExpiredAt,
                 paymentAmount,

@@ -8,7 +8,7 @@ export default function Page({icon, title, actions, children} : PageProperties) 
                 {actions}
             </section>
 
-            <section>
+            <section className="mt-3">
                 {children}
             </section>
         </>

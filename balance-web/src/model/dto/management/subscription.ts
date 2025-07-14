@@ -23,16 +23,38 @@ export type SubscriptionListItem = {
   reason: string;
 };
 
-export type SubscriptionDetails = SubscriptionListItem & {
-    previousPlanExpiredAt: string
-    paymentSlip: string
-    phone: string
-    email: string
-    createdBy: string
-    createdAt: string
-    updatedBy: string
-    updatedAt: string
+export type PlanInfo = {
+    id: number
+    name: string;             // required, must not be blank
+    months: number;
+    fees: number;
+    maxLedgers: number;      // optional (Integer in Java = nullable)
+    dailyEntry: number;      // optional
+    monthlyEntry: number;    // optional
 }
+
+export type SubscriptionDetails = {
+  id: SubscriptionPk;
+  plan: PlanInfo;
+  previousPlan: PlanInfo;
+  previousPlanExpiredAt: string; // LocalDate → ISO date string (e.g., "2025-07-14")
+  paymentAmount: number;
+  paymentName: string;
+  paymentSlip: string;
+  memberId: number;
+  memberName: string;
+  phone: string;
+  email: string;
+  usage: Usage;
+  status: SubscriptionStatus;
+  statusChangeAt: string; // LocalDateTime → ISO date-time string (e.g., "2025-07-14T12:30:00")
+  reason: string;
+  createdBy: string;
+  createdAt: string; // LocalDateTime
+  updatedBy: string;
+  updatedAt: string; // LocalDateTime
+};
+
 
 export type SubscriptionSearch = {
   planId?: number;
