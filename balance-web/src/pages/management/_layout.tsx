@@ -1,5 +1,6 @@
 import { Link, Outlet, useNavigate } from "react-router"
 import { authStore } from "../../model/store/auth-result.store"
+import ManagementPlanProvider from "../../model/provider/management-plan-provider"
 
 export default function AdminLayout() {
     return (
@@ -7,7 +8,9 @@ export default function AdminLayout() {
             <Navigation />
 
             <main className="container-fluid mt-3">
-                <Outlet />
+                <ManagementPlanProvider>
+                    <Outlet />
+                </ManagementPlanProvider>
             </main>
         </>
     )

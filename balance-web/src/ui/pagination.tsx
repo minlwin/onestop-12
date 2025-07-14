@@ -3,7 +3,7 @@ import InputGroup from "./input-group";
 
 export default function Pagination({pager, sizeChange, pageChange} : {pager?: Pager, sizeChange : (size:number) => void, pageChange : (size:number) => void}) {
     
-    if(!pager || pager.totalPage > 1) {
+    if(!pager || pager.totalPage <= 1) {
         return (
             <></>
         )

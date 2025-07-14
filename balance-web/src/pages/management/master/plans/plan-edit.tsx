@@ -3,15 +3,17 @@ import Page from "../../../../ui/page";
 import FormGroup from "../../../../ui/form-group";
 import { useForm } from "react-hook-form";
 import type { SubscriptionPlanForm } from "../../../../model/dto/management/subscription-plan";
-import { createPlan, findPlanById, updatePlan } from "../../../../model/client/management/subscription-plan-client";
+import { createPlan, findPlanById, searchPlan, updatePlan } from "../../../../model/client/management/subscription-plan-client";
 import { useEffect } from "react";
 import FormError from "../../../../ui/form-error";
+import { useManagementPlan } from "../../../../model/provider/management-plan-context";
 
 export default function EditSubscriptionPlan() {
 
     const [params] = useSearchParams()
     const planId = params.get("planId")
     const navigate = useNavigate()
+    const {setPlans} = useManagementPlan()
 
     const {handleSubmit, reset, register, watch,formState : {errors}} = useForm<SubscriptionPlanForm>()
 
@@ -41,6 +43,10 @@ export default function EditSubscriptionPlan() {
         } else {
             await createPlan(form)
         } 
+
+        const response = await searchPlan({})
+        setPlans(response)
+
         navigate(`/admin/master/plan`)
     }
 

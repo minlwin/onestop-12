@@ -20,6 +20,7 @@ import EditSubscriptionPlan from './pages/management/master/plans/plan-edit.tsx'
 import SubscriptionPlanDetails from './pages/management/master/plans/plan-details.tsx'
 import EditPaymentMethod from './pages/management/master/payments/payment-edit.tsx'
 import PaymentMethodDetails from './pages/management/master/payments/payment-details.tsx'
+import SubscriptionDetails from './pages/management/subscription/details.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -35,6 +36,7 @@ createRoot(document.getElementById('root')!).render(
           <Route index element={<DashBoard />} />
           <Route path='members' element={<MemberManagement />} />
           <Route path='subscriptions' element={<Subscriptions />} />
+          <Route path='subscriptions/:code' element={<SubscriptionDetails />} />
           <Route path='master/plan' element={<SubscriptionPlanManagement />} />
           <Route path='master/plan/edit' element={<EditSubscriptionPlan />} />
           <Route path='master/plan/:planId' element={<SubscriptionPlanDetails />} />

@@ -6,7 +6,7 @@ export async function searchPlan(search:SubscriptionPlanSearch):Promise<Subscrip
     return data
 }
 
-export async function findPlanById(id:unknown) : Promise<ModificationResult<number>> {
+export async function findPlanById(id:unknown) : Promise<SubscriptionPlanDetails> {
     const {data} = await securedClient().get(`/management/plan/${id}`)
     return data
 }

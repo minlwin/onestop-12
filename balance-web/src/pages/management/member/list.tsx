@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import type { PageResult } from "../../../model/client/_instance";
 import { searchMember } from "../../../model/client/management/member-client";
 import Pagination from "../../../ui/pagination";
+import { useManagementPlan } from "../../../model/provider/management-plan-context";
 
 export default function MemberManagement() {
 
@@ -38,6 +39,7 @@ function SearchForm({search, selectedPage, selectedSize} : {search:(form:MemberS
 
     const {handleSubmit, register, reset} = useForm<MemberSearch>()
     const searchForm = useRef<HTMLFormElement | null>(null)
+    const {plans} = useManagementPlan()
 
     useEffect(() => {
         if(searchForm.current) {
@@ -58,6 +60,9 @@ function SearchForm({search, selectedPage, selectedSize} : {search:(form:MemberS
             <FormGroup label="Plan" className="col-auto">
                 <select {...register('planId')} className="form-select">
                     <option value="">Search All</option>
+                    {plans.map(item => 
+                        <option key={item.id} value={item.id}>{item.name}</option>
+                    )}
                 </select>
             </FormGroup>
 
@@ -90,6 +95,29 @@ function ListView({list} : {list : MemberListItem[]}) {
         )
     }
     return (
-        <></>
+        <table className="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Plan</th>
+                    <th>Expire At</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+            {list.map(item => 
+                <tr key={item.id}>
+                    <td>{item.id}</td>
+                    <td>{item.name}</td>
+                    <td>{item.planName}</td>
+                    <td>{item.expiredAt}</td>
+                    <td>{item.phone}</td>
+                    <td>{item.email}</td>
+                </tr>
+            )}
+            </tbody>
+        </table>
     )
 }
