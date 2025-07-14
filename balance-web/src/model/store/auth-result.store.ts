@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import type { AuthResult } from "../dto"
+import type { AuthResult } from "../dto/anonymous/commons"
 import { createJSONStorage, persist } from "zustand/middleware"
 
 type AuthStoreType = {
@@ -17,3 +17,13 @@ export const authStore = create(persist<AuthStoreType>(
      storage: createJSONStorage(() => localStorage)
    }
 ))
+
+export function userName() {
+  const auth = authStore.getState().auth as AuthResult | undefined
+
+  if(!auth) {
+    throw Error("You need to login")
+  }
+
+  return auth
+}

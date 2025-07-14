@@ -100,7 +100,8 @@ public class LedgerEntryService {
 
 	public LedgerEntryDetails findById(String username, String requestedId) {
 		var member = safeCall(memberRepo.findByAccountEmail(username), "Member", username);	
-		return safeCall(entryRepo.findById(getId(member.getId(), requestedId)).map(LedgerEntryDetails::from), 
+		return safeCall(entryRepo.findById(getId(member.getId(), requestedId))
+				.map(entry -> LedgerEntryDetails.from(entry, itemMapper::fromJson)), 
 				"Ledger Entry", requestedId);
 	}
 

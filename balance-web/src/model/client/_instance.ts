@@ -57,3 +57,27 @@ export function securedClient() {
 
     return instance
 }
+
+export type Pager = {
+    page: number
+    size: number
+    totalCount : number
+    totalPage : number
+    links : number[]
+}
+
+export type PageResult<T> = {
+    contents : T[]
+    pager: Pager
+}
+
+export type ModificationResult<T> = {
+    success: boolean
+    id?: T
+    message? :string
+}
+
+export type PageSearch = {
+    page: number
+    size: number
+}

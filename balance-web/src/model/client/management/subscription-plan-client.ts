@@ -1,17 +1,17 @@
 import type { SubscriptionPlanDetails, SubscriptionPlanForm, SubscriptionPlanListItem, SubscriptionPlanSearch } from "../../dto/management/subscription-plan";
-import { securedClient } from "../_instance";
+import { securedClient, type ModificationResult } from "../_instance";
 
 export async function searchPlan(search:SubscriptionPlanSearch):Promise<SubscriptionPlanListItem[]> {
     const {data} = await securedClient().get("/management/plan", {params: search})
     return data
 }
 
-export async function findPlanById(id:unknown) : Promise<SubscriptionPlanDetails> {
+export async function findPlanById(id:unknown) : Promise<ModificationResult<number>> {
     const {data} = await securedClient().get(`/management/plan/${id}`)
     return data
 }
 
-export async function createPlan(form:SubscriptionPlanForm) : Promise<SubscriptionPlanDetails>  {
+export async function createPlan(form:SubscriptionPlanForm) : Promise<ModificationResult<number>>  {
     const {data} = await securedClient().post('/management/plan', form)
     return data
 }

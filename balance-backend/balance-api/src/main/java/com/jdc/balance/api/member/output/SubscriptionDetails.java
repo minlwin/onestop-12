@@ -16,7 +16,6 @@ public record SubscriptionDetails(
         String planName,
         LocalDate planStartAt,
         int fees,
-        int paymentId,
         String paymentName,
         String accountNo,
         String accountName,
@@ -34,7 +33,6 @@ public record SubscriptionDetails(
 				.planName(entity.getPlan().getName())
 				.planStartAt(entity.getStartAt())
 				.fees(entity.getPaymentAmount())
-				.paymentId(entity.getPayment().getId())
 				.paymentName(entity.getPayment().getName())
 				.accountNo(entity.getPayment().getAccountNo())
 				.accountName(entity.getPayment().getAccountName())
@@ -53,7 +51,6 @@ public record SubscriptionDetails(
         private String planName;
         private LocalDate planStartAt;
         private int fees;
-        private int paymentId;
         private String paymentName;
         private String accountNo;
         private String accountName;
@@ -90,11 +87,6 @@ public record SubscriptionDetails(
 
         public Builder fees(int fees) {
             this.fees = fees;
-            return this;
-        }
-
-        public Builder paymentId(int paymentId) {
-            this.paymentId = paymentId;
             return this;
         }
 
@@ -146,7 +138,6 @@ public record SubscriptionDetails(
                 planName,
                 planStartAt,
                 fees,
-                paymentId,
                 paymentName,
                 accountNo,
                 accountName,

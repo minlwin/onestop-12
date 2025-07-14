@@ -1,5 +1,5 @@
 import type { PaymentMethodDetails, PaymentMethodForm, PaymentMethodListItem, PaymentMethodSearch } from "../../dto/management/payment-method";
-import { securedClient } from "../_instance";
+import { securedClient, type ModificationResult } from "../_instance";
 
 export async function searchPaymentMethod(form: PaymentMethodSearch)
     :Promise<PaymentMethodListItem[]> {
@@ -8,13 +8,13 @@ export async function searchPaymentMethod(form: PaymentMethodSearch)
 }
 
 export async function createPaymentMethod(form: PaymentMethodForm)
-    :Promise<PaymentMethodDetails> {
+    :Promise<ModificationResult<number>> {
     const {data} = await securedClient().post('/management/payment', form)
     return data
 }
 
 export async function updatePaymentMethod(id:unknown, form: PaymentMethodForm)
-    :Promise<PaymentMethodDetails> {
+    :Promise<ModificationResult<number>> {
     const {data} = await securedClient().put(`/management/payment/${id}`, form)
     return data
 }

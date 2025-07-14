@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jdc.balance.api.management.output.SubscriptionPlanListItem;
+import com.jdc.balance.api.member.output.SubscriptionPlanListItem;
 import com.jdc.balance.api.member.service.SubscriptionPlanService;
 
 import lombok.RequiredArgsConstructor;

@@ -13,8 +13,8 @@ public record SubscriptionDetails(
         String planName,
         String previousPlan,
         LocalDate expiredAt,
-        String paymentName,
         int paymentAmount,
+        String paymentName,
         String paymentSlip,
         long memberId,
         String memberName,
@@ -23,7 +23,11 @@ public record SubscriptionDetails(
         Usage usage,
         Status status,
         LocalDateTime statusChangeAt,
-        String reason) {
+        String reason, 
+        String createdBy,
+        LocalDateTime createdAt,
+        String updatedBy,
+        LocalDateTime updatedAt) {
 	
 	public static SubscriptionDetails from(Subscription entity) {
 		return new Builder()
@@ -42,6 +46,10 @@ public record SubscriptionDetails(
 				.status(entity.getStatus())
 				.statusChangeAt(entity.getStatusChangeAt())
 				.reason(entity.getReason())
+				.createdBy(entity.getCreatedBy())
+				.createdAt(entity.getCreatedAt())
+				.updatedBy(entity.getUpdatedBy())
+				.updatedAt(entity.getUpdatedAt())
 				.build();
 	}
 
@@ -62,6 +70,10 @@ public record SubscriptionDetails(
         private Status status;
         private LocalDateTime statusChangeAt;
         private String reason;
+        private String createdBy;
+        private LocalDateTime createdAt;
+        private String updatedBy;
+        private LocalDateTime updatedAt;
 
         public Builder id(SubscriptionPk id) {
             this.id = id;
@@ -137,6 +149,26 @@ public record SubscriptionDetails(
             this.reason = reason;
             return this;
         }
+        
+        public Builder createdBy(String createdBy) {
+			this.createdBy = createdBy;
+			return this;
+		}
+        
+        public Builder createdAt(LocalDateTime createdAt) {
+			this.createdAt = createdAt;
+			return this;
+		}
+        
+        public Builder updatedBy(String updatedBy) {
+			this.updatedBy = updatedBy;
+			return this;
+        }
+        
+        public Builder updatedAt(LocalDateTime updatedAt) {
+        	this.updatedAt = updatedAt;
+        	return this;
+        }
 
         public SubscriptionDetails build() {
             return new SubscriptionDetails(
@@ -144,8 +176,8 @@ public record SubscriptionDetails(
                 planName,
                 previousPlan,
                 expiredAt,
-                paymentName,
                 paymentAmount,
+                paymentName,
                 paymentSlip,
                 memberId,
                 memberName,
@@ -154,7 +186,11 @@ public record SubscriptionDetails(
                 usage,
                 status,
                 statusChangeAt,
-                reason
+                reason,
+                createdBy,
+                createdAt,
+                updatedBy,
+                updatedAt
             );
         }
     }
