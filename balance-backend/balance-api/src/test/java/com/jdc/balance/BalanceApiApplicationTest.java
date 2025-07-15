@@ -9,8 +9,8 @@ import org.springframework.test.context.ActiveProfiles;
 
 import com.jdc.balance.domain.repo.AccountRepo;
 
-@ActiveProfiles("test")
 @SpringBootTest
+@ActiveProfiles("test")
 public class BalanceApiApplicationTest {
 	
 	@Autowired
