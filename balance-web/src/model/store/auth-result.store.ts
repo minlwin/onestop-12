@@ -25,5 +25,5 @@ export function userName() {
     throw Error("You need to login")
   }
 
-  return auth
+  return auth.email
 }
