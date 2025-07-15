@@ -30,7 +30,7 @@ public class LedgerEntryApi {
 	private final LedgerEntryService service;
 
 	@GetMapping
-	@PreAuthorize("authentication.name eq username")
+	@PreAuthorize("authentication.name eq #username")
 	PageResult<LedgerEntryListItem> search(
 			@PathVariable String username,
 			LedgerEntrySearch search, 
@@ -40,7 +40,7 @@ public class LedgerEntryApi {
 	}
 	
 	@GetMapping("{requestedId}")
-	@PreAuthorize("authentication.name eq username")
+	@PreAuthorize("authentication.name eq #username")
 	LedgerEntryDetails findById(
 			@PathVariable String username, 
 			@PathVariable String requestedId) {
@@ -48,7 +48,7 @@ public class LedgerEntryApi {
 	}
 	
 	@PostMapping
-	@PreAuthorize("authentication.name eq username")
+	@PreAuthorize("authentication.name eq #username")
 	ModificationResult<LedgerEntryPk> create(
 			@PathVariable String username,
 			@RequestBody @Validated LedgerEntryForm form) {
@@ -56,7 +56,7 @@ public class LedgerEntryApi {
 	}
 	
 	@PutMapping("{requestedId}")
-	@PreAuthorize("authentication.name eq username")
+	@PreAuthorize("authentication.name eq #susername")
 	ModificationResult<LedgerEntryPk> update(
 			@PathVariable String username,
 			@PathVariable String requestedId,

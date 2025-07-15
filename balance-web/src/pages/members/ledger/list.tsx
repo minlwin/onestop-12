@@ -1,14 +1,15 @@
 import { useForm } from "react-hook-form";
 import Page from "../../../ui/page";
-import type { LedgerListItem, LedgerSearch } from "../../../model/dto/member/ledger";
+import type { LedgerForm, LedgerListItem, LedgerSearch } from "../../../model/dto/member/ledger";
 import FormGroup from "../../../ui/form-group";
 import { LEDGER_TYPE_LIST } from "../../../model/constants";
-import { useState } from "react";
-import { searchLedger } from "../../../model/client/member/ledger-client";
+import { useRef, useState } from "react";
+import { createLedger, searchLedger } from "../../../model/client/member/ledger-client";
 import NoData from "../../../ui/no-data";
 import ModalDialog from "../../../ui/modal-dialog";
 import ModalDialogProvider from "../../../model/provider/modal-dialog-provider";
 import { useModalDialogContext } from "../../../model/provider/modal-dialog-context";
+import FormError from "../../../ui/form-error";
 
 export default function LedgerManagement() {
 
@@ -17,6 +18,11 @@ export default function LedgerManagement() {
     async function search(form:LedgerSearch) {
         const response = await searchLedger(form)
         setList(response)
+    }
+
+    async function save(form:LedgerForm) {
+        await createLedger(form)
+        search({})
     }
 
     return (
@@ -28,7 +34,7 @@ export default function LedgerManagement() {
                     <ListView list={list} />
                 </section>
 
-                <EditDialog />
+                <EditDialog onSave={save} />
             </ModalDialogProvider>
         </Page>
     )
@@ -108,10 +114,40 @@ function ListView({list} : {list: LedgerListItem[]}) {
     )
 }
 
-function EditDialog() {
+function EditDialog({onSave} : {onSave : (form: LedgerForm) => void}) {
+    const {handleSubmit, register, formState: {errors}} = useForm<LedgerForm>()
+    const formRef = useRef<HTMLFormElement | null>(null)
+
     return (
-        <ModalDialog title="Create Ledger">
-            <form action=""></form>
+        <ModalDialog title="Create Ledger" 
+            action={() => formRef.current?.requestSubmit()}>
+            <form ref={formRef} onSubmit={handleSubmit(onSave)}>
+                <div className="row mb-3">
+                    <FormGroup label="Type" className="col-auto">
+                        <select {...register('type', {required : true})} className="form-select">
+                            <option value="">Select Type</option>
+                            {LEDGER_TYPE_LIST.map(item => 
+                                <option key={item} value={item}>{item}</option>
+                            )}
+                        </select>
+                        {errors.type && <FormError message="Please select type." />}
+                    </FormGroup>
+
+                    <FormGroup label="Code" className="col">
+                        <input {...register('code', {required : true})} type="text" placeholder="Ledger Code" className="form-control" />
+                        {errors.code && <FormError message="Please enter code." />}
+                    </FormGroup>
+                </div>
+                
+                <FormGroup label="Name" className="mb-3">
+                    <input {...register('name', {required : true})} type="text" className="form-control" placeholder="Ledger Name" />
+                    {errors.name && <FormError message="Please enter ledger name." />}
+                </FormGroup>
+
+                <FormGroup label="Description">
+                    <textarea {...register('description')} className="form-control"></textarea>
+                </FormGroup>
+            </form>
         </ModalDialog>
     )
 }

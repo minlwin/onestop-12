@@ -29,7 +29,7 @@ public class LedgerApi {
 	private final LedgerService service;
 
 	@GetMapping
-	@PreAuthorize("authentication.name eq username")
+	@PreAuthorize("authentication.name eq #username")
 	List<LedgerListItem> search(
 			@PathVariable String username, 
 			LedgerSearch search) {
@@ -37,7 +37,7 @@ public class LedgerApi {
 	}
 	
 	@PostMapping
-	@PreAuthorize("authentication.name eq username")
+	@PreAuthorize("authentication.name eq #username")
 	ModificationResult<LedgerPk> create(
 			@PathVariable String username, 
 			@RequestBody @Validated LedgerForm form) {
@@ -45,7 +45,7 @@ public class LedgerApi {
 	}
 
 	@PutMapping("{code}")
-	@PreAuthorize("authentication.name eq username")
+	@PreAuthorize("authentication.name eq #username")
 	ModificationResult<LedgerPk> update(
 			@PathVariable String username, 
 			@RequestBody @Validated LedgerForm form) {

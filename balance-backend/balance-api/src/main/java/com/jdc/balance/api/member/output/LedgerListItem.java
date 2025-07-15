@@ -19,7 +19,7 @@ public record LedgerListItem(
 		Type type,
 		String name,
 		String description,
-		int entries,
+		long entries,
 		BigDecimal total) {
 
 	public static void select(CriteriaBuilder cb, CriteriaQuery<LedgerListItem> cq, Root<Ledger> root) {

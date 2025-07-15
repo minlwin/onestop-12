@@ -3,8 +3,6 @@ import { createContext, useContext } from "react"
 type ModalDialogContextType = {
     show: boolean
     setShow : (show: boolean) => void
-    action?: VoidFunction
-    setAction? : (action : VoidFunction) => void
 }
 
 const ModalDialogContext = createContext<ModalDialogContextType | undefined>(undefined)

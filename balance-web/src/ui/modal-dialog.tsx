@@ -13,11 +13,11 @@ export type Bootstrap = {
 
 declare const bootstrap:Bootstrap
 
-export default function ModalDialog({title, children} : {title : string, children : React.ReactNode}) {
+export default function ModalDialog({title, action, children} : {title : string, action?:VoidFunction, children : React.ReactNode}) {
     
     const dialogRef = useRef<HTMLDivElement | null>(null)
     const modalRef = useRef<Modal | undefined>(undefined)
-    const {show, setShow, action} = useModalDialogContext()
+    const {show, setShow} = useModalDialogContext()
 
     useEffect(() => {
         if(dialogRef.current) {
