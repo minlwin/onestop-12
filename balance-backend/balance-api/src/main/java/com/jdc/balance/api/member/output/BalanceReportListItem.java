@@ -1,6 +1,7 @@
 package com.jdc.balance.api.member.output;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import com.jdc.balance.domain.embeddable.LedgerEntryPk;
 import com.jdc.balance.domain.entity.Ledger.Type;
@@ -14,6 +15,7 @@ import jakarta.persistence.criteria.Root;
 
 public record BalanceReportListItem(
 		LedgerEntryPk id,
+		LocalDate issueAt,
 		String ledger, 
 		String particular,
 		BigDecimal debit,
@@ -45,6 +47,7 @@ public record BalanceReportListItem(
 
 		cq.multiselect(
 			root.get(LedgerEntry_.id),
+			root.get(LedgerEntry_.issueAt),
 			ledger.get(Ledger_.name),
 			root.get(LedgerEntry_.particular),
 			debit,

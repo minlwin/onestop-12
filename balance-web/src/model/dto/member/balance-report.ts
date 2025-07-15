@@ -8,6 +8,7 @@ export type BalanceReportSearch = {
 
 export type BalanceReportListItem = {
   id: LedgerEntryPk;
+  issueAt:string;
   ledger: string;
   particular: string;
   debit: string;   // BigDecimal represented as string

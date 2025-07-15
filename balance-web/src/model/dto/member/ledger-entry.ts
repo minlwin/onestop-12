@@ -10,6 +10,7 @@ export type LedgerEntryPk = {
 
 export type LedgerEntrySearch = {
     type: LedgerType
+    code?: string
     from? : string
     to? : string
     keyword? : string

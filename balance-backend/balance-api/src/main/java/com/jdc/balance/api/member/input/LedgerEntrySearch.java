@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.springframework.util.StringUtils;
 
+import com.jdc.balance.domain.embeddable.LedgerPk_;
 import com.jdc.balance.domain.entity.Account_;
 import com.jdc.balance.domain.entity.Ledger.Type;
 import com.jdc.balance.domain.entity.LedgerEntry;
@@ -20,6 +21,7 @@ import jakarta.persistence.criteria.Root;
 
 public record LedgerEntrySearch(
 		Type type,
+		String code,
 		LocalDate from,
 		LocalDate to,
 		String keyword) {
@@ -28,6 +30,11 @@ public record LedgerEntrySearch(
 		
 		var params = new ArrayList<Predicate>();
 		params.add(cb.equal(root.get(LedgerEntry_.ledger).get(Ledger_.member).get(Member_.account).get(Account_.email), username));
+		
+		
+		if(StringUtils.hasLength(code)) {
+			params.add(cb.like(cb.lower(root.get(LedgerEntry_.ledger).get(Ledger_.id).get(LedgerPk_.code)), likeString(code)));
+		}
 		
 		if(type != null) {
 			params.add(cb.equal(root.get(LedgerEntry_.ledger).get(Ledger_.type), type));

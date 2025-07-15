@@ -61,11 +61,11 @@ function SearchForm({onSearch} : {onSearch : (form : LedgerSearch) => void}) {
             </FormGroup>
 
             <div className="col btn-wrapper">
-                <button type="submit" className="btn btn-dark">
+                <button type="submit" className="btn btn-secondary">
                     <i className="bi-search"></i> Search
                 </button>
 
-                <button onClick={() => setShow(true)} type="button" className="btn btn-outline-dark ms-2">
+                <button onClick={() => setShow(true)} type="button" className="btn btn-outline-secondary ms-2">
                     <i className="bi-plus"></i> Add New
                 </button>
             </div>

@@ -23,6 +23,10 @@ export default function Subscriptions() {
         setResult(response)
     }
 
+    useEffect(() => {
+        setPage(0)
+    }, [size, setPage])
+
     return (
         <Page icon={<i className="bi-cart-plus"></i>} title="Subscription Management">
             <SearchForm page={page} size={size} onSearch={search} />
@@ -31,7 +35,7 @@ export default function Subscriptions() {
                 <ListView list={contents} />
             </section>
 
-            <Pagination pageChange={a => setPage(a)} sizeChange={a => setSize(a)} pager={pager} />
+            <Pagination pageChange={setPage} sizeChange={setSize} pager={pager} />
         </Page>
     )
 }
@@ -43,17 +47,11 @@ function SearchForm({page, size, onSearch} : {page: number, size: number, onSear
     const {plans} = useManagementPlan()
 
     useEffect(() => {
-        reset({page : page})
-        searchForm.current?.requestSubmit()
-    }, [page, searchForm, reset])
-
-    useEffect(() => {
-        reset({
-            page: 0,
-            size: size
-        })
-        searchForm.current?.requestSubmit()
-    }, [size, searchForm, reset])
+        if(searchForm.current) {
+            reset({page : page, size: size})
+            searchForm.current.requestSubmit()
+        }
+    }, [page, size, searchForm, reset])
 
     return (
         <form ref={searchForm} onSubmit={handleSubmit(onSearch)} className="row">

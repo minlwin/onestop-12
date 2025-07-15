@@ -17,6 +17,10 @@ export default function MemberManagement() {
 
     const {contents, pager} = result
 
+    useEffect(() => {
+        setSelectedPage(0)
+    }, [selectedSize, setSelectedPage])
+
     async function search(form:MemberSearch) {
         const response = await searchMember(form)
         setResult(response)
@@ -30,7 +34,7 @@ export default function MemberManagement() {
                 <ListView list={contents} />
             </section> 
 
-            <Pagination pager={pager} pageChange={(page) => setSelectedPage(page)} sizeChange={(size) => setSelectedSize(size)} />
+            <Pagination pager={pager} pageChange={setSelectedPage} sizeChange={setSelectedSize} />
         </Page>
     )
 }
@@ -43,17 +47,10 @@ function SearchForm({search, selectedPage, selectedSize} : {search:(form:MemberS
 
     useEffect(() => {
         if(searchForm.current) {
-            reset({page: selectedPage})
+            reset({page: selectedPage, size : selectedSize})
             searchForm.current.requestSubmit()
         }
-    }, [selectedPage, searchForm, reset])
-
-    useEffect(() => {
-        if(searchForm.current) {
-            reset({size : selectedSize, page : 0})
-            searchForm.current.requestSubmit()
-        }
-    }, [selectedSize, searchForm, reset])
+    }, [selectedPage, selectedSize, searchForm, reset])
 
     return (
         <form ref={searchForm} onSubmit={handleSubmit(search)} className="row">

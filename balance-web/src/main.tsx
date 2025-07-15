@@ -21,6 +21,8 @@ import SubscriptionPlanDetails from './pages/management/master/plans/plan-detail
 import EditPaymentMethod from './pages/management/master/payments/payment-edit.tsx'
 import PaymentMethodDetails from './pages/management/master/payments/payment-details.tsx'
 import SubscriptionDetails from './pages/management/subscription/details.tsx'
+import LedgerEntryEdit from './pages/members/entry/edit.tsx'
+import LedgerEntryDetails from './pages/members/entry/details.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -49,7 +51,9 @@ createRoot(document.getElementById('root')!).render(
           <Route index element={<MemberHome />} />
           <Route path='ledger' element={<LedgerManagement />} />
           <Route path='entry/:type' element={<LedgerEntryManagement />} />
+          <Route path='entry/:type/edit' element={<LedgerEntryEdit />} />
           <Route path='balance' element={<BalanceManagement />} />
+          <Route path='balance/:id' element={<LedgerEntryDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>   
