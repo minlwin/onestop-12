@@ -3,8 +3,8 @@ import Page from "../../../ui/page";
 import type { LedgerForm, LedgerListItem, LedgerSearch } from "../../../model/dto/member/ledger";
 import FormGroup from "../../../ui/form-group";
 import { LEDGER_TYPE_LIST } from "../../../model/constants";
-import { useRef, useState } from "react";
-import { createLedger, searchLedger } from "../../../model/client/member/ledger-client";
+import { useEffect, useRef, useState } from "react";
+import { createLedger, searchLedger, updateLedger } from "../../../model/client/member/ledger-client";
 import NoData from "../../../ui/no-data";
 import ModalDialog from "../../../ui/modal-dialog";
 import ModalDialogProvider from "../../../model/provider/modal-dialog-provider";
@@ -14,15 +14,32 @@ import FormError from "../../../ui/form-error";
 export default function LedgerManagement() {
 
     const [list, setList] = useState<LedgerListItem[]>([])
+    const [editData, setEditData] = useState<LedgerListItem>()
+
+    const searchParamRef = useRef<LedgerSearch>({})
+
+    useEffect(() => {       
+        async function load() {
+            const response = await searchLedger(searchParamRef.current)
+            setList(response)
+        }
+
+        load()
+    }, [searchParamRef])
 
     async function search(form:LedgerSearch) {
+        searchParamRef.current = form
         const response = await searchLedger(form)
         setList(response)
     }
 
-    async function save(form:LedgerForm) {
-        await createLedger(form)
-        search({})
+    async function refreshList() {
+        // Refresh List View
+        const response = await searchLedger(searchParamRef.current)
+        setList(response)
+
+        // Clear Edit Data
+        setEditData(undefined)
     }
 
     return (
@@ -31,10 +48,10 @@ export default function LedgerManagement() {
                 <SearchForm onSearch={search} />
 
                 <section className="my-3">
-                    <ListView list={list} />
+                    <ListView setEditData={setEditData} list={list} />
                 </section>
 
-                <EditDialog onSave={save} />
+                <EditDialog editData={editData} refreshList={refreshList} />
             </ModalDialogProvider>
         </Page>
     )
@@ -73,7 +90,9 @@ function SearchForm({onSearch} : {onSearch : (form : LedgerSearch) => void}) {
     )  
 }
 
-function ListView({list} : {list: LedgerListItem[]}) {
+function ListView({list, setEditData} : {list: LedgerListItem[], setEditData: (data: LedgerListItem) => void },) {
+
+    const {setShow} = useModalDialogContext()
 
     if(!list.length) {
         return <NoData name="Ledger" />
@@ -103,7 +122,11 @@ function ListView({list} : {list: LedgerListItem[]}) {
                     <td className="text-end">{item.entries}</td>
                     <td className="text-end">{item.total}</td>
                     <td className="text-center">
-                        <a href="#" className="icon-link">
+                        <a href="#" onClick={(e) => {
+                            e.preventDefault()
+                            setEditData(item)
+                            setShow(true)
+                        }} className="icon-link">
                             <i className="bi-pencil"></i>
                         </a>
                     </td>
@@ -114,14 +137,42 @@ function ListView({list} : {list: LedgerListItem[]}) {
     )
 }
 
-function EditDialog({onSave} : {onSave : (form: LedgerForm) => void}) {
-    const {handleSubmit, register, formState: {errors}} = useForm<LedgerForm>()
+function EditDialog({editData, refreshList} : {editData?: LedgerListItem,refreshList : VoidFunction}) {
+    const {handleSubmit, register, reset,formState: {errors}} = useForm<LedgerForm>()
     const formRef = useRef<HTMLFormElement | null>(null)
+    const {setShow} = useModalDialogContext()
+
+    useEffect(() => {
+        reset({
+            code : editData?.id.code,
+            type : editData?.type,
+            name: editData?.name,
+            description: editData?.description
+        })
+    }, [editData, reset])
+
+    async function saveLedger(form : LedgerForm) {
+        // Create Ledger
+        if(editData) {
+            await updateLedger(form)
+        } else {
+            await createLedger(form)
+        }
+
+        // hide dialog
+        setShow(false)
+
+        // Clear Form
+        reset(undefined)
+
+        // Refresh List
+        refreshList()
+    }
 
     return (
-        <ModalDialog title="Create Ledger" 
+        <ModalDialog title={editData ? 'Edit Ledger' : 'Create Ledger'} 
             action={() => formRef.current?.requestSubmit()}>
-            <form ref={formRef} onSubmit={handleSubmit(onSave)}>
+            <form ref={formRef} onSubmit={handleSubmit(saveLedger)}>
                 <div className="row mb-3">
                     <FormGroup label="Type" className="col-auto">
                         <select {...register('type', {required : true})} className="form-select">

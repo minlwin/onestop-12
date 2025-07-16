@@ -12,7 +12,7 @@ export async function createLedger(form:LedgerForm):Promise<ModificationResult<L
     return response.data    
 }
 
-export async function update(code:unknown, form:LedgerForm):Promise<ModificationResult<LedgerPk>> {
-    const response = await securedClient().put(`member/${userName()}/ledger/${code}`, form)
+export async function updateLedger(form:LedgerForm):Promise<ModificationResult<LedgerPk>> {
+    const response = await securedClient().put(`member/${userName()}/ledger`, form)
     return response.data    
 }

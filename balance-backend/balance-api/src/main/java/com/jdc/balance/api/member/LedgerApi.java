@@ -44,7 +44,7 @@ public class LedgerApi {
 		return service.create(username, form);
 	}
 
-	@PutMapping("{code}")
+	@PutMapping
 	@PreAuthorize("authentication.name eq #username")
 	ModificationResult<LedgerPk> update(
 			@PathVariable String username, 
