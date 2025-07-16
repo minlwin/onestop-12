@@ -10,6 +10,7 @@ import type { PageResult } from "../../../model/client/_instance";
 import { searchEntry } from "../../../model/client/member/ledger-entry-client";
 import NoData from "../../../ui/no-data";
 import FormGroup from "../../../ui/form-group";
+import { useMemberLedgerContext } from "../../../model/provider/member-ledger-context";
 
 export default function LedgerEntryManagement() {
 
@@ -57,6 +58,9 @@ function SearchForm({type, page, size, onSearch} : {type: LedgerType, page : num
 
     const formRef = useRef<HTMLFormElement | null>(null)
     const {reset, handleSubmit, register} = useForm<LedgerEntrySearch>()
+    const {ledgers} = useMemberLedgerContext()
+
+    const ledgerOptions = ledgers.filter(a => a.type == type)
 
     useEffect(() => {
         if(formRef.current) {
@@ -70,6 +74,9 @@ function SearchForm({type, page, size, onSearch} : {type: LedgerType, page : num
             <FormGroup className="col-auto" label="Ledger">
                 <select {...register('code')} className="form-select">
                     <option value="">Search All</option>
+                    {ledgerOptions.map(item => 
+                        <option key={item.id.code} value={item.id.code}>{item.name}</option>
+                    )}
                 </select>
             </FormGroup>
 

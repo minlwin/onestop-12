@@ -4,17 +4,23 @@ import type { LedgerForm, LedgerListItem, LedgerSearch } from "../../../model/dt
 import FormGroup from "../../../ui/form-group";
 import { LEDGER_TYPE_LIST } from "../../../model/constants";
 import { useEffect, useRef, useState } from "react";
-import { createLedger, searchLedger, updateLedger } from "../../../model/client/member/ledger-client";
+import { searchLedger } from "../../../model/client/member/ledger-client";
 import NoData from "../../../ui/no-data";
-import ModalDialog from "../../../ui/modal-dialog";
 import ModalDialogProvider from "../../../model/provider/modal-dialog-provider";
 import { useModalDialogContext } from "../../../model/provider/modal-dialog-context";
-import FormError from "../../../ui/form-error";
+import LedgerEditDialog from "./ledger-edit-dialog";
+
+const BLANK_FORM:LedgerForm = {
+    code : '',
+    type : '',
+    name: '',
+    description : ''
+}
 
 export default function LedgerManagement() {
 
     const [list, setList] = useState<LedgerListItem[]>([])
-    const [editData, setEditData] = useState<LedgerListItem>()
+    const [editData, setEditData] = useState<LedgerForm>(BLANK_FORM)
 
     const searchParamRef = useRef<LedgerSearch>({})
 
@@ -35,32 +41,52 @@ export default function LedgerManagement() {
 
     async function refreshList() {
         // Refresh List View
+        // Fetch API
         const response = await searchLedger(searchParamRef.current)
+        
+        // Set Result List
         setList(response)
 
         // Clear Edit Data
-        setEditData(undefined)
+        setEditData({...BLANK_FORM})
+    }
+
+    function setForEdit(item : LedgerListItem) {
+        setEditData({
+            code : item.id.code,
+            name : item.name,
+            type : item.type,
+            description : item.description
+        })
     }
 
     return (
         <Page title="Ledger Management" icon={<i className="bi-tags"></i>}>
             <ModalDialogProvider>
-                <SearchForm onSearch={search} />
+                <SearchForm setEditData={setEditData} onSearch={search} />
 
                 <section className="my-3">
-                    <ListView setEditData={setEditData} list={list} />
+                    <ListView setEditData={setForEdit} list={list} />
                 </section>
 
-                <EditDialog editData={editData} refreshList={refreshList} />
+                <LedgerEditDialog editData={editData} refreshList={refreshList} />
             </ModalDialogProvider>
         </Page>
     )
 }
 
-function SearchForm({onSearch} : {onSearch : (form : LedgerSearch) => void}) {
+function SearchForm({onSearch, setEditData} : {
+    onSearch : (form : LedgerSearch) => void,
+    setEditData : (form : LedgerForm) => void
+}) {
 
     const {handleSubmit, register} = useForm<LedgerSearch>()
     const {setShow} = useModalDialogContext()
+
+    function addNew() {
+        setEditData({...BLANK_FORM})
+        setShow(true)
+    }
 
     return (
         <form onSubmit={handleSubmit(onSearch)} className="row">
@@ -82,7 +108,7 @@ function SearchForm({onSearch} : {onSearch : (form : LedgerSearch) => void}) {
                     <i className="bi-search"></i> Search
                 </button>
 
-                <button onClick={() => setShow(true)} type="button" className="btn btn-outline-secondary ms-2">
+                <button onClick={addNew} type="button" className="btn btn-outline-secondary ms-2">
                     <i className="bi-plus"></i> Add New
                 </button>
             </div>
@@ -134,71 +160,5 @@ function ListView({list, setEditData} : {list: LedgerListItem[], setEditData: (d
             )}
             </tbody>
         </table>
-    )
-}
-
-function EditDialog({editData, refreshList} : {editData?: LedgerListItem,refreshList : VoidFunction}) {
-    const {handleSubmit, register, reset,formState: {errors}} = useForm<LedgerForm>()
-    const formRef = useRef<HTMLFormElement | null>(null)
-    const {setShow} = useModalDialogContext()
-
-    useEffect(() => {
-        reset({
-            code : editData?.id.code,
-            type : editData?.type,
-            name: editData?.name,
-            description: editData?.description
-        })
-    }, [editData, reset])
-
-    async function saveLedger(form : LedgerForm) {
-        // Create Ledger
-        if(editData) {
-            await updateLedger(form)
-        } else {
-            await createLedger(form)
-        }
-
-        // hide dialog
-        setShow(false)
-
-        // Clear Form
-        reset(undefined)
-
-        // Refresh List
-        refreshList()
-    }
-
-    return (
-        <ModalDialog title={editData ? 'Edit Ledger' : 'Create Ledger'} 
-            action={() => formRef.current?.requestSubmit()}>
-            <form ref={formRef} onSubmit={handleSubmit(saveLedger)}>
-                <div className="row mb-3">
-                    <FormGroup label="Type" className="col-auto">
-                        <select {...register('type', {required : true})} className="form-select">
-                            <option value="">Select Type</option>
-                            {LEDGER_TYPE_LIST.map(item => 
-                                <option key={item} value={item}>{item}</option>
-                            )}
-                        </select>
-                        {errors.type && <FormError message="Please select type." />}
-                    </FormGroup>
-
-                    <FormGroup label="Code" className="col">
-                        <input {...register('code', {required : true})} type="text" placeholder="Ledger Code" className="form-control" />
-                        {errors.code && <FormError message="Please enter code." />}
-                    </FormGroup>
-                </div>
-                
-                <FormGroup label="Name" className="mb-3">
-                    <input {...register('name', {required : true})} type="text" className="form-control" placeholder="Ledger Name" />
-                    {errors.name && <FormError message="Please enter ledger name." />}
-                </FormGroup>
-
-                <FormGroup label="Description">
-                    <textarea {...register('description')} className="form-control"></textarea>
-                </FormGroup>
-            </form>
-        </ModalDialog>
     )
 }

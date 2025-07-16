@@ -20,7 +20,7 @@ export type LedgerListItem = {
 };
 
 export type LedgerForm = {
-    type: LedgerType
+    type: LedgerType | ""
     code: string
     name: string
     description?: string

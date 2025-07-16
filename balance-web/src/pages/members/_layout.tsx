@@ -1,15 +1,18 @@
 import { Link, Outlet, useNavigate } from "react-router"
 import NavItem from "../../ui/nav-item"
 import { authStore } from "../../model/store/auth-result.store"
+import MemberLedgerProvider from "../../model/provider/member-ledger-provider"
 
 export default function MembersLayout() {
     return (
         <>
             <Navigation />
 
-            <main className="container-fluid mt-3">
-                <Outlet />
-            </main>
+            <MemberLedgerProvider>
+                <main className="container-fluid mt-3">
+                    <Outlet />
+                </main>
+            </MemberLedgerProvider>
         </>
     )
 }
