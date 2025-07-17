@@ -1,16 +1,23 @@
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import Page from "../../../ui/page";
 import type { LedgerEntryForm, LedgerEntryItem } from "../../../model/dto/member/ledger-entry";
 import FormGroup from "../../../ui/form-group";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useMemberLedgerContext } from "../../../model/provider/member-ledger-context";
 import FormError from "../../../ui/form-error";
+import { useEffect, useState } from "react";
+import { createEntry } from "../../../model/client/member/ledger-entry-client";
 
 const BLANK_ITEM:Readonly<LedgerEntryItem> = {item: '', remark: '', quantity: 0, unitPrice: 0}
+
+const getTotal = (item: LedgerEntryItem) => item.unitPrice * item.quantity
+const isValidItem = (item: LedgerEntryItem) => item.unitPrice >= 0 && item.quantity >= 0
 
 export default function LedgerEntryEdit() {
 
     const params = useParams()
+    const navigate = useNavigate()
+
     const ledgerType = params.type == 'credit' ? 'Credit' : 'Debit'
     const {ledgers} = useMemberLedgerContext()
     const ledgerOptions = ledgers.filter(a => a.type == ledgerType)
@@ -31,7 +38,10 @@ export default function LedgerEntryEdit() {
     })
 
     async function save(form: LedgerEntryForm) {
-        console.log(form)
+        const respose = await createEntry(form)
+        if(respose.success && respose.id) {
+            navigate(`/member/balance/${respose.id.requestId}`)
+        }
     }
 
     function addItem() {
@@ -46,13 +56,25 @@ export default function LedgerEntryEdit() {
         }
     }
 
+    const itemArray = useWatch({control : control, name : 'items'})
+    const [totals, setTotals] = useState(itemArray.map(getTotal))
+
+    useEffect(() => {
+
+        if(itemArray.filter(a => isValidItem(a)).length) {
+            setTotals(itemArray.map(getTotal))
+        } 
+
+    }, [itemArray])
+
+
     return (
         <Page title={`Create ${ledgerType} Entry`} icon={<i className="bi-pencil"></i>} actions={
             <div className="row" style={{width : 320}}>
                 <div className="col">
                     <div className="input-group">
                         <span className="input-group-text">Total Amount</span>
-                        <span className="form-control text-end">0</span>
+                        <span className="form-control text-end">{totals.reduce((a, b) => a + b)}</span>
                     </div>
                 </div>             
             </div>
@@ -81,16 +103,19 @@ export default function LedgerEntryEdit() {
                 {fields.map((item, index) => 
                     <div className="row mb-2" key={item.id}>
                         <FormGroup label={`${index ? '' : 'Item'}`} className="col">
-                            <input {...register(`items.${index}.item`)} placeholder="Enter Item Name" className="form-control" />
+                            <input {...register(`items.${index}.item`, {required : true})} placeholder="Enter Item Name" className="form-control" />
+                            {errors.items && errors.items[index]?.item && <FormError message="Item name is required." />}
                         </FormGroup>
                         <FormGroup label={`${index ? '' : 'Unit Price'}`} className="col-2">
-                            <input {...register(`items.${index}.unitPrice`)} type="number" className="form-control text-end" />
+                            <input {...register(`items.${index}.unitPrice`, {required: true, min: 0})} type="number" className="form-control text-end" />
+                            {errors.items && errors.items[index]?.unitPrice && <FormError message="Invalid Unit Price." />}
                         </FormGroup>
                         <FormGroup label={`${index ? '' : 'Quantity'}`} className="col-2">
-                            <input {...register(`items.${index}.quantity`)} type="number" className="form-control text-end" />
+                            <input {...register(`items.${index}.quantity`, {required: true, min: 0})} type="number" className="form-control text-end" />
+                            {errors.items && errors.items[index]?.quantity && <FormError message="Invalid Quantity." />}
                         </FormGroup>
                         <FormGroup label={`${index ? '' : 'Total'}`} className="col-2">
-                            <span className="form-control text-end">0</span>
+                            <span className="form-control text-end">{totals[index]}</span>
                         </FormGroup>
                         <FormGroup label={`${index ? '' : 'Remark'}`} className="col">
                             <div className="input-group">
