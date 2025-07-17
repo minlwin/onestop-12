@@ -15,16 +15,12 @@ import { useMemberLedgerContext } from "../../../model/provider/member-ledger-co
 export default function LedgerEntryManagement() {
 
     const params = useParams()
-    const [ledgerType, setLedgerType] = useState<LedgerType | undefined>(undefined)
+    const ledgerType = params.type == 'credit' ? "Credit" : "Debit"
+    
     const [page, setPage] = useState(0)
     const [size, setSize] = useState(10)
     const [result, setResult] = useState<PageResult<LedgerEntryListItem>>({contents: []})
     const {contents, pager} = result
-
-    useEffect(() => {
-        const type = params.type 
-        setLedgerType(type == 'Credit'.toLocaleLowerCase() ? 'Credit' : 'Debit')
-    }, [params])
 
     useEffect(() => {
         setPage(0)
@@ -97,7 +93,7 @@ function SearchForm({type, page, size, onSearch} : {type: LedgerType, page : num
                     <i className="bi-search"></i> Search
                 </button>
 
-                <Link to={`/member/entry/${type}/edit`} className="btn btn-outline-secondary ms-2">
+                <Link to={`/member/entry/${type.toLowerCase()}/edit`} className="btn btn-outline-secondary ms-2">
                     <i className="bi-plus"></i> Add New
                 </Link>
             </div>
