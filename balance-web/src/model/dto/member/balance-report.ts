@@ -11,7 +11,7 @@ export type BalanceReportListItem = {
   issueAt:string;
   ledger: string;
   particular: string;
-  debit: string;   // BigDecimal represented as string
-  credit: string;  // BigDecimal represented as string
-  balance: string; // BigDecimal represented as string
+  debit: number;   
+  credit: number;  
+  balance: number; 
 };

@@ -97,9 +97,9 @@ function ListView({list} : {list : BalanceReportListItem[]}) {
                     <td>{item.id.code}</td>
                     <td>{item.ledger}</td>
                     <td>{item.particular}</td>
-                    <td className="text-end">{item.debit}</td>
-                    <td className="text-end">{item.credit}</td>
-                    <td className="text-end">{item.balance}</td>
+                    <td className="text-end">{item.debit.toLocaleString()}</td>
+                    <td className="text-end">{item.credit.toLocaleString()}</td>
+                    <td className="text-end">{item.balance.toLocaleString()}</td>
                     <td className="text-center">
                         <Link to={`/member/balance/${item.id.requestId}`} className="icon-link">
                             <i className="bi-arrow-right"></i>

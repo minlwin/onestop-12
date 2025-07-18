@@ -5,13 +5,16 @@ import FormGroup from "../../../ui/form-group";
 import { useNavigate, useParams } from "react-router";
 import { useMemberLedgerContext } from "../../../model/provider/member-ledger-context";
 import FormError from "../../../ui/form-error";
-import { useEffect, useState } from "react";
 import { createEntry } from "../../../model/client/member/ledger-entry-client";
 
 const BLANK_ITEM:Readonly<LedgerEntryItem> = {item: '', remark: '', quantity: 0, unitPrice: 0}
 
-const getTotal = (item: LedgerEntryItem) => item.unitPrice * item.quantity
-const isValidItem = (item: LedgerEntryItem) => item.unitPrice >= 0 && item.quantity >= 0
+const getTotal = (item: LedgerEntryItem) => {
+    const total = item.unitPrice * item.quantity
+    return total ? total : 0
+}
+
+const getAllTotal = (items : LedgerEntryItem[]) => items.map(getTotal).reduce((a, b) => a + b)
 
 export default function LedgerEntryEdit() {
 
@@ -57,16 +60,6 @@ export default function LedgerEntryEdit() {
     }
 
     const itemArray = useWatch({control : control, name : 'items'})
-    const [totals, setTotals] = useState(itemArray.map(getTotal))
-
-    useEffect(() => {
-
-        if(itemArray.filter(a => isValidItem(a)).length) {
-            setTotals(itemArray.map(getTotal))
-        } 
-
-    }, [itemArray])
-
 
     return (
         <Page title={`Create ${ledgerType} Entry`} icon={<i className="bi-pencil"></i>} actions={
@@ -74,7 +67,7 @@ export default function LedgerEntryEdit() {
                 <div className="col">
                     <div className="input-group">
                         <span className="input-group-text">Total Amount</span>
-                        <span className="form-control text-end">{totals.reduce((a, b) => a + b)}</span>
+                        <span className="form-control text-end">{getAllTotal(itemArray)}</span>
                     </div>
                 </div>             
             </div>
@@ -115,7 +108,7 @@ export default function LedgerEntryEdit() {
                             {errors.items && errors.items[index]?.quantity && <FormError message="Invalid Quantity." />}
                         </FormGroup>
                         <FormGroup label={`${index ? '' : 'Total'}`} className="col-2">
-                            <span className="form-control text-end">{totals[index]}</span>
+                            <span className="form-control text-end">{getTotal(itemArray[index])}</span>
                         </FormGroup>
                         <FormGroup label={`${index ? '' : 'Remark'}`} className="col">
                             <div className="input-group">

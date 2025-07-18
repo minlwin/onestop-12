@@ -22,7 +22,7 @@ public class BalanceReportApi {
 	private final BalanceReportService service;
 	
 	@GetMapping
-	@PreAuthorize("authorization.name eq #username")
+	@PreAuthorize("authentication.name eq #username")
 	PageResult<BalanceReportListItem> search(
 			@PathVariable String username,
 			BalanceReportSearch search,

@@ -22,8 +22,8 @@ export type LedgerEntryListItem = {
   type: LedgerType;
   issueAt: string; // LocalDate → ISO date string (e.g., '2025-07-13')
   particular: string;
-  lastBalance: string; // BigDecimal → string (to preserve precision)
-  amount: string; // BigDecimal → string
+  lastBalance: number; 
+  amount: number; 
 };
 
 export type LedgerEntryItem = {

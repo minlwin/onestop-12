@@ -129,7 +129,7 @@ function ListView({list} : {list : LedgerEntryListItem[]}) {
                     <td>{item.id.code}</td>
                     <td>{item.ledgerName}</td>
                     <td>{item.particular}</td>
-                    <td className="text-end">{item.amount}</td>
+                    <td className="text-end">{item.amount.toLocaleString()}</td>
                     <td className="text-center">
                         <Link to={`/member/balance/${item.id.requestId}`} className="icon-link">
                             <i className="bi-arrow-right"></i>
