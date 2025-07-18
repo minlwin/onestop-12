@@ -2,10 +2,11 @@ import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import Page from "../../../ui/page";
 import type { LedgerEntryForm, LedgerEntryItem } from "../../../model/dto/member/ledger-entry";
 import FormGroup from "../../../ui/form-group";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import { useMemberLedgerContext } from "../../../model/provider/member-ledger-context";
 import FormError from "../../../ui/form-error";
-import { createEntry } from "../../../model/client/member/ledger-entry-client";
+import { createEntry, findEntryById, updateEntry } from "../../../model/client/member/ledger-entry-client";
+import { useEffect } from "react";
 
 const BLANK_ITEM:Readonly<LedgerEntryItem> = {item: '', remark: '', quantity: 0, unitPrice: 0}
 
@@ -19,13 +20,14 @@ const getAllTotal = (items : LedgerEntryItem[]) => items.map(getTotal).reduce((a
 export default function LedgerEntryEdit() {
 
     const params = useParams()
+    const [query] = useSearchParams()
     const navigate = useNavigate()
 
     const ledgerType = params.type == 'credit' ? 'Credit' : 'Debit'
     const {ledgers} = useMemberLedgerContext()
     const ledgerOptions = ledgers.filter(a => a.type == ledgerType)
 
-    const {handleSubmit, control, register, formState : {errors}} = useForm<LedgerEntryForm>({
+    const {handleSubmit, control, register, reset, formState : {errors}} = useForm<LedgerEntryForm>({
         defaultValues: {
             code: '',
             particular: '',
@@ -40,8 +42,25 @@ export default function LedgerEntryEdit() {
         name: 'items'
     })
 
+    useEffect(() => {
+        async function load(requestId:unknown) {
+            const {id, particular, items} = await findEntryById(requestId)
+
+            reset({
+                code: id.code,
+                particular: particular,
+                items : items
+            })
+        }
+
+        const id = query.get("id")
+        if(id) {
+            load(id)
+        }
+    }, [query, reset])
+
     async function save(form: LedgerEntryForm) {
-        const respose = await createEntry(form)
+        const respose = query.get("id") ? await updateEntry(query.get("id"), form) : await createEntry(form)
         if(respose.success && respose.id) {
             navigate(`/member/balance/${respose.id.requestId}`)
         }
@@ -62,7 +81,7 @@ export default function LedgerEntryEdit() {
     const itemArray = useWatch({control : control, name : 'items'})
 
     return (
-        <Page title={`Create ${ledgerType} Entry`} icon={<i className="bi-pencil"></i>} actions={
+        <Page title={`${query.get("id") ? "Edit" : "Create"} ${ledgerType} Entry`} icon={<i className="bi-pencil"></i>} actions={
             <div className="row" style={{width : 320}}>
                 <div className="col">
                     <div className="input-group">

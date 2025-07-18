@@ -18,9 +18,12 @@ public record LedgerEntryDetails(
 		String particular,
 		BigDecimal lastBalance,
 		BigDecimal amount,
+		boolean canEdit,
 		List<LedgerEntryItem> items) {
 
-	public static LedgerEntryDetails from(LedgerEntry entity, 
+	public static LedgerEntryDetails from(
+			LedgerEntry entity, 
+			Function<LocalDate, Boolean> cutOffFunc, 
 			Function<String, List<LedgerEntryItem>> itemMapper) {
 		return new LedgerEntryDetails(
 				entity.getId(),
@@ -30,6 +33,7 @@ public record LedgerEntryDetails(
 				entity.getParticular(),
 				entity.getLastBalance(),
 				entity.getAmount(),
+				cutOffFunc.apply(entity.getIssueAt()),
 				itemMapper.apply(entity.getItems()));
 	}
 }

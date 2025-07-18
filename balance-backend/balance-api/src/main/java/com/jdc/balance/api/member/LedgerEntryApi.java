@@ -56,7 +56,7 @@ public class LedgerEntryApi {
 	}
 	
 	@PutMapping("{requestedId}")
-	@PreAuthorize("authentication.name eq #susername")
+	@PreAuthorize("authentication.name eq #username")
 	ModificationResult<LedgerEntryPk> update(
 			@PathVariable String username,
 			@PathVariable String requestedId,

@@ -4,6 +4,9 @@ import static com.jdc.balance.common.utils.EntityOperations.safeCall;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.springframework.stereotype.Service;
@@ -13,10 +16,14 @@ import com.jdc.balance.api.member.input.LedgerEntryForm;
 import com.jdc.balance.api.member.input.LedgerEntrySearch;
 import com.jdc.balance.api.member.output.LedgerEntryDetails;
 import com.jdc.balance.api.member.output.LedgerEntryListItem;
+import com.jdc.balance.common.dto.ErrorMessage;
 import com.jdc.balance.common.dto.ModificationResult;
+import com.jdc.balance.common.exception.ApiBusinessException;
+import com.jdc.balance.common.limit.LimitEntry;
 import com.jdc.balance.common.utils.LedgerEntryItemMapper;
 import com.jdc.balance.domain.PageResult;
 import com.jdc.balance.domain.embeddable.LedgerEntryPk;
+import com.jdc.balance.domain.embeddable.LedgerEntryPk_;
 import com.jdc.balance.domain.embeddable.LedgerPk;
 import com.jdc.balance.domain.entity.Ledger.Type;
 import com.jdc.balance.domain.entity.LedgerEntry;
@@ -44,7 +51,9 @@ public class LedgerEntryService {
 
 	private final LedgerEntryIdGenerator idGenerator;
 	private final LedgerEntryItemMapper itemMapper;
+	private final CutOffDayService cutOffDayService;
 	
+	@LimitEntry
 	@Transactional
 	public ModificationResult<LedgerEntryPk> create(String username, LedgerEntryForm form) {
 		
@@ -85,6 +94,10 @@ public class LedgerEntryService {
 		var member = safeCall(memberRepo.findByAccountEmail(username), "Member", username);
 		var entry = safeCall(entryRepo.findById(getId(member.getId(), requestedId)), "Ledger Entry", requestedId);
 		
+		if(!cutOffDayService.canEdit(entry.getIssueAt())) {
+			throw new ApiBusinessException(ErrorMessage.withMessage("Changes are not allowed as the cutoff date has passed."));
+		}
+		
 		if(!entry.getId().getCode().equals(form.code())) {
 			throw new IllegalArgumentException("Invalid ledger entry code: " + form.code());
 		}
@@ -93,15 +106,41 @@ public class LedgerEntryService {
 		entry.setParticular(form.particular());
 		entry.setAmount(form.amount());
 		
-		// TODO handle balance change
+		// handle balance change
+		var entries = getEntriesForUpdate(entry.getId().getMemberId(), entry.getCreatedAt());
+		
+		// Balance Calculation Function
+		BiFunction<LedgerEntry, BigDecimal, BigDecimal> lastBalancFunc = (ledgerEntry, lastBalance) -> 
+			switch(ledgerEntry.getLedger().getType()) {
+			case Credit -> lastBalance.add(ledgerEntry.getAmount());
+			case Debit -> lastBalance.subtract(ledgerEntry.getAmount());
+			};
+		
+		// Calculate Balance
+		var lastBalance = lastBalancFunc.apply(entry, entry.getLastBalance());
+		
+		for(var entity : entries) {
+			// Calculate Last Balance for Each Entry
+			entity.setLastBalance(lastBalance);
+			lastBalance = lastBalancFunc.apply(entity, lastBalance);
+		}
+		
+		// Update Member Balance
+		var memberBalance = safeCall(memberBalanceRepo.findById(member.getId()), "Member Balance", member.getId());
+		memberBalance.setBalance(lastBalance);
 		
 		return ModificationResult.success(entry.getId());
 	}
 
+
+
 	public LedgerEntryDetails findById(String username, String requestedId) {
 		var member = safeCall(memberRepo.findByAccountEmail(username), "Member", username);	
 		return safeCall(entryRepo.findById(getId(member.getId(), requestedId))
-				.map(entry -> LedgerEntryDetails.from(entry, itemMapper::fromJson)), 
+				.map(entry -> LedgerEntryDetails.from(
+						entry, 
+						cutOffDayService::canEdit,
+						itemMapper::fromJson)), 
 				"Ledger Entry", requestedId);
 	}
 
@@ -144,5 +183,23 @@ public class LedgerEntryService {
 		
 		return pk;
 	}
+	
+	private List<LedgerEntry> getEntriesForUpdate(long memberId, LocalDateTime createdAt) {
+		return entryRepo.search(cb -> {
+			var cq = cb.createQuery(LedgerEntry.class);
+			var root = cq.from(LedgerEntry.class);
+			cq.select(root);
+			
+			cq.where(
+				cb.equal(root.get(LedgerEntry_.id).get(LedgerEntryPk_.memberId), memberId),
+				cb.greaterThan(root.get(LedgerEntry_.createdAt), createdAt)
+			);
+			
+			cq.orderBy(cb.asc(root.get(LedgerEntry_.createdAt)));
+			
+			return cq;
+		});
+	}
+
 	
 }

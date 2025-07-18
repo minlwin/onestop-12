@@ -13,6 +13,7 @@ import com.jdc.balance.api.member.output.LedgerListItem;
 import com.jdc.balance.common.dto.ErrorMessage;
 import com.jdc.balance.common.dto.ModificationResult;
 import com.jdc.balance.common.exception.ApiBusinessException;
+import com.jdc.balance.common.limit.LimitLedger;
 import com.jdc.balance.domain.embeddable.LedgerPk;
 import com.jdc.balance.domain.embeddable.LedgerPk_;
 import com.jdc.balance.domain.entity.Ledger;
@@ -30,6 +31,7 @@ public class LedgerService {
 	private final LedgerRepo ledgerRepo;
 	private final MemberRepo memberRepo;
 	
+	@LimitLedger
 	@Transactional
 	public ModificationResult<LedgerPk> create(String username, LedgerForm form) {
 		var ledger = ledgerRepo.create(form.entity(getId(username, form.code())));

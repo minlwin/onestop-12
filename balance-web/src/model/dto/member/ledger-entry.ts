@@ -40,6 +40,7 @@ export type LedgerEntryForm = {
 }
 
 export type LedgerEntryDetails = LedgerEntryListItem & {
-    items: LedgerEntryItem []
+    items: LedgerEntryItem [],
+    canEdit: boolean
 }
 
