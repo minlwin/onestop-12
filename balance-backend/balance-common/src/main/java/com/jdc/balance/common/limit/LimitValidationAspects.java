@@ -15,6 +15,7 @@ import com.jdc.balance.common.dto.ErrorMessage;
 import com.jdc.balance.common.exception.ApiBusinessException;
 import com.jdc.balance.domain.entity.Member;
 import com.jdc.balance.domain.repo.LedgerEntryRepo;
+import com.jdc.balance.domain.repo.LedgerRepo;
 import com.jdc.balance.domain.repo.MemberRepo;
 
 @Aspect
@@ -25,6 +26,8 @@ public class LimitValidationAspects {
 	private MemberRepo memberRepo;
 	@Autowired
 	private LedgerEntryRepo entryRepo;
+	@Autowired
+	private LedgerRepo ledgerRepo;
 	
 	@Pointcut("within(com.jdc.balance.api.*.service.*)")
 	public void serviceClasses() {}
@@ -40,16 +43,21 @@ public class LimitValidationAspects {
 		var member = getMember();
 		var plan = member.getPlan();
 		
+		// Check Expiration
+		if(LocalDate.now().isAfter(member.getAccount().getExpiredAt())) {
+			throw new ApiBusinessException(ErrorMessage.withMessage("Your account has expired. Please renew your plan."));
+		}
+		
 		// Check Daily Limit
 		var dailyEntry = entryRepo.countForCheck(member.getId(), LocalDate.now());
 		if(plan.getDailyEntry() <= dailyEntry) {
-			throw new ApiBusinessException(ErrorMessage.withMessage(""));
+			throw new ApiBusinessException(ErrorMessage.withMessage("You’ve reached your daily limit. Please try again tomorrow."));
 		}
 		
 		// Check Monthly Limit
 		var monthlyEntry = entryRepo.countForCheck(member.getId(), LocalDate.now().minusMonths(1));
 		if(plan.getMonthlyEntry() <= monthlyEntry) {
-			throw new ApiBusinessException(ErrorMessage.withMessage(""));
+			throw new ApiBusinessException(ErrorMessage.withMessage("You’ve reached your monthly limit. Please consider about next plan."));
 		}		
 	}
 	
@@ -57,6 +65,19 @@ public class LimitValidationAspects {
 	public void checkLedgerLimit() {
 		var member = getMember();
 		
+		var plan = member.getPlan();
+		
+		// Check Expiration
+		if(LocalDate.now().isAfter(member.getAccount().getExpiredAt())) {
+			throw new ApiBusinessException(ErrorMessage.withMessage("Your account has expired. Please renew your plan."));
+		}
+		
+		// Check Ledger Limit		
+		var ledgerCount = ledgerRepo.countForCheck(member.getId());
+		
+		if(ledgerCount >= plan.getMaxLedgers()) {
+			throw new ApiBusinessException(ErrorMessage.withMessage("You’ve reached your ledger limit. Please consider about next plan."));
+		}
 	}
 
 	private Member getMember() {

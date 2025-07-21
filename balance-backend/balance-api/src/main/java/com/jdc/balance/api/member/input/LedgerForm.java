@@ -14,6 +14,7 @@ public record LedgerForm(
 		String code,
 		@NotEmpty(message = "Please enter ledger name.")
 		String name,
+		@NotEmpty(message = "Please enter description.")
 		String description) {
 
 	public Ledger entity(LedgerPk id) {
