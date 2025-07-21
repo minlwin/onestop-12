@@ -5,16 +5,21 @@ import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class PaymentSlipStorageService {
+	
+	@Value("${app.subscription.slip-directory}")
+	private String slipFolderName;
 
-	public String save(Path slipDirectory, String code, MultipartFile slip) {
+	public String save(String code, MultipartFile slip) {
 		
 		try {
 			var fileName = getFileName(code, slip);
+			var slipDirectory = Path.of(slipFolderName);
 			
 			if(!Files.exists(slipDirectory, LinkOption.NOFOLLOW_LINKS)) {
 				Files.createDirectory(slipDirectory);

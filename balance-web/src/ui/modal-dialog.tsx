@@ -13,7 +13,7 @@ export type Bootstrap = {
 
 declare const bootstrap:Bootstrap
 
-export default function ModalDialog({title, action, children} : {title : string, action?:VoidFunction, children : React.ReactNode}) {
+export default function ModalDialog({title, action, children} : {title : string, action?:VoidFunction, closeAction?:VoidFunction  ,children : React.ReactNode}) {
     
     const dialogRef = useRef<HTMLDivElement | null>(null)
     const modalRef = useRef<Modal | undefined>(undefined)

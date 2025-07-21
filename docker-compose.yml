@@ -31,6 +31,6 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - balance-backend-volume:/home/spring/images
+      - balance-backend-volume:/home/spring/slips
     depends_on:
       - db

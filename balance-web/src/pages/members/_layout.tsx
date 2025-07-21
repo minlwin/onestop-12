@@ -2,6 +2,7 @@ import { Link, Outlet, useNavigate } from "react-router"
 import NavItem from "../../ui/nav-item"
 import { authStore } from "../../model/store/auth-result.store"
 import MemberLedgerProvider from "../../model/provider/member-ledger-provider"
+import ClientErrorMessage from "../../ui/client-error-message"
 
 export default function MembersLayout() {
     return (
@@ -13,6 +14,8 @@ export default function MembersLayout() {
                     <Outlet />
                 </main>
             </MemberLedgerProvider>
+
+            <ClientErrorMessage anonymous={false} />
         </>
     )
 }

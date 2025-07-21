@@ -1,7 +1,5 @@
 package com.jdc.balance.api.member;
 
-import java.nio.file.Path;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +19,6 @@ import com.jdc.balance.common.dto.ModificationResult;
 import com.jdc.balance.domain.PageResult;
 import com.jdc.balance.domain.embeddable.SubscriptionPk;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -48,10 +45,8 @@ public class SubscriptionApi {
 	@PreAuthorize("authentication.name eq #username")
 	ModificationResult<SubscriptionPk> create(
 			@Validated SubscriptionForm form, 
-			@PathVariable String username, 
-			HttpServletRequest req) {
-		var slipDirectoryPath = req.getServletContext().getRealPath(slipDirectory);
-		return service.create(username, form, Path.of(slipDirectoryPath));
+			@PathVariable String username) {
+		return service.create(username, form);
 	}
 	
 	@GetMapping("{code}")

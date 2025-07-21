@@ -2,6 +2,8 @@ package com.jdc.balance.api.management.service;
 
 import static com.jdc.balance.common.utils.EntityOperations.safeCall;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.function.Function;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,8 @@ import com.jdc.balance.domain.PageResult;
 import com.jdc.balance.domain.embeddable.SubscriptionPk;
 import com.jdc.balance.domain.embeddable.SubscriptionPk_;
 import com.jdc.balance.domain.entity.Subscription;
+import com.jdc.balance.domain.entity.Subscription.Status;
+import com.jdc.balance.domain.entity.Subscription.Usage;
 import com.jdc.balance.domain.entity.Subscription_;
 import com.jdc.balance.domain.repo.SubscriptionRepo;
 
@@ -34,11 +38,21 @@ public class SubscriptionService {
 	
 	@Transactional
 	public ModificationResult<SubscriptionPk> update(String code, SubscriptionStatusUpdateForm form) {
+		
 		var entity = safeCall(repo.findById(SubscriptionPk.from(code)), "Subscription", code);
+
 		entity.setStatus(form.status());
 		entity.setReason(form.message());
+		entity.setStatusChangeAt(LocalDateTime.now());
 		
-		// TODO Handle Expired At Value
+		// Handle Expired At Value
+		if((form.status() == Status.Approved && entity.getUsage() == Usage.Urgent) || 
+				(form.status() == Status.Approved && entity.getMember().getAccount().getExpiredAt().isBefore(LocalDate.now())) ) {
+			var member = entity.getMember();
+			member.setPlan(entity.getPlan());
+			entity.setStartAt(LocalDate.now());
+			member.getAccount().setExpiredAt(LocalDate.now().plusMonths(entity.getPlan().getMonths()));
+		}
 		
 		return ModificationResult.success(entity.getId());
 	}

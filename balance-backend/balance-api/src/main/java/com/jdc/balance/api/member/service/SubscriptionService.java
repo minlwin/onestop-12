@@ -2,7 +2,6 @@ package com.jdc.balance.api.member.service;
 
 import static com.jdc.balance.common.utils.EntityOperations.safeCall;
 
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.function.Function;
@@ -45,7 +44,7 @@ public class SubscriptionService {
 	private final PaymentSlipStorageService storageService;
 
 	@Transactional
-	public ModificationResult<SubscriptionPk> create(String username, SubscriptionForm form, Path slipDirectory) {
+	public ModificationResult<SubscriptionPk> create(String username, SubscriptionForm form) {
 		
 		// Create Subscription
 		var plan = safeCall(planRepo.findById(form.planId()), "Subscription Plan", form.planId());
@@ -64,7 +63,7 @@ public class SubscriptionService {
 		subscription.setUsage(form.usage());
 		subscription.setPreviousPlan(member.getPlan());
 		
-		var slipFileName = storageService.save(slipDirectory, id.getCode(), form.slip());
+		var slipFileName = storageService.save(id.getCode(), form.slip());
 		subscription.setPaymentSlip(slipFileName);
 		subscription.setPaymentAmount(plan.getFees());
 		

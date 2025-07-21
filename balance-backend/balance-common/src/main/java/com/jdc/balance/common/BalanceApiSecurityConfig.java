@@ -2,6 +2,7 @@ package com.jdc.balance.common;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -18,6 +19,7 @@ import com.jdc.balance.common.security.SecurityExceptionHandler;
 import com.jdc.balance.common.security.token.JwtTokenFilter;
 
 @Configuration
+@EnableScheduling
 @EnableMethodSecurity
 public class BalanceApiSecurityConfig {
 

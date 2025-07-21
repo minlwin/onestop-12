@@ -14,7 +14,9 @@ export default function SignIn() {
     async function signIn(form : SignInForm) {
         const result = await signInRequest(form)
         setAuth(result)
-        navigate(`/${result.role.toLocaleLowerCase()}`)
+        if(result) {
+            navigate(`/${result.role.toLocaleLowerCase()}`)
+        }
     }
 
     return (

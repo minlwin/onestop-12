@@ -1,6 +1,7 @@
 import { Link, Outlet, useNavigate } from "react-router"
 import { authStore } from "../../model/store/auth-result.store"
 import ManagementPlanProvider from "../../model/provider/management-plan-provider"
+import ClientErrorMessage from "../../ui/client-error-message"
 
 export default function AdminLayout() {
     return (
@@ -12,6 +13,8 @@ export default function AdminLayout() {
                     <Outlet />
                 </ManagementPlanProvider>
             </main>
+
+            <ClientErrorMessage anonymous={false} />
         </>
     )
 }

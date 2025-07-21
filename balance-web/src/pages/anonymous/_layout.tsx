@@ -1,4 +1,5 @@
 import { Outlet } from "react-router";
+import ClientErrorMessage from "../../ui/client-error-message";
 
 export default function AnonymousLayout() {
     return (
@@ -11,10 +12,11 @@ export default function AnonymousLayout() {
                 <h5 className="text-white">Final project for One Stop Bath 12</h5>
             </section>
 
-            <main className="w-50 d-flex justify-content-center align-items-center">
+            <main className="w-50 d-flex flex-column justify-content-center align-items-center">
                 <Outlet />
             </main>
-        
+
+            <ClientErrorMessage anonymous={false} />
         </div>
     )
 }
