@@ -34,7 +34,9 @@ export default function LedgerEntryManagement() {
 
     async function search(form:LedgerEntrySearch) {
         const response = await searchEntry(form)
-        setResult(response)
+        if(response) {
+            setResult(response)
+        }
     }
 
     return (

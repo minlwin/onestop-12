@@ -44,13 +44,17 @@ export default function LedgerEntryEdit() {
 
     useEffect(() => {
         async function load(requestId:unknown) {
-            const {id, particular, items} = await findEntryById(requestId)
+            const entry = await findEntryById(requestId)
 
-            reset({
-                code: id.code,
-                particular: particular,
-                items : items
-            })
+            if(entry) {
+                const {id, particular, items} = entry
+
+                reset({
+                    code: id.code,
+                    particular: particular,
+                    items : items
+                })
+            }
         }
 
         const id = query.get("id")
@@ -61,7 +65,7 @@ export default function LedgerEntryEdit() {
 
     async function save(form: LedgerEntryForm) {
         const respose = query.get("id") ? await updateEntry(query.get("id"), form) : await createEntry(form)
-        if(respose.success && respose.id) {
+        if(respose && respose.success && respose.id) {
             navigate(`/member/balance/${respose.id.requestId}`)
         }
     }

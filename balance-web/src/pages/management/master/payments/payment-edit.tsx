@@ -19,12 +19,14 @@ export default function EditPaymentMethod() {
 
         async function load(id: unknown) {
             const response = await findPaymentMethod(id)
-            reset({
-                name: response.name,
-                accountNo: response.accountNo,
-                accountName: response.accountName,
-                active: response.active
-            })
+            if(response) {
+                reset({
+                    name: response.name,
+                    accountNo: response.accountNo,
+                    accountName: response.accountName,
+                    active: response.active
+                })
+            }
         }
 
         if(paymentId) {

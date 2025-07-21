@@ -27,7 +27,9 @@ export default function LedgerManagement() {
     useEffect(() => {       
         async function load() {
             const response = await searchLedger(searchParamRef.current)
-            setList(response)
+            if(response) {
+                setList(response)
+            }
         }
 
         load()
@@ -36,7 +38,9 @@ export default function LedgerManagement() {
     async function search(form:LedgerSearch) {
         searchParamRef.current = form
         const response = await searchLedger(form)
-        setList(response)
+        if(response) {
+            setList(response)
+        }
     }
 
     async function refreshList() {
@@ -44,11 +48,13 @@ export default function LedgerManagement() {
         // Fetch API
         const response = await searchLedger(searchParamRef.current)
         
-        // Set Result List
-        setList(response)
+        if(response) {
+            // Set Result List
+            setList(response)
 
-        // Clear Edit Data
-        setEditData({...BLANK_FORM})
+            // Clear Edit Data
+            setEditData({...BLANK_FORM})
+        }
     }
 
     function setForEdit(item : LedgerListItem) {

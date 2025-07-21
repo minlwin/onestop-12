@@ -14,7 +14,9 @@ export default function SubscriptionPlanManagement() {
 
     async function search(form:SubscriptionPlanSearch) {
         const result = await searchPlan(form)
-        setList(result)
+        if(result) {
+            setList(result)
+        }
     }
 
     useEffect(() => {

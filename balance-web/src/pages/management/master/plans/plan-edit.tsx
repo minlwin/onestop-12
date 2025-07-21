@@ -20,16 +20,18 @@ export default function EditSubscriptionPlan() {
     useEffect(() => {
         async function load() {
             const response = await findPlanById(planId)
-            reset({
-                name: response.name,
-                fees: response.fees,
-                months: response.months,
-                maxLedgers: response.maxLedgers,
-                dailyEntry: response.dailyEntry,
-                monthlyEntry: response.monthlyEntry,
-                defaultPlan: response.defaultPlan,
-                active: response.active
-            })
+            if(response) {
+                reset({
+                    name: response.name,
+                    fees: response.fees,
+                    months: response.months,
+                    maxLedgers: response.maxLedgers,
+                    dailyEntry: response.dailyEntry,
+                    monthlyEntry: response.monthlyEntry,
+                    defaultPlan: response.defaultPlan,
+                    active: response.active
+                })
+            }
         }
 
         if(planId) {
@@ -45,9 +47,10 @@ export default function EditSubscriptionPlan() {
         } 
 
         const response = await searchPlan({})
-        setPlans(response)
-
-        navigate(`/admin/master/plan`)
+        if(response) {
+            setPlans(response)
+            navigate(`/admin/master/plan`)
+        }
     }
 
     return (

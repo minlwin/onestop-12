@@ -14,7 +14,9 @@ export default function PaymentMethods() {
 
     async function search(form:PaymentMethodSearch) {
         const response = await searchPaymentMethod(form)
-        setList(response)
+        if(response) {
+            setList(response)
+        }
     }
 
     useEffect(() => {

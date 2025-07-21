@@ -20,7 +20,9 @@ export default function Subscriptions() {
 
     async function search(form:SubscriptionSearch) {
         const response = await searchSubscription(form)
-        setResult(response)
+        if(response) {
+            setResult(response)
+        }
     }
 
     useEffect(() => {

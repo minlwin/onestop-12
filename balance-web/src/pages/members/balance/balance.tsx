@@ -22,7 +22,9 @@ export default function BalanceManagement() {
 
     async function search(form: BalanceReportSearch) {
         const response = await searchBalance(form)
-        setResult(response)
+        if(response) {
+            setResult(response)
+        }
     }
 
     return (

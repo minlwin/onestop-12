@@ -23,7 +23,9 @@ export default function MemberManagement() {
 
     async function search(form:MemberSearch) {
         const response = await searchMember(form)
-        setResult(response)
+        if(response) {
+            setResult(response)
+        }
     }
 
     return (

@@ -42,10 +42,12 @@ export default function LedgerEditDialog({editData, refreshList} :
 
         // Load Context Data
         const ledgers = await searchLedger({})
-        setLedgers(ledgers)
+        if(ledgers) {
+            setLedgers(ledgers)
 
-        // Refresh List
-        refreshList()
+            // Refresh List
+            refreshList()
+        }
     }
 
     return (
