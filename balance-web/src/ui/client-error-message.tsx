@@ -28,10 +28,10 @@ export default function ClientErrorMessage({anonymous} : {anonymous : boolean}) 
             if(show) {
                 modalRef.current?.show()
             } else {
-                modalRef.current?.show()
+                modalRef.current?.hide()
             }
         }
-    }, [show, modalRef])
+    }, [show])
 
     useEffect(() => {
         if(error) {
@@ -48,9 +48,7 @@ export default function ClientErrorMessage({anonymous} : {anonymous : boolean}) 
                 setClientError(messages)
                 setShow(true)
             }
-        } else {
-            setClientError(undefined)
-        }
+        } 
     }, [error, anonymous, navigate])
 
     function closeDialog() {
