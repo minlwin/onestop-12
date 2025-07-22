@@ -16,7 +16,7 @@ export default function AnonymousLayout() {
                 <Outlet />
             </main>
 
-            <ClientErrorMessage anonymous={false} />
+            <ClientErrorMessage anonymous={true} />
         </div>
     )
 }

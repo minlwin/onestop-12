@@ -22,7 +22,7 @@ export default function MembersLayout() {
 
 function Navigation() {
     const navigate = useNavigate()
-    const {setAuth} = authStore()
+    const {auth ,setAuth} = authStore()
 
     const signOut = () => {
         setAuth(undefined)
@@ -42,12 +42,34 @@ function Navigation() {
                     <NavItem path="/member/entry/credit" title="Credit" icon={<i className="bi-bag-plus"></i>} />
                     <NavItem path="/member/ledger" title="Ledgers" icon={<i className="bi-tags"></i>} />
                     <li className="nav-item">
-                        <a href="#" onClick={e => {
-                            e.preventDefault()
-                            signOut()
-                        }} className="nav-link">
-                            <i className="bi-lock"></i> Sign Out
+                    </li>
+                    <li className="nav-item dropdown">
+                        <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown" >
+                            <i className="bi-person"></i> {auth?.name}
                         </a>
+                        <ul className="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <Link to="/member" className="dropdown-item">
+                                    <i className="bi-house"></i> Dashboard
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/member/subscription" className="dropdown-item">
+                                    <i className="bi-shield"></i> Subscriptions
+                                </Link>
+                            </li>
+                            <li>
+                                <hr className="dropdown-divider" />
+                            </li>
+                            <li>
+                                <a href="#" onClick={e => {
+                                    e.preventDefault()
+                                    signOut()
+                                }} className="dropdown-item">
+                                    <i className="bi-lock"></i> Sign Out
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>

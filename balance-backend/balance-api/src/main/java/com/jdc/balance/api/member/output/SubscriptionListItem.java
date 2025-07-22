@@ -39,6 +39,7 @@ public record SubscriptionListItem(
 			root.get(Subscription_.member).get(Member_.account).get(Account_.expiredAt),
 			root.get(Subscription_.plan).get(SubscriptionPlan_.name),
 			payment.get(PaymentMethod_.name),
+			root.get(Subscription_.usage),
 			root.get(Subscription_.status),
 			root.get(Subscription_.reason),
 			root.get(Subscription_.statusChangeAt)

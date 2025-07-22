@@ -80,17 +80,17 @@ public class SubscriptionService {
 		return SubscriptionDetails.from(entity);
 	}
 
-	public PageResult<SubscriptionListItem> search(SubscriptionSearch search, int page, int size) {
-		return subscriptionRepo.search(queryFunc(search), countFunc(search), page, size);
+	public PageResult<SubscriptionListItem> search(String username, SubscriptionSearch search, int page, int size) {
+		return subscriptionRepo.search(queryFunc(search, username), countFunc(search, username), page, size);
 	}
 
-	private Function<CriteriaBuilder, CriteriaQuery<SubscriptionListItem>> queryFunc(SubscriptionSearch search) {
+	private Function<CriteriaBuilder, CriteriaQuery<SubscriptionListItem>> queryFunc(SubscriptionSearch search, String username) {
 		return cb -> {
 			var cq = cb.createQuery(SubscriptionListItem.class);
 			
 			var root = cq.from(Subscription.class);
 			SubscriptionListItem.select(cq, root);
-			cq.where(search.where(cb, root));
+			cq.where(search.where(cb, root, username));
 			
 			cq.orderBy(
 				cb.desc(root.get(Subscription_.id).get(SubscriptionPk_.appliedAt)), 
@@ -101,12 +101,12 @@ public class SubscriptionService {
 		};
 	}
 
-	private Function<CriteriaBuilder, CriteriaQuery<Long>> countFunc(SubscriptionSearch search) {
+	private Function<CriteriaBuilder, CriteriaQuery<Long>> countFunc(SubscriptionSearch search, String username) {
 		return cb -> {
 			var cq = cb.createQuery(Long.class);
 			
 			var root = cq.from(Subscription.class);
-			cq.where(search.where(cb, root));
+			cq.where(search.where(cb, root, username));
 			cq.select(cb.count(root.get(Subscription_.id)));
 			
 			return cq;
