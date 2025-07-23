@@ -6,3 +6,5 @@ export type ErrorMessage = {
 export type ClientError = {
     messages : ErrorMessage[]
 }
+
+export type Optional<T> = T | undefined

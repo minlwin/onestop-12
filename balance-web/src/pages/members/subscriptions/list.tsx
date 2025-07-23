@@ -6,6 +6,7 @@ import { searchPlan } from "../../../model/client/member/subscription-plan-clien
 import { searchSubscription } from "../../../model/client/member/subscription-client";
 import Card from "../../../ui/card";
 import { Link } from "react-router";
+import { getCurrentPlan } from "../../../model/client/member/member-profile-client";
 
 export default function MemberSubscriptions() {
 
@@ -25,23 +26,24 @@ export default function MemberSubscriptions() {
                 const {contents} = subscriptionResult
                 setHistory(contents)
 
-                const pendingSubscription = contents.filter(a => a.status === 'Pending').shift()
+                const currentPlan = await getCurrentPlan()
 
-                function mapToAvailablePlan(plan: SubscriptionPlanListItem):AvailablePlan {
-                    return {
-                        planId : plan.id,
-                        planName: plan.name,
-                        months : plan.months,
-                        fees: plan.fees,
-                        defaultPlan: plan.defaultPlan,
-                        maxLedger: plan.maxLedgers || 0,
-                        dailyEntry: plan.dailyEntry || 0,
-                        monthlyEntry: plan.monthlyEntry || 0,
-                        applied : pendingSubscription ? plan.id == pendingSubscription.id.planId : false
+                if(currentPlan) {
+                    function mapToAvailablePlan(plan: SubscriptionPlanListItem):AvailablePlan {
+                        return {
+                            planId : plan.id,
+                            planName: plan.name,
+                            months : plan.months,
+                            fees: plan.fees,
+                            defaultPlan: plan.defaultPlan,
+                            maxLedger: plan.maxLedgers || 0,
+                            dailyEntry: plan.dailyEntry || 0,
+                            monthlyEntry: plan.monthlyEntry || 0,
+                            current : currentPlan?.planId == plan.id
+                        }
                     }
+                    setPlans(planList.map(mapToAvailablePlan))
                 }
-
-                setPlans(planList.map(mapToAvailablePlan))
             }
         }
 
@@ -71,7 +73,7 @@ type AvailablePlan = {
     dailyEntry : number
     monthlyEntry : number
     defaultPlan : boolean
-    applied: boolean
+    current: boolean
 }
 
 function AvailablePlans({plans} : {plans : AvailablePlan[]}) {
@@ -87,7 +89,7 @@ function AvailablePlans({plans} : {plans : AvailablePlan[]}) {
             <div className="row row-cols-3">
             {plans.map(plan => 
                 <div className="col">
-                    <Card title={`${plan.planName} Plan`}>
+                    <Card title={`${plan.planName} Plan`} icon={plan.current ? <i className="bi-check-circle"></i> : undefined} >
                         <div className="list-group list-group-flush">
                             <PlanInfo name="Max Ledger" value={limitValue(plan.maxLedger)} />
                             <PlanInfo name="Daily Limit" value={limitValue(plan.dailyEntry)} />
@@ -97,7 +99,7 @@ function AvailablePlans({plans} : {plans : AvailablePlan[]}) {
                         </div>
 
                         <div className="text-end">
-                            <Link to={`/member/subscription/${plan.planId}`} className={`btn btn-secondary ${plan.defaultPlan || plan.applied ? 'disabled' : ''}`} >
+                            <Link to={`/member/subscription/${plan.planId}`} className={`btn btn-secondary ${plan.defaultPlan ? 'disabled' : ''}`} >
                                 <i className="bi-cart-plus"></i> Subscribe
                             </Link>
                         </div>

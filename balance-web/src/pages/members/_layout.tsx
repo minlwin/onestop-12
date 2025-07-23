@@ -10,7 +10,7 @@ export default function MembersLayout() {
             <Navigation />
 
             <MemberLedgerProvider>
-                <main className="container-fluid mt-3">
+                <main className="container-fluid mt-3 pb-3">
                     <Outlet />
                 </main>
             </MemberLedgerProvider>
