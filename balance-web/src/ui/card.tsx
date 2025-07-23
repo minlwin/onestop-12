@@ -4,10 +4,7 @@ export default function Card({title, icon, className, children} : {title: string
     return (
         <div className={`card ${className}`}>
             <div className="card-body">
-                <h5 className="card-title d-flex justify-content-between align-items-center">
-                    <span>{title}</span>
-                    <span>{icon}</span>
-                </h5>
+                <h5>{icon}{title}</h5>
 
                 {children}
             </div>

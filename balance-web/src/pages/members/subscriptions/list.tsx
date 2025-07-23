@@ -89,7 +89,7 @@ function AvailablePlans({plans} : {plans : AvailablePlan[]}) {
             <div className="row row-cols-3">
             {plans.map(plan => 
                 <div className="col">
-                    <Card title={`${plan.planName} Plan`} icon={plan.current ? <i className="bi-check-circle"></i> : undefined} >
+                    <Card icon={<i className="bi-shield me-2"></i>} title={`${plan.planName} Plan`} >
                         <div className="list-group list-group-flush">
                             <PlanInfo name="Max Ledger" value={limitValue(plan.maxLedger)} />
                             <PlanInfo name="Daily Limit" value={limitValue(plan.dailyEntry)} />
@@ -98,7 +98,12 @@ function AvailablePlans({plans} : {plans : AvailablePlan[]}) {
                             <PlanInfo name="Fees" value={plan.fees.toLocaleString()} />
                         </div>
 
-                        <div className="text-end">
+                        <div className="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                            {plan.current && 
+                                <span className="btn btn-outline-secondary"><i className="bi-check-circle"></i> Current Plan</span>
+                            }
+                            </div>
                             <Link to={`/member/subscription/${plan.planId}`} className={`btn btn-secondary ${plan.defaultPlan ? 'disabled' : ''}`} >
                                 <i className="bi-cart-plus"></i> Subscribe
                             </Link>
