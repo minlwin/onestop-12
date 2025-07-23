@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.jdc.balance.common.dto.PlanInfo;
 import com.jdc.balance.domain.embeddable.SubscriptionPk;
 import com.jdc.balance.domain.entity.Subscription;
 import com.jdc.balance.domain.entity.Subscription.Status;
@@ -13,7 +14,11 @@ public record SubscriptionDetails(
         SubscriptionPk id,
         PlanInfo plan,
         PlanInfo previousPlan,
-        LocalDate previousPlanExpiredAt,
+        LocalDate currentStartAt,
+        LocalDate currentExpiredAt,
+        LocalDate prevAppliedAt,
+        LocalDate prevStartAt,
+        LocalDate prevEndAt,
         int paymentAmount,
         String paymentName,
         String paymentSlip,
@@ -29,174 +34,34 @@ public record SubscriptionDetails(
         LocalDateTime createdAt,
         String updatedBy,
         LocalDateTime updatedAt) {
-	
+
 	public static SubscriptionDetails from(Subscription entity) {
-		return new Builder()
-				.id(entity.getId())
-				.plan(new PlanInfo(entity.getPlan()))
-				.previousPlan(Optional.ofNullable(entity.getPreviousPlan())
-						.map(PlanInfo::new)
-						.orElse(null))
-				.previousPlanExpiredAt(entity.getPreviousPlanExpiredAt())
-				.paymentName(Optional.ofNullable(entity.getPayment())
-						.map(payment -> payment.getName())
-						.orElse(null))
-				.paymentAmount(entity.getPaymentAmount())
-				.paymentSlip(entity.getPaymentSlip())
-				.memberId(entity.getMember().getId())
-				.memberName(entity.getMember().getAccount().getName())
-				.phone(entity.getMember().getPhone())
-				.email(entity.getMember().getAccount().getEmail())
-				.usage(entity.getUsage())
-				.status(entity.getStatus())
-				.statusChangeAt(entity.getStatusChangeAt())
-				.reason(entity.getReason())
-				.createdBy(entity.getCreatedBy())
-				.createdAt(entity.getCreatedAt())
-				.updatedBy(entity.getUpdatedBy())
-				.updatedAt(entity.getUpdatedAt())
-				.build();
+		return new SubscriptionDetails(
+				entity.getId(),
+				new PlanInfo(entity.getPlan()),
+				Optional.ofNullable(entity.getPreviousPlan()).map(PlanInfo::new).orElse(null),
+				entity.getStartAt(),
+				entity.getExpiredAt(),
+				entity.getPreviousPlanAppliedAt(),
+				entity.getPreviousPlanStartAt(),
+				entity.getPreviousPlanExpiredAt(),
+				entity.getPaymentAmount(),
+				Optional.ofNullable(entity.getPayment()).map(a -> a.getName()).orElse(""),
+				entity.getPaymentSlip(),
+				entity.getMember().getId(),
+				entity.getMember().getAccount().getName(),
+				entity.getMember().getPhone(),
+				entity.getMember().getAccount().getEmail(),
+				entity.getUsage(),
+				entity.getStatus(),
+				entity.getStatusChangeAt(),
+				entity.getReason(),
+				entity.getCreatedBy(),
+				entity.getCreatedAt(),
+				entity.getUpdatedBy(),
+				entity.getUpdatedAt()
+		);
 	}
+	
 
-
-    public static class Builder {
-        private SubscriptionPk id;
-        private PlanInfo plan;
-        private PlanInfo previousPlan;
-        private LocalDate previousPlanExpiredAt;
-        private String paymentName;
-        private int paymentAmount;
-        private String paymentSlip;
-        private long memberId;
-        private String memberName;
-        private String phone;
-        private String email;
-        private Usage usage;
-        private Status status;
-        private LocalDateTime statusChangeAt;
-        private String reason;
-        private String createdBy;
-        private LocalDateTime createdAt;
-        private String updatedBy;
-        private LocalDateTime updatedAt;
-
-        public Builder id(SubscriptionPk id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder plan(PlanInfo plan) {
-            this.plan = plan;
-            return this;
-        }
-
-        public Builder previousPlan(PlanInfo previousPlan) {
-            this.previousPlan = previousPlan;
-            return this;
-        }
-        
-        public Builder previousPlanExpiredAt(LocalDate previousPlanExpiredAt) {
-			this.previousPlanExpiredAt = previousPlanExpiredAt;
-			return this;
-		}
-        
-        public Builder paymentName(String paymentName) {
-            this.paymentName = paymentName;
-            return this;
-        }
-
-        public Builder paymentAmount(int paymentAmount) {
-            this.paymentAmount = paymentAmount;
-            return this;
-        }
-
-        public Builder paymentSlip(String paymentSlip) {
-            this.paymentSlip = paymentSlip;
-            return this;
-        }
-
-        public Builder memberId(long memberId) {
-            this.memberId = memberId;
-            return this;
-        }
-
-        public Builder memberName(String memberName) {
-            this.memberName = memberName;
-            return this;
-        }
-
-        public Builder phone(String phone) {
-            this.phone = phone;
-            return this;
-        }
-
-        public Builder email(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public Builder usage(Usage usage) {
-            this.usage = usage;
-            return this;
-        }
-
-        public Builder status(Status status) {
-            this.status = status;
-            return this;
-        }
-
-        public Builder statusChangeAt(LocalDateTime statusChangeAt) {
-            this.statusChangeAt = statusChangeAt;
-            return this;
-        }
-
-        public Builder reason(String reason) {
-            this.reason = reason;
-            return this;
-        }
-        
-        public Builder createdBy(String createdBy) {
-			this.createdBy = createdBy;
-			return this;
-		}
-        
-        public Builder createdAt(LocalDateTime createdAt) {
-			this.createdAt = createdAt;
-			return this;
-		}
-        
-        public Builder updatedBy(String updatedBy) {
-			this.updatedBy = updatedBy;
-			return this;
-        }
-        
-        public Builder updatedAt(LocalDateTime updatedAt) {
-        	this.updatedAt = updatedAt;
-        	return this;
-        }
-
-        public SubscriptionDetails build() {
-            return new SubscriptionDetails(
-                id,
-                plan,
-                previousPlan,
-                previousPlanExpiredAt,
-                paymentAmount,
-                paymentName,
-                paymentSlip,
-                memberId,
-                memberName,
-                phone,
-                email,
-                usage,
-                status,
-                statusChangeAt,
-                reason,
-                createdBy,
-                createdAt,
-                updatedBy,
-                updatedAt
-            );
-        }
-    }
 }

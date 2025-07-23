@@ -10,7 +10,9 @@ export default function ManagementPlanProvider({children} : {children: React.Rea
     useEffect(() => {
         async function load() {
             const result = await searchPlan({})
-            setPlans(result)
+            if(result) {
+                setPlans(result)
+            }
         }
 
         load()

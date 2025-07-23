@@ -3,20 +3,35 @@ import NavItem from "../../ui/nav-item"
 import { authStore } from "../../model/store/auth-result.store"
 import MemberLedgerProvider from "../../model/provider/member-ledger-provider"
 import ClientErrorMessage from "../../ui/client-error-message"
+import MemberPlanContextProvider from "../../model/provider/member-plan-context-provider"
+import MemberPaymentContextProvider from "../../model/provider/member-payment-context-provider"
+import type React from "react"
 
 export default function MembersLayout() {
     return (
         <>
             <Navigation />
 
-            <MemberLedgerProvider>
+            <MasterDataProvider>
                 <main className="container-fluid mt-3 pb-3">
                     <Outlet />
                 </main>
-            </MemberLedgerProvider>
+            </MasterDataProvider>
 
             <ClientErrorMessage anonymous={false} />
         </>
+    )
+}
+
+function MasterDataProvider({children} : {children : React.ReactNode}) {
+    return (
+        <MemberLedgerProvider>
+            <MemberPlanContextProvider>
+                <MemberPaymentContextProvider>
+                    {children}
+                </MemberPaymentContextProvider>
+            </MemberPlanContextProvider>
+        </MemberLedgerProvider>
     )
 }
 

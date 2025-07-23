@@ -16,9 +16,9 @@ public record CurrentSubscriptionPlan(
 	
 	public static CurrentSubscriptionPlan from(Member entity) {
 		return new CurrentSubscriptionPlan(
-				entity.getPlan().getId(), 
-				entity.getPlan().getName(), 
-				entity.getAccount().getExpiredAt().minusMonths(entity.getPlan().getMonths()), 
-				entity.getAccount().getExpiredAt());
+				entity.getSubscription().getPlan().getId(), 
+				entity.getSubscription().getPlan().getName(), 
+				entity.getSubscription().getStartAt(), 
+				entity.getSubscription().getExpiredAt());
 	}
 }

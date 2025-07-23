@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { findPlanById } from "../../../../model/client/management/subscription-plan-client";
 import type { SubscriptionPlanDetails } from "../../../../model/dto/management/subscription-plan";
 import FormGroup from "../../../../ui/form-group";
+import { limitValue } from "../../../../model/utils";
 
 export default function SubscriptionPlanDetails() {
 
@@ -14,7 +15,6 @@ export default function SubscriptionPlanDetails() {
     useEffect(() => {
         async function load() {
             const result = await findPlanById(planId)
-            console.log(result)
             setPlan(result)
         }
 
@@ -47,13 +47,13 @@ export default function SubscriptionPlanDetails() {
             </div>
             <div className="row mb-3">
                 <FormGroup label="Maximum Ledger" className="col-3">
-                    <span className="form-control">{plan.maxLedgers}</span>
+                    <span className="form-control">{limitValue(plan.maxLedgers || 0)}</span>
                 </FormGroup>
                 <FormGroup label="Daily Entry Limit" className="col-3">
-                    <span className="form-control">{plan.dailyEntry}</span>
+                    <span className="form-control">{limitValue(plan.dailyEntry || 0)}</span>
                 </FormGroup>
                 <FormGroup label="Monthly Entry Limit" className="col-3">
-                    <span className="form-control">{plan.monthlyEntry}</span>
+                    <span className="form-control">{limitValue(plan.monthlyEntry || 0)}</span>
                 </FormGroup>
             </div>
 

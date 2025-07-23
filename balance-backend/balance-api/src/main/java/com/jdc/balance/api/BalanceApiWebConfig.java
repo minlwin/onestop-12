@@ -1,5 +1,6 @@
 package com.jdc.balance.api;
 
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -25,6 +27,9 @@ public class BalanceApiWebConfig implements WebMvcConfigurer{
 	private String dateFormat;
 	@Value("${spring.mvc.format.date-time}")
 	private String dateTimeFormat;
+	
+	@Value("${app.subscription.slip-directory}")
+	private String slipDirectory;
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
@@ -32,6 +37,13 @@ public class BalanceApiWebConfig implements WebMvcConfigurer{
 			.allowedHeaders("*")
 			.allowedOrigins("*")
 			.allowedMethods("*");
+	}
+	
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		var slips = Paths.get(slipDirectory).toAbsolutePath().normalize();
+		var slipsLocation = "file:%s/".formatted(slips.toString());
+		registry.addResourceHandler("/slips/**").addResourceLocations(slipsLocation);
 	}
 	
 	@Bean

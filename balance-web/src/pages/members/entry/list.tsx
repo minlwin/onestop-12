@@ -6,11 +6,11 @@ import Loading from "../../../ui/loading";
 import Pagination from "../../../ui/pagination";
 import { useForm } from "react-hook-form";
 import type { LedgerEntryListItem, LedgerEntrySearch } from "../../../model/dto/member/ledger-entry";
-import type { PageResult } from "../../../model/client/_instance";
 import { searchEntry } from "../../../model/client/member/ledger-entry-client";
 import NoData from "../../../ui/no-data";
 import FormGroup from "../../../ui/form-group";
 import { useMemberLedgerContext } from "../../../model/provider/member-ledger-context";
+import type { PageResult } from "../../../model/dto";
 
 export default function LedgerEntryManagement() {
 

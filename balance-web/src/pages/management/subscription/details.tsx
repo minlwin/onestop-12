@@ -5,8 +5,8 @@ import { findSubscriptionById } from "../../../model/client/management/subscript
 import type { SubscriptionDetails } from "../../../model/dto/management/subscription";
 import Card from "../../../ui/card";
 import Information from "../../../ui/information";
-import NoSlip from "../../../ui/no-slip";
 import type { SubscriptionStatus } from "../../../model/constants";
+import SlipImage from "../../../ui/slip-image";
 
 export default function SubscriptionDetails() {
 
@@ -53,7 +53,7 @@ export default function SubscriptionDetails() {
                     {details?.previousPlan &&
                         <Card title="Previous Plan" className="mb-3">
                             <Information label="Plan Name" value={details?.previousPlan.name || ''} /> 
-                            <Information label="Expired At" value={details?.previousPlanExpiredAt || ''} /> 
+                            <Information label="Expired At" value={details?.prevEndAt || ''} /> 
                         </Card>
                     }
 
@@ -83,10 +83,9 @@ export default function SubscriptionDetails() {
                 </div>
 
                 <div className="col-3">
-                    {details?.paymentSlip ? 
-                        <img src={details.paymentSlip} alt="Payment Slip" /> 
-                        : <NoSlip />
-                    } 
+                    <Card title="Payment Slip" icon={<i className="bi-filetype-png"></i>}>
+                        <SlipImage src={details?.paymentSlip} />                     
+                    </Card>
                 </div>
             </div>
         </Page>

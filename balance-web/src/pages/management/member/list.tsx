@@ -4,10 +4,10 @@ import Page from "../../../ui/page";
 import FormGroup from "../../../ui/form-group";
 import NoData from "../../../ui/no-data";
 import { useEffect, useRef, useState } from "react";
-import type { PageResult } from "../../../model/client/_instance";
 import { searchMember } from "../../../model/client/management/member-client";
 import Pagination from "../../../ui/pagination";
 import { useManagementPlan } from "../../../model/provider/management-plan-context";
+import type { PageResult } from "../../../model/dto";
 
 export default function MemberManagement() {
 

@@ -25,6 +25,7 @@ import LedgerEntryEdit from './pages/members/entry/edit.tsx'
 import LedgerEntryDetails from './pages/members/balance/details.tsx'
 import MemberSubscriptions from './pages/members/subscriptions/list.tsx'
 import SubscriptionApplication from './pages/members/subscriptions/edit.tsx'
+import MemberSubscriptionDetails from './pages/members/subscriptions/details.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -58,6 +59,7 @@ createRoot(document.getElementById('root')!).render(
           <Route path='balance/:id' element={<LedgerEntryDetails />} />
           <Route path='subscription' element={<MemberSubscriptions />} />
           <Route path='subscription/:planId' element={<SubscriptionApplication />} />
+          <Route path='subscription/details/:code' element={<MemberSubscriptionDetails />} />
         </Route>
       </Routes>
     </BrowserRouter>   

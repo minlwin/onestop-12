@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Page from "../../../ui/page";
 import Pagination from "../../../ui/pagination";
-import type { PageResult } from "../../../model/client/_instance";
 import type { SubscriptionListItem, SubscriptionSearch } from "../../../model/dto/management/subscription";
 import { searchSubscription } from "../../../model/client/management/subscription-client";
 import { useForm } from "react-hook-form";
@@ -10,6 +9,7 @@ import FormGroup from "../../../ui/form-group";
 import { useManagementPlan } from "../../../model/provider/management-plan-context";
 import { SUBSCRIPTION_STATUS_LIST } from "../../../model/constants";
 import { Link } from "react-router";
+import type { PageResult } from "../../../model/dto";
 
 export default function Subscriptions() {
 

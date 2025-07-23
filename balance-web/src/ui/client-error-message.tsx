@@ -39,6 +39,7 @@ export default function ClientErrorMessage({anonymous} : {anonymous : boolean}) 
 
             if(!anonymous && (status === 401 || status === 408)) {
                 navigate('/')
+                return
             }
 
             const response = error.response
@@ -66,8 +67,8 @@ export default function ClientErrorMessage({anonymous} : {anonymous : boolean}) 
 
                     <div className="modal-body">
                         <ul className="list-group list-group-flush">
-                            {clientError && clientError.messages.map(error => 
-                            <li className="list-group-item">{error.message}</li>
+                            {clientError && clientError.messages.map((error, index) => 
+                            <li key={index} className="list-group-item">{error.message}</li>
                             )}
                         </ul>    
                     </div>

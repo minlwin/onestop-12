@@ -1,4 +1,4 @@
-import type { PageSearch } from "../../client/_instance";
+import type { PageSearch } from "..";
 
 export type MemberSearch = {
   planId?: number;

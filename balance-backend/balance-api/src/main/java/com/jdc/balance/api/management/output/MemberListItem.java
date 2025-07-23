@@ -6,6 +6,7 @@ import com.jdc.balance.domain.entity.Account_;
 import com.jdc.balance.domain.entity.Member;
 import com.jdc.balance.domain.entity.Member_;
 import com.jdc.balance.domain.entity.SubscriptionPlan_;
+import com.jdc.balance.domain.entity.Subscription_;
 
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -30,8 +31,8 @@ public record MemberListItem(
 			root.get(Member_.address),
 			root.get(Member_.enabledDate),
 			root.get(Member_.account).get(Account_.expiredAt),
-			root.get(Member_.plan).get(SubscriptionPlan_.id),
-			root.get(Member_.plan).get(SubscriptionPlan_.name)
+			root.get(Member_.subscription).get(Subscription_.plan).get(SubscriptionPlan_.id),
+			root.get(Member_.subscription).get(Subscription_.plan).get(SubscriptionPlan_.name)
 		);
 	}
 

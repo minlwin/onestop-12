@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.Data;
@@ -32,5 +33,9 @@ public class Member extends AuditableEntity{
 	private String address;
 	
 	@ManyToOne
+	private Subscription subscription;
+	
+	@ManyToOne
+	@JoinColumn(name = "subscription_plan_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private SubscriptionPlan plan;
 }

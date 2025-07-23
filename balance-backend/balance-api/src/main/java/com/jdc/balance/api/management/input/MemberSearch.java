@@ -11,6 +11,7 @@ import com.jdc.balance.domain.entity.Account_;
 import com.jdc.balance.domain.entity.Member;
 import com.jdc.balance.domain.entity.Member_;
 import com.jdc.balance.domain.entity.SubscriptionPlan_;
+import com.jdc.balance.domain.entity.Subscription_;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
@@ -27,7 +28,7 @@ public record MemberSearch(
 		var list = new ArrayList<Predicate>();
 		
 		if(null != planId) {
-			list.add(cb.equal(root.get(Member_.plan)
+			list.add(cb.equal(root.get(Member_.subscription).get(Subscription_.plan)
 					.get(SubscriptionPlan_.id), planId));
 		}
 		

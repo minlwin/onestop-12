@@ -1,4 +1,4 @@
-package com.jdc.balance.api.management.output;
+package com.jdc.balance.common.dto;
 
 import com.jdc.balance.domain.entity.SubscriptionPlan;
 
@@ -12,7 +12,15 @@ public record PlanInfo(
 		Integer monthlyEntry) {
 	
 	public PlanInfo(SubscriptionPlan entity) {
-		this(entity.getId(), entity.getName(), entity.getMonths(), entity.getFees(), entity.getMaxLedgers(), entity.getDailyEntry(), entity.getMonthlyEntry());
+		this(
+			entity.getId(), 
+			entity.getName(), 
+			entity.getMonths(), 
+			entity.getFees(), 
+			entity.getMaxLedgers(), 
+			entity.getDailyEntry(), 
+			entity.getMonthlyEntry()
+		);
 	}
 
 }

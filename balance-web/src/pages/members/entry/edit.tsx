@@ -8,11 +8,14 @@ import FormError from "../../../ui/form-error";
 import { createEntry, findEntryById, updateEntry } from "../../../model/client/member/ledger-entry-client";
 import { useEffect } from "react";
 
-const BLANK_ITEM:Readonly<LedgerEntryItem> = {item: '', remark: '', quantity: 0, unitPrice: 0}
+const BLANK_ITEM:LedgerEntryItem = {item: '', remark: '', quantity: 0, unitPrice: 0}
 
 const getTotal = (item: LedgerEntryItem) => {
-    const total = item.unitPrice * item.quantity
-    return total ? total : 0
+    if(item) {
+        const total = item.unitPrice * item.quantity
+        return total ? total : 0
+    }
+    return 0
 }
 
 const getAllTotal = (items : LedgerEntryItem[]) => items.map(getTotal).reduce((a, b) => a + b)
@@ -65,7 +68,7 @@ export default function LedgerEntryEdit() {
 
     async function save(form: LedgerEntryForm) {
         const respose = query.get("id") ? await updateEntry(query.get("id"), form) : await createEntry(form)
-        if(respose && respose.success && respose.id) {
+        if(respose && respose.id) {
             navigate(`/member/balance/${respose.id.requestId}`)
         }
     }

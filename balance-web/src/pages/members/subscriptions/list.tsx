@@ -2,21 +2,26 @@ import { useEffect, useState } from "react";
 import Page from "../../../ui/page";
 import type { SubscriptionListItem } from "../../../model/dto/member/subscription";
 import type { SubscriptionPlanListItem } from "../../../model/dto/member/subscription-plan";
-import { searchPlan } from "../../../model/client/member/subscription-plan-client";
 import { searchSubscription } from "../../../model/client/member/subscription-client";
 import Card from "../../../ui/card";
 import { Link } from "react-router";
 import { getCurrentPlan } from "../../../model/client/member/member-profile-client";
+import { useMemberPlanContext } from "../../../model/provider/member-plan-context";
+import PlanInfo from "../../../ui/plan-info";
+import { limitValue } from "../../../model/utils";
 
 export default function MemberSubscriptions() {
 
     const [plans, setPlans] = useState<AvailablePlan[]>([])
     const [history, setHistory] = useState<SubscriptionListItem[]>([])
+    const planMaster = useMemberPlanContext()
+
+    const applied = history.find(a => a.status == 'Pending')
 
     useEffect(() => {
 
         async function load() {
-            const planList = await searchPlan()
+            const planList = planMaster.plans
             const subscriptionResult = await searchSubscription({
                 page: 0,
                 size: 10
@@ -48,13 +53,19 @@ export default function MemberSubscriptions() {
         }
 
         load()
-    }, [setPlans, setHistory])
+    }, [setPlans, setHistory, planMaster])
 
     return (
-        <Page title="Subscriptions" icon={<i className="bi-shield"></i>}>
+        <Page title="Subscriptions" icon={<i className="bi-flag"></i>}>
             
-            <section className="mb-5">
-                <AvailablePlans plans={plans} />
+            {applied && 
+            <div className="alert alert-info">
+                You had applied {applied.planName} plan. Please wait for approvment.
+            </div>
+            }
+
+            <section className="mb-4">
+                <AvailablePlans applied={applied != undefined} plans={plans} />
             </section>
 
             <section>
@@ -76,11 +87,7 @@ type AvailablePlan = {
     current: boolean
 }
 
-function AvailablePlans({plans} : {plans : AvailablePlan[]}) {
-
-    function limitValue(value: number) {
-        return value < 0 ? "Unlimited" : value.toLocaleString()
-    }
+function AvailablePlans({applied, plans} : {applied : boolean, plans : AvailablePlan[]}) {
 
     return (
         <>
@@ -88,7 +95,7 @@ function AvailablePlans({plans} : {plans : AvailablePlan[]}) {
 
             <div className="row row-cols-3">
             {plans.map(plan => 
-                <div className="col">
+                <div key={plan.planId} className="col">
                     <Card icon={<i className="bi-shield me-2"></i>} title={`${plan.planName} Plan`} >
                         <div className="list-group list-group-flush">
                             <PlanInfo name="Max Ledger" value={limitValue(plan.maxLedger)} />
@@ -104,7 +111,7 @@ function AvailablePlans({plans} : {plans : AvailablePlan[]}) {
                                 <span className="btn btn-outline-secondary"><i className="bi-check-circle"></i> Current Plan</span>
                             }
                             </div>
-                            <Link to={`/member/subscription/${plan.planId}`} className={`btn btn-secondary ${plan.defaultPlan ? 'disabled' : ''}`} >
+                            <Link to={`/member/subscription/${plan.planId}`} className={`btn btn-secondary ${plan.defaultPlan || applied ? 'disabled' : ''}`} >
                                 <i className="bi-cart-plus"></i> Subscribe
                             </Link>
                         </div>
@@ -113,15 +120,6 @@ function AvailablePlans({plans} : {plans : AvailablePlan[]}) {
             )}    
             </div>
         </>
-    )
-}
-
-function PlanInfo({name, value} : {name: string, value: string | number}) {
-    return (
-        <div className={`d-flex justify-content-between list-group-item`}>
-            <label>{name}</label>
-            <span>{value}</span>
-        </div>
     )
 }
 
@@ -138,7 +136,7 @@ function SubscriptionHistory({history} : {history: SubscriptionListItem[]}) {
                         <th>Expired At</th>
                         <th>Status</th>
                         <th>Change At</th>
-                        <th>Reason</th>
+                        <th></th>
                     </tr>
                 </thead>
 
@@ -150,7 +148,11 @@ function SubscriptionHistory({history} : {history: SubscriptionListItem[]}) {
                         <td>{item.expiredAt}</td>
                         <td>{item.status}</td>
                         <td>{item.statusChangeAt}</td>
-                        <td>{item.reason}</td>
+                        <td className="text-center">
+                            <Link to={`/member/subscription/details/${item.id.code}`} className="icon-link">
+                                <i className="bi-arrow-right"></i>
+                            </Link>
+                        </td>
                     </tr>
                 )}    
                 </tbody>

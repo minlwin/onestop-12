@@ -13,8 +13,10 @@ export default function SignUp() {
 
     async function signUp(form:SignUpForm) {
         const response = await signUpRequest(form)
-        setAuth(response)
-        navigate(`/${response.role.toLocaleLowerCase()}`)
+        if(response) {
+            setAuth(response)
+            navigate(`/${response.role.toLocaleLowerCase()}`)
+        }
     }
 
     return (

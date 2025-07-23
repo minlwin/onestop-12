@@ -1,4 +1,4 @@
-import type { PageSearch } from "../../client/_instance"
+import type { PageSearch } from ".."
 import type { LedgerType } from "../../constants"
 
 export type LedgerEntryPk = {

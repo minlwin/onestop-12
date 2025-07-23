@@ -60,7 +60,6 @@ public class SignUpService {
 		member = memberRepo.create(member);
 		
 		var defaultPlan = defaultPlans.getFirst();
-		member.setPlan(defaultPlan);
 		account.setExpiredAt(LocalDate.now().plusMonths(defaultPlan.getMonths()));
 		
 		var pk = new SubscriptionPk();
@@ -75,10 +74,13 @@ public class SignUpService {
 		subscription.setUsage(Usage.Urgent);
 		
 		subscription.setStartAt(LocalDate.now());
+		subscription.setExpiredAt(LocalDate.now().plusMonths(defaultPlan.getMonths()));
+
 		subscription.setStatus(Status.Approved);
 		subscription.setStatusChangeAt(LocalDateTime.now());
 		
-		subscriptionRepo.create(subscription);
+		subscription = subscriptionRepo.create(subscription);
+		member.setSubscription(subscription);
 		
 		return member;
 	}

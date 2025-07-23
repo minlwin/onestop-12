@@ -41,7 +41,7 @@ public class LimitValidationAspects {
 	@Before("serviceClasses() && requireEntryLimit()")
 	public void checkEntryLimit() {
 		var member = getMember();
-		var plan = member.getPlan();
+		var plan = member.getSubscription().getPlan();
 		
 		// Check Expiration
 		if(LocalDate.now().isAfter(member.getAccount().getExpiredAt())) {
@@ -65,7 +65,7 @@ public class LimitValidationAspects {
 	public void checkLedgerLimit() {
 		var member = getMember();
 		
-		var plan = member.getPlan();
+		var plan = member.getSubscription().getPlan();
 		
 		// Check Expiration
 		if(LocalDate.now().isAfter(member.getAccount().getExpiredAt())) {

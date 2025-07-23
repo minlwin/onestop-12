@@ -27,7 +27,10 @@ public class Subscription extends AuditableEntity{
 	private SubscriptionPlan plan;
 	
 	@ManyToOne
+	@JoinColumn(name = "previous_plan_id", referencedColumnName = "id")
 	private SubscriptionPlan previousPlan;
+	private LocalDate previousPlanAppliedAt;
+	private LocalDate previousPlanStartAt;
 	private LocalDate previousPlanExpiredAt;
 	
 	@ManyToOne(optional = false)
@@ -38,6 +41,7 @@ public class Subscription extends AuditableEntity{
 	private Usage usage;
 	
 	private LocalDate startAt;
+	private LocalDate expiredAt;
 	private Status status;
 	private String reason;
 	private LocalDateTime statusChangeAt;

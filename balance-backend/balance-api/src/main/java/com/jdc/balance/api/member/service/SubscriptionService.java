@@ -17,7 +17,6 @@ import com.jdc.balance.api.member.output.SubscriptionListItem;
 import com.jdc.balance.common.dto.ModificationResult;
 import com.jdc.balance.domain.PageResult;
 import com.jdc.balance.domain.embeddable.SubscriptionPk;
-import com.jdc.balance.domain.embeddable.SubscriptionPk_;
 import com.jdc.balance.domain.entity.Subscription;
 import com.jdc.balance.domain.entity.Subscription.Status;
 import com.jdc.balance.domain.entity.Subscription_;
@@ -57,11 +56,16 @@ public class SubscriptionService {
 		id.setMemberId(member.getId());
 		
 		var subscription = new Subscription();
+		subscription.setId(id);
 		subscription.setPlan(plan);
 		subscription.setPayment(paymentMethod);
 		subscription.setMember(member);
 		subscription.setUsage(form.usage());
-		subscription.setPreviousPlan(member.getPlan());
+		
+		subscription.setPreviousPlan(member.getSubscription().getPreviousPlan());
+		subscription.setPreviousPlanAppliedAt(member.getSubscription().getId().getAppliedAt());
+		subscription.setPreviousPlanStartAt(member.getSubscription().getStartAt());
+		subscription.setPreviousPlanExpiredAt(member.getSubscription().getExpiredAt());
 		
 		var slipFileName = storageService.save(id.getCode(), form.slip());
 		subscription.setPaymentSlip(slipFileName);
@@ -93,8 +97,7 @@ public class SubscriptionService {
 			cq.where(search.where(cb, root, username));
 			
 			cq.orderBy(
-				cb.desc(root.get(Subscription_.id).get(SubscriptionPk_.appliedAt)), 
-				cb.asc(root.get(Subscription_.id).get(SubscriptionPk_.planId))
+				cb.desc(root.get(Subscription_.createdAt))
 			);
 			
 			return cq;

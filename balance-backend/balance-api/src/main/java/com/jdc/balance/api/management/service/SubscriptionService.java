@@ -49,7 +49,7 @@ public class SubscriptionService {
 		if((form.status() == Status.Approved && entity.getUsage() == Usage.Urgent) || 
 				(form.status() == Status.Approved && entity.getMember().getAccount().getExpiredAt().isBefore(LocalDate.now())) ) {
 			var member = entity.getMember();
-			member.setPlan(entity.getPlan());
+			member.setSubscription(entity);
 			entity.setStartAt(LocalDate.now());
 			member.getAccount().setExpiredAt(LocalDate.now().plusMonths(entity.getPlan().getMonths()));
 		}

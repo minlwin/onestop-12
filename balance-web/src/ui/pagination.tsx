@@ -1,4 +1,4 @@
-import type { Pager } from "../model/client/_instance";
+import type { Pager } from "../model/dto";
 import InputGroup from "./input-group";
 
 export default function Pagination({pager, sizeChange, pageChange} : {pager?: Pager, sizeChange : (size:number) => void, pageChange : (size:number) => void}) {

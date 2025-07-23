@@ -30,9 +30,8 @@ public class MemberExtensionSchedule {
 		// Update Plan for Members
 		for(var subscription : subscriptions) {
 			var member = subscription.getMember();
-			var plan = subscription.getPlan();
-			member.setPlan(plan);
-			member.getAccount().setExpiredAt(member.getAccount().getExpiredAt().plusMonths(plan.getMonths()));
+			member.setSubscription(subscription);
+			member.getAccount().setExpiredAt(member.getAccount().getExpiredAt().plusMonths(subscription.getPlan().getMonths()));
 			subscription.setStartAt(LocalDate.now());
 		}
 	}

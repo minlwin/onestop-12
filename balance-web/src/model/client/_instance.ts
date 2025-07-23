@@ -20,14 +20,10 @@ export function securedClient() {
         const {auth} = authStore.getState()
     
         if(auth) {
-                config?.headers.set('Authorization', `Bearer ${auth.accessToken}`)
-            }
-            return config
-        }, error => {
-            console.log(error)
-            return Promise.reject(error)
+            config?.headers.set('Authorization', `Bearer ${auth.accessToken}`)
         }
-    )
+        return config
+    })
 
     instance.interceptors.response.use(response => {
         return response
@@ -37,47 +33,20 @@ export function securedClient() {
         const {auth, setAuth} = authStore.getState()
 
         if(error.status == 408 && !originalRequest._retry) {
-            try {
-                originalRequest._retry = true
-                
-                // Refresh token
-                const refreshResult = await refreshToken(auth?.refreshToken || '')
-                setAuth(refreshResult)
+            originalRequest._retry = true
+            
+            // Refresh token
+            const refreshResult = await refreshToken(auth?.refreshToken || '')
+            setAuth(refreshResult)
 
-                // Retry last request
-                instance(originalRequest)
-            } catch(e) {
-                console.log(e)
-                window.location.href = "/"
-            }
+            // Retry last request
+            instance(originalRequest)
+
+            return
         }
 
         return Promise.reject(error)
     })
 
     return instance
-}
-
-export type Pager = {
-    page: number
-    size: number
-    totalCount : number
-    totalPage : number
-    links : number[]
-}
-
-export type PageResult<T> = {
-    contents : T[]
-    pager?: Pager
-}
-
-export type ModificationResult<T> = {
-    success: boolean
-    id?: T
-    message? :string
-}
-
-export type PageSearch = {
-    page: number
-    size: number
 }
