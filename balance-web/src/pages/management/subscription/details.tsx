@@ -16,6 +16,7 @@ export default function SubscriptionDetails() {
     useEffect(() => {
         async function load() {
             const response = await findSubscriptionById(params.code)
+            console.log(response)
             setDetails(response)
         }
 
@@ -50,13 +51,6 @@ export default function SubscriptionDetails() {
                         <Information label="Email" value={details?.email || ''} /> 
                     </Card>
 
-                    {details?.previousPlan &&
-                        <Card title="Previous Plan" className="mb-3">
-                            <Information label="Plan Name" value={details?.previousPlan.name || ''} /> 
-                            <Information label="Expired At" value={details?.prevEndAt || ''} /> 
-                        </Card>
-                    }
-
                     <Card title="Request Plan" className="mb-3">
                         <Information label="Plan Name" value={details?.plan.name || ''} /> 
                         <Information label="Fees" value={details?.plan.fees || '0'} /> 
@@ -65,6 +59,14 @@ export default function SubscriptionDetails() {
                         <Information label="Daily Entry" value={details?.plan.dailyEntry || ''} /> 
                         <Information label="Monthly Entry" value={details?.plan.monthlyEntry || ''} /> 
                     </Card>
+
+                    {details?.previousPlan &&
+                        <Card title="Previous Plan" className="mb-3">
+                            <Information label="Plan Name" value={details?.previousPlan.name || ''} /> 
+                            <Information label="Expired At" value={details?.prevEndAt || ''} /> 
+                        </Card>
+                    }
+
                 </div>
 
                 <div className="col">

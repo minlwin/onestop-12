@@ -62,7 +62,7 @@ public class SubscriptionService {
 		subscription.setMember(member);
 		subscription.setUsage(form.usage());
 		
-		subscription.setPreviousPlan(member.getSubscription().getPreviousPlan());
+		subscription.setPreviousPlan(member.getPlan());
 		subscription.setPreviousPlanAppliedAt(member.getSubscription().getId().getAppliedAt());
 		subscription.setPreviousPlanStartAt(member.getSubscription().getStartAt());
 		subscription.setPreviousPlanExpiredAt(member.getSubscription().getExpiredAt());
