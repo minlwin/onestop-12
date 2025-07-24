@@ -142,7 +142,7 @@ function SubscriptionHistory({history} : {history: SubscriptionListItem[]}) {
 
                 <tbody>
                 {history.map(item => 
-                    <tr key={item.id.appliedAt}>
+                    <tr key={item.id.code}>
                         <td>{item.planName}</td>
                         <td>{item.id.appliedAt}</td>
                         <td>{item.expiredAt}</td>

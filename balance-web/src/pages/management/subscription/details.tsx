@@ -16,7 +16,6 @@ export default function SubscriptionDetails() {
     useEffect(() => {
         async function load() {
             const response = await findSubscriptionById(params.code)
-            console.log(response)
             setDetails(response)
         }
 
@@ -45,12 +44,6 @@ export default function SubscriptionDetails() {
             <div className="row">
 
                 <div className="col-4">
-                    <Card title="Member" className="mb-3" >
-                        <Information label="Name" value={details?.memberName || ''} /> 
-                        <Information label="Phone" value={details?.phone || 'No Phone Number'} /> 
-                        <Information label="Email" value={details?.email || ''} /> 
-                    </Card>
-
                     <Card title="Request Plan" className="mb-3">
                         <Information label="Plan Name" value={details?.plan.name || ''} /> 
                         <Information label="Fees" value={details?.plan.fees || '0'} /> 
@@ -70,6 +63,12 @@ export default function SubscriptionDetails() {
                 </div>
 
                 <div className="col">
+                    <Card title="Member" className="mb-3" >
+                        <Information label="Name" value={details?.memberName || ''} /> 
+                        <Information label="Phone" value={details?.phone || 'No Phone Number'} /> 
+                        <Information label="Email" value={details?.email || ''} /> 
+                    </Card>
+
                     <Card title="Subscription">
                         <Information label="Amount" value={details?.paymentAmount || '0'} /> 
                         <Information label="Payment" value={details?.paymentName || 'No Payment'} /> 
@@ -78,9 +77,7 @@ export default function SubscriptionDetails() {
                         <Information label="Change Reason" value={details?.reason || ''} /> 
                         <Information label="Changed At" value={details?.statusChangeAt || ''} /> 
                         <Information label="Created At" value={details?.createdAt || ''} /> 
-                        <Information label="Created By" value={details?.createdBy || ''} /> 
                         <Information label="Modified At" value={details?.updatedAt || ''} /> 
-                        <Information label="Modified By" value={details?.updatedBy || ''} /> 
                     </Card>
                 </div>
 

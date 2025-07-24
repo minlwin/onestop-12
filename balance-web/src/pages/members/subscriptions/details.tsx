@@ -7,6 +7,8 @@ import Loading from "../../../ui/loading";
 import Card from "../../../ui/card";
 import Information from "../../../ui/information";
 import { NOT_YET } from "../../../model/constants";
+import SlipImage from "../../../ui/slip-image";
+import { usageValue } from "../../../model/utils";
 
 export default function MemberSubscriptionDetails() {
 
@@ -19,6 +21,7 @@ export default function MemberSubscriptionDetails() {
         async function load() {
             if(code) {
                 const response = await findSubscriptionById(code)
+                console.log(response)
                 setDetails(response)
             }
         }
@@ -41,6 +44,7 @@ export default function MemberSubscriptionDetails() {
                             <Information label="Applied At" value={details.currentAppliedAt} />
                             <Information label="Start At" value={details.currentStartAt || NOT_YET} />
                             <Information label="Expired At" value={details.currentStartAt || NOT_YET} />
+                            <Information label="Extension" value={usageValue(details.usage)} />
                         </div>
                     </Card>
 
@@ -59,13 +63,20 @@ export default function MemberSubscriptionDetails() {
 
                 <div className="col">
                     <Card title="Subscription Information" icon={<i className="bi-cart me-2"></i>}>
+                        <Information label="Payment" value={details.payment || ''} />
+                        <Information label="Account No" value={details.accountNo || ''} />
+                        <Information label="Account Name" value={details.accountName || ''} />
+                        <Information label="Fees" value={details.fees || ''} />
+                        <Information label="Status" value={details.status || ''} />
+                        <Information label="Change At" value={details.statusChangeAt || ''} />
+                        <Information label="Change Reason" value={details.reason || ''} />
                     </Card>
                 </div>
 
                 <div className="col-3">
                     <Card title="Palyemt Slip" icon={<i className="bi-filetype-png me-2"></i>}>
                         <div className="mt-4 mb-2">
-                            <span>{details.paymentSlip}</span>
+                            <SlipImage src={details.paymentSlip} />
                         </div>
                     </Card>
                 </div>

@@ -31,6 +31,7 @@ export type SubscriptionDetails = {
     prevStartAt?: string;
     prevEndAt?: string;
     fees: number;
+    payment: string;
     accountNo : string;
     accountName: string;
     paymentSlip: string;
