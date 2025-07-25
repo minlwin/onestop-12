@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import NoData from "../../../ui/no-data";
 import FormGroup from "../../../ui/form-group";
 import { useManagementPlan } from "../../../model/provider/management-plan-context";
-import { SUBSCRIPTION_STATUS_LIST } from "../../../model/constants";
+import { SUBSCRIPTION_STATUS_LIST, type SubscriptionStatus } from "../../../model/constants";
 import { Link } from "react-router";
 import type { PageResult } from "../../../model/dto";
 
@@ -25,15 +25,11 @@ export default function Subscriptions() {
         }
     }
 
-    useEffect(() => {
-        setPage(0)
-    }, [size, setPage])
-
     return (
         <Page icon={<i className="bi-cart-plus"></i>} title="Subscription Management">
             <SearchForm page={page} size={size} onSearch={search} />
 
-            <section className="my-3">
+            <section className="mb-3">
                 <ListView list={contents} />
             </section>
 
@@ -42,57 +38,69 @@ export default function Subscriptions() {
     )
 }
 
-function SearchForm({page, size, onSearch} : {page: number, size: number, onSearch : (form:SubscriptionSearch) => void}) {
+function SearchForm({page = 0, size = 10, onSearch} : {page: number, size: number, onSearch : (form:SubscriptionSearch) => void}) {
     
-    const {handleSubmit, reset, register} = useForm<SubscriptionSearch>()
+    const {handleSubmit, reset, register, getValues} = useForm<SubscriptionSearch>({
+        defaultValues: {status : 'Pending'}
+    })
     const searchForm = useRef<HTMLFormElement | null>(null)
     const {plans} = useManagementPlan()
+    const [status, setStatus] = useState<SubscriptionStatus>('Pending')
 
     useEffect(() => {
         if(searchForm.current) {
-            reset({page : page, size: size})
+            reset({... getValues(),page : page, size: size})
             searchForm.current.requestSubmit()
         }
-    }, [page, size, searchForm, reset])
+    }, [page, size, reset,  getValues])
+
+    useEffect(() => {
+        reset({...getValues(), status : status})
+        searchForm.current?.requestSubmit()
+    }, [status, reset, getValues])
+
 
     return (
-        <form ref={searchForm} onSubmit={handleSubmit(onSearch)} className="row">
-            <FormGroup label="Plan" className="col-auto">
-                <select {...register('planId')} className="form-select">
-                    <option value="">Search All</option>
-                    {plans.map(item => 
-                        <option key={item.id} value={item.id}>{item.name}</option>
-                    )}
-                </select>
-            </FormGroup>
+        <>
+            <ul className="nav nav-tabs">
+                {SUBSCRIPTION_STATUS_LIST.map(item => 
+                    <li key={item} className="nav-item">
+                        <a href="#" onClick={e => {
+                            e.preventDefault()
+                            setStatus(item)
+                        }} className={`nav-link ${status == item && 'active'}`}>{item}</a>
+                    </li>
+                )}
+            </ul>
+            <form ref={searchForm} onSubmit={handleSubmit(onSearch)} className="row p-4">
+                <FormGroup label="Plan" className="col-auto">
+                    <select {...register('planId')} className="form-select">
+                        <option value="">Search All</option>
+                        {plans.map(item => 
+                            <option key={item.id} value={item.id}>{item.name}</option>
+                        )}
+                    </select>
+                </FormGroup>
 
-            <FormGroup label="Status" className="col-auto">
-                <select {...register('status')} className="form-select">
-                    <option value="">Search All</option>
-                    {SUBSCRIPTION_STATUS_LIST.map(item => 
-                        <option key={item} value={item}>{item}</option>
-                    )}
-                </select>
-            </FormGroup>
+                <FormGroup label="Applied From" className="col-auto">
+                    <input {...register('appliedFrom')} type="date" className="form-control" />
+                </FormGroup>
 
-            <FormGroup label="Applied From" className="col-auto">
-                <input {...register('appliedFrom')} type="date" className="form-control" />
-            </FormGroup>
+                <FormGroup label="Applied To" className="col-auto">
+                    <input {...register('appliedTo')} type="date" className="form-control" />
+                </FormGroup>
 
-            <FormGroup label="Applied To" className="col-auto">
-                <input {...register('appliedTo')} type="date" className="form-control" />
-            </FormGroup>
+                <FormGroup label="Keyword" className="col-auto">
+                    <input {...register('keyword')} placeholder="Search Keyword" className="form-control" />
+                </FormGroup>
 
-            <FormGroup label="Keyword" className="col-auto">
-                <input {...register('keyword')} placeholder="Search Keyword" className="form-control" />
-            </FormGroup>
-
-            <div className="col btn-wrapper">
-                <button type="submit" className="btn btn-dark">
-                    <i className="bi-search"></i> Search
-                </button>
-            </div>
-        </form>
+                <div className="col btn-wrapper">
+                    <button type="submit" className="btn btn-dark">
+                        <i className="bi-search"></i> Search
+                    </button>
+                </div>
+            </form>
+        </>
     )
 }
 
