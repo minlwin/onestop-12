@@ -44,6 +44,6 @@ export type SubscriptionDetails = {
 export type SubscriptionForm = {
     planId: number
     paymentId: number
-    slip: File
+    slip?: File
     usage: Usage
 }

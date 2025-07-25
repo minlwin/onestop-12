@@ -28,7 +28,7 @@ export default function SubscriptionApplication() {
     const [currentPlan, setCurrentPlan] = useState<CurrentPlan>()
     const [usages, setUsages] = useState<Usage[]>([])
 
-    const {register, resetField, handleSubmit, formState : {isValid}} = useForm<SubscriptionForm>({mode : 'onTouched'})
+    const {register, setValue, handleSubmit, formState : {isValid}} = useForm<SubscriptionForm>()
     const fileSelectRef = useRef<HTMLInputElement | null>(null)
 
     const [slip, setSlip] = useState<File>()
@@ -47,7 +47,7 @@ export default function SubscriptionApplication() {
     useEffect(() => {
         if(newPlan && currentPlan) {
 
-            resetField("planId", {defaultValue: newPlan.id})
+            setValue("planId", newPlan.id, {shouldValidate : true})
 
             if(newPlan.id != currentPlan.planId && !currentPlan.expired) {
                 // Current
@@ -56,7 +56,11 @@ export default function SubscriptionApplication() {
                 setUsages(['Extend'])
             }
         }
-    }, [currentPlan, newPlan, resetField])
+    }, [currentPlan, newPlan, setValue])
+
+    useEffect(() => {
+        setValue('usage', usages[0], {shouldValidate :true})
+    }, [usages, setValue])
 
     if(!newPlan || (!usages || usages.length == 0)) {
         return (
@@ -74,17 +78,14 @@ export default function SubscriptionApplication() {
     }
 
     function uploadSlip() {
-        resetField("slip", {defaultValue : undefined})
+        setValue('slip', undefined, {shouldValidate :true})
         setSlip(undefined)
         fileSelectRef.current?.click()
     }
 
     function changeSelectedFile(e : React.ChangeEvent<HTMLInputElement>) {
-        resetField("slip", {defaultValue : undefined})
-        setSlip(undefined)
-        
         if(e.target.files?.length) {
-            resetField("slip", {defaultValue : e.target.files[0]})
+            setValue('slip', e.target.files[0], {shouldValidate :true})
             setSlip(e.target.files[0])
         }
     }

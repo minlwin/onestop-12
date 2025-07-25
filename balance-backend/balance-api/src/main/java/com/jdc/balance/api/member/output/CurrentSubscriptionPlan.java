@@ -11,7 +11,7 @@ public record CurrentSubscriptionPlan(
 		LocalDate expiredAt) {
 
 	public boolean isExpired() {
-		return LocalDate.now().isAfter(expiredAt);
+		return null != expiredAt && LocalDate.now().isAfter(expiredAt);
 	}
 	
 	public static CurrentSubscriptionPlan from(Member entity) {

@@ -1,17 +1,25 @@
 import { useParams } from "react-router";
 import Page from "../../../ui/page";
-import { useEffect, useState } from "react";
-import { findSubscriptionById } from "../../../model/client/management/subscription-client";
-import type { SubscriptionDetails } from "../../../model/dto/management/subscription";
+import { useEffect, useRef, useState } from "react";
+import { findSubscriptionById, updateSubscriptionStatus } from "../../../model/client/management/subscription-client";
+import type { SubscriptionDetails, SubscriptionStatusUpdateForm } from "../../../model/dto/management/subscription";
 import Card from "../../../ui/card";
 import Information from "../../../ui/information";
 import type { SubscriptionStatus } from "../../../model/constants";
 import SlipImage from "../../../ui/slip-image";
+import ModalDialogProvider from "../../../model/provider/modal-dialog-provider";
+import ModalDialog from "../../../ui/modal-dialog";
+import { useModalDialogContext } from "../../../model/provider/modal-dialog-context";
+import { useForm } from "react-hook-form";
+import FormGroup from "../../../ui/form-group";
+import FormError from "../../../ui/form-error";
+import Loading from "../../../ui/loading";
 
 export default function SubscriptionDetails() {
 
     const params = useParams()
     const [details, setDetails] = useState<SubscriptionDetails>()
+    const [status, setStatus] = useState<SubscriptionStatus>('Approved')
 
     useEffect(() => {
         async function load() {
@@ -24,9 +32,68 @@ export default function SubscriptionDetails() {
         }
     }, [params, setDetails]) 
 
-    async function updateStatus(status: SubscriptionStatus) {
-        console.log(status)
+
+    async function updateStatus(form:SubscriptionStatusUpdateForm) {
+        const updateResult = await updateSubscriptionStatus(params.code, form)
+        const code = updateResult?.id?.code
+        if(code) {
+            const response = await findSubscriptionById(code)
+            setDetails(response)
+        }
     }
+
+    if(!details) {
+        return (
+            <Loading />
+        )
+    }
+
+    return (
+        <ModalDialogProvider>
+            <SubscriptionDetailsView details={details} setStatus={setStatus}/>
+            <UpdateDialog status={status} save={updateStatus} />
+        </ModalDialogProvider>
+    )
+}
+
+function UpdateDialog({status, save} : {status : SubscriptionStatus, save : (form:SubscriptionStatusUpdateForm) => void}) {
+    
+    const {register, handleSubmit, reset, formState : {errors}} = useForm<SubscriptionStatusUpdateForm>()
+    const formRef = useRef<HTMLFormElement>(null)
+
+    useEffect(() => {
+        reset({status : status, message: ""})
+    }, [status, reset])
+
+    return (
+        <ModalDialog title={`Confirmation`} action={() => {
+                formRef.current?.requestSubmit()
+        }}>
+            <p>{`Do you want to ${status == 'Approved' ? 'approve' : 'deny'}?`}</p>
+            <form ref={formRef} onSubmit={handleSubmit(save)}>
+            {status == 'Denied' && 
+                <FormGroup label="Deny Reason">
+                    <textarea {...register('message', {required : true})} className="form-control" placeholder="Enter Deny Reason"></textarea>                   
+                    {errors.message && <FormError message="Please eneter deny reason." />}
+                </FormGroup>
+            }
+            </form>
+        </ModalDialog>
+    )
+}
+
+function SubscriptionDetailsView({details, setStatus} : {details: SubscriptionDetails, setStatus : (status : SubscriptionStatus) => void}) {
+
+    const {setShow} = useModalDialogContext()
+
+    async function updateStatus(status: SubscriptionStatus) {
+        setStatus(status)
+        setShow(true)
+    }
+
+    useEffect(() => {
+        setShow(false)
+    }, [details, setShow])
 
     return (
         <Page title="Subscription Details" icon={<i className="bi-cart-plus"></i>} actions={

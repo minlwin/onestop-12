@@ -5,7 +5,7 @@ import { refreshToken } from "./anonymous/client";
 export function anonymousClient() {
     return axios.create({
         baseURL: 'http://localhost:8080/anonymous',
-        timeout: 100000
+        timeout: 3000
     })
 }
 
@@ -13,7 +13,7 @@ export function securedClient() {
 
     const instance = axios.create({
         baseURL: 'http://localhost:8080',
-        timeout: 100000
+        timeout: 3000
     })
 
     instance.interceptors.request.use(config => {
