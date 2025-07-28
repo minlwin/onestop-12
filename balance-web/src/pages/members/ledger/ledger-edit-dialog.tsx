@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react"
 import { useForm } from "react-hook-form"
-import { updateLedger, createLedger, searchLedger } from "../../../model/client/member/ledger-client"
+import { updateLedger, createLedger, searchLedger } from "../../../model/client/member/ledger-management-client"
 import { LEDGER_TYPE_LIST } from "../../../model/constants"
 import type { LedgerForm } from "../../../model/dto/member/ledger"
 import { useModalDialogContext } from "../../../model/provider/modal-dialog-context"

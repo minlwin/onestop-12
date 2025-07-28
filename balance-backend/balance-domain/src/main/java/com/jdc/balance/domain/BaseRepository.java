@@ -14,10 +14,13 @@ public interface BaseRepository<T, ID> extends JpaRepository<T, ID>{
 	
 	T create(T entity);
 
+	<R>R searchOne(Function<CriteriaBuilder, CriteriaQuery<R>> queryFunc);
+
 	<R>List<R> search(Function<CriteriaBuilder, CriteriaQuery<R>> queryFunc);
 	
 	<R>PageResult<R> search(
 			Function<CriteriaBuilder, CriteriaQuery<R>> queryFunc,
 			Function<CriteriaBuilder, CriteriaQuery<Long>> countFunc,
 			int page, int size);
+	
 }

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jdc.balance.api.member.input.LedgerForm;
 import com.jdc.balance.api.member.input.LedgerSearch;
 import com.jdc.balance.api.member.output.LedgerListItem;
-import com.jdc.balance.api.member.service.LedgerService;
+import com.jdc.balance.api.member.service.LedgerManagementService;
 import com.jdc.balance.common.dto.ModificationResult;
 import com.jdc.balance.domain.embeddable.LedgerPk;
 
@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("member/{username}/ledger")
 public class LedgerApi {
 	
-	private final LedgerService service;
+	private final LedgerManagementService service;
 
 	@GetMapping
 	@PreAuthorize("authentication.name eq #username")

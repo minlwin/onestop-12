@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class LedgerService {
+public class LedgerManagementService {
 	
 	private final LedgerRepo ledgerRepo;
 	private final MemberRepo memberRepo;

@@ -4,7 +4,7 @@ import Pagination from "../../../ui/pagination";
 import { useForm } from "react-hook-form";
 import type { BalanceReportListItem, BalanceReportSearch } from "../../../model/dto/member/balance-report";
 import NoData from "../../../ui/no-data";
-import { searchBalance } from "../../../model/client/member/balance-report-client";
+import { searchBalance } from "../../../model/client/member/reporting-client";
 import FormGroup from "../../../ui/form-group";
 import { Link } from "react-router";
 import type { PageResult } from "../../../model/dto";

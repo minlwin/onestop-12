@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CutOffDayService {
+public class LedgerEntryCutOffService {
 
 	@Value("${app.cutoff.day.value}")
 	private int cutOffDay;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MemberLedgerContext, type LedgerItem } from "./member-ledger-context";
-import { searchLedger } from "../client/member/ledger-client";
+import { searchLedger } from "../client/member/ledger-management-client";
 import { authStore } from "../store/auth-result.store";
 
 export default function MemberLedgerProvider({children} : {children : React.ReactNode}) {

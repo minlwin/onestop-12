@@ -21,6 +21,12 @@ public class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implem
 	}
 
 	@Override
+	public <R> R searchOne(Function<CriteriaBuilder, CriteriaQuery<R>> queryFunc) {
+		var criteriaQuery = queryFunc.apply(em.getCriteriaBuilder());
+		return em.createQuery(criteriaQuery).getSingleResult();
+	}
+
+	@Override
 	public <R> List<R> search(Function<CriteriaBuilder, CriteriaQuery<R>> queryFunc) {
 		var criteriaQuery = queryFunc.apply(em.getCriteriaBuilder());
 		return em.createQuery(criteriaQuery).getResultList();

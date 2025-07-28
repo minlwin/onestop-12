@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jdc.balance.api.member.input.BalanceReportSearch;
 import com.jdc.balance.api.member.output.BalanceReportListItem;
-import com.jdc.balance.api.member.service.BalanceReportService;
+import com.jdc.balance.api.member.service.ReportingService;
 import com.jdc.balance.domain.PageResult;
 
 import lombok.RequiredArgsConstructor;
@@ -17,9 +17,9 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("member/{username}/balance")
-public class BalanceReportApi {
+public class ReportApi {
 
-	private final BalanceReportService service;
+	private final ReportingService service;
 	
 	@GetMapping
 	@PreAuthorize("authentication.name eq #username")

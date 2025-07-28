@@ -44,3 +44,9 @@ export type PlanInfo = {
     dailyEntry: number;      // optional
     monthlyEntry: number;    // optional
 }
+
+export type YearMonthData = {
+    type: 'Yearly' | 'Monthly';
+    year: number;
+    month? : number;
+}

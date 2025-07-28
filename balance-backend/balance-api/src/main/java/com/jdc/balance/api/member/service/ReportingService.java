@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class BalanceReportService {
+public class ReportingService {
 	
 	private final LedgerEntryRepo repo;
 	

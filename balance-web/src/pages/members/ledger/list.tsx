@@ -4,7 +4,7 @@ import type { LedgerForm, LedgerListItem, LedgerSearch } from "../../../model/dt
 import FormGroup from "../../../ui/form-group";
 import { LEDGER_TYPE_LIST } from "../../../model/constants";
 import { useEffect, useRef, useState } from "react";
-import { searchLedger } from "../../../model/client/member/ledger-client";
+import { searchLedger } from "../../../model/client/member/ledger-management-client";
 import NoData from "../../../ui/no-data";
 import ModalDialogProvider from "../../../model/provider/modal-dialog-provider";
 import { useModalDialogContext } from "../../../model/provider/modal-dialog-context";

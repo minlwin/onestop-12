@@ -51,7 +51,7 @@ public class LedgerEntryService {
 
 	private final LedgerEntryIdGenerator idGenerator;
 	private final LedgerEntryItemMapper itemMapper;
-	private final CutOffDayService cutOffDayService;
+	private final LedgerEntryCutOffService cutOffDayService;
 	
 	@LimitEntry
 	@Transactional
