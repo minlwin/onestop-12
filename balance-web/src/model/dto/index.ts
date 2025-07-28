@@ -50,3 +50,13 @@ export type YearMonthData = {
     year: number;
     month? : number;
 }
+
+export type SummaryData = {
+    [key: string]: {
+        [key: string] : number
+    }
+}
+
+export type ProgressData = {
+    [key: string] : number
+}

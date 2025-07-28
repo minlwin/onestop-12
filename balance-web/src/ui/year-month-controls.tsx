@@ -1,40 +1,44 @@
-import { useRef, type ChangeEvent } from "react"
+import { useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import type { YearMonthData } from "../model/dto"
 
 export default function YearMonthControls({years, onChange} : {years: number[], onChange : (data:YearMonthData) => void}) {
 
-    const {register, handleSubmit, setValue} = useForm<YearMonthData>({defaultValues : {type : 'Monthly'}})
-    
+    const {register, handleSubmit, setValue, watch} = useForm<YearMonthData>({defaultValues : {type : 'Monthly'}})
+    const selectedYear = watch('year')
+    const selectedMonth = watch('month')
+    const selectedType = watch('type')
+
     const formRef = useRef<HTMLFormElement | null>(null)
 
-    function changeType(e : ChangeEvent<HTMLSelectElement>) {
+    useEffect(() => {
         const now = new Date()
-        setValue("year", now.getFullYear())
-        
-        if(e.target.value == 'Monthly') {
-            setValue("month", now.getMonth() + 1)
-        } else {
-            setValue("month", undefined)
-        }
+        setValue('year', now.getFullYear())
+        setValue('month', selectedType == "Monthly" ? now.getMonth() + 1 : undefined)
+    }, [selectedType, setValue])
 
-        formRef.current?.requestSubmit()
-    }
+    useEffect(() => {
+        if(selectedYear) {
+            formRef.current?.requestSubmit()
+        }
+    }, [selectedYear, selectedMonth, selectedType])
 
     return (
         <form onSubmit={handleSubmit(onChange)} ref={formRef} className="row g-2">
             <div className="col-auto">
-                <select {...register('year')} onChange={() => formRef.current?.requestSubmit()} className="form-select">
+                <select {...register('year')} className="form-select">
                     {years.map(item => <option key={item} value={item}>{item}</option>)}
                 </select>
             </div>
+            {selectedType == 'Monthly' &&
+                <div className="col-auto">
+                    <select {...register('month')} className="form-select">
+                        {MONTHS.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
+                    </select>
+                </div>
+            }
             <div className="col-auto">
-                <select {...register('month')} onChange={() => formRef.current?.requestSubmit()} className="form-select">
-                    {MONTHS.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
-                </select>
-            </div>
-            <div className="col-auto">
-                <select {...register('type')} onChange={changeType} className="form-select">
+                <select {...register('type')} className="form-select">
                     <option value="Monthly">Monthly</option>
                     <option value="Yearly">Yearly</option>
                 </select>

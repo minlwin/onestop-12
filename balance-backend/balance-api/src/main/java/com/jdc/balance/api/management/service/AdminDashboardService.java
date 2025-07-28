@@ -51,6 +51,9 @@ public class AdminDashboardService {
 			var cq = cb.createQuery(SubscriptionStatusSummary.class);
 			var root = cq.from(Subscription.class);
 			
+			var startDate = data.getStartDate();
+			var endDate = data.getEndDate();
+			
 			cq.multiselect(
 				root.get(Subscription_.status),
 				root.get(Subscription_.plan).get(SubscriptionPlan_.name),
@@ -63,8 +66,8 @@ public class AdminDashboardService {
 			);
 			
 			cq.where(
-				cb.greaterThanOrEqualTo(root.get(Subscription_.createdAt), data.getStartDate().atStartOfDay()),
-				cb.lessThan(root.get(Subscription_.createdAt), data.getEndDate().atStartOfDay())
+				cb.greaterThanOrEqualTo(root.get(Subscription_.id).get(SubscriptionPk_.appliedAt), startDate),
+				cb.lessThan(root.get(Subscription_.id).get(SubscriptionPk_.appliedAt), endDate)
 			);
 			
 			return cq;
@@ -102,8 +105,8 @@ public class AdminDashboardService {
 			);
 
 			cq.where(
-				cb.greaterThanOrEqualTo(root.get(Subscription_.createdAt), start.atStartOfDay()),
-				cb.lessThan(root.get(Subscription_.createdAt), next.atStartOfDay())
+				cb.greaterThanOrEqualTo(root.get(Subscription_.id).get(SubscriptionPk_.appliedAt), start),
+				cb.lessThan(root.get(Subscription_.id).get(SubscriptionPk_.appliedAt), next)
 			);
 
 			return cq;

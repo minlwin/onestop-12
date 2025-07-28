@@ -2,6 +2,7 @@ import { Link, Outlet, useNavigate } from "react-router"
 import { authStore } from "../../model/store/auth-result.store"
 import ManagementPlanProvider from "../../model/provider/management-plan-provider"
 import ClientErrorMessage from "../../ui/client-error-message"
+import BusinessYearContextProvider from "../../model/provider/business-years-context-provider"
 
 export default function AdminLayout() {
     return (
@@ -10,7 +11,9 @@ export default function AdminLayout() {
 
             <main className="container-fluid mt-3">
                 <ManagementPlanProvider>
-                    <Outlet />
+                    <BusinessYearContextProvider>
+                        <Outlet />
+                    </BusinessYearContextProvider>
                 </ManagementPlanProvider>
             </main>
 
@@ -30,7 +33,7 @@ function Navigation() {
     }
 
     return (
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+        <nav className="navbar navbar-expand navbar-light bg-light shadow-sm">
             <div className="container-fluid">
                 <Link className="navbar-brand" to='/admin'>
                     <i className="bi-house"></i> Balance Admin
