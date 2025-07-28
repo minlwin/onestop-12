@@ -60,7 +60,7 @@ function SummaryInformation({data} : {data: Optional<SummaryData>}) {
     const modelList:PieModel[] = refineSummaryData(data)
     return (
         <div className="row row-cols-5 " style={{height : 180}}>
-            {modelList.map((item, index) => 
+            {modelList.filter(item => item.data.length > 0).map((item, index) => 
                 <div key={`Pie-${index}`} className="col">
                     <AppPieChart model={item} />
                 </div>
@@ -113,10 +113,11 @@ function refineProgressData(data : Optional<ProgressData>):BarData[] {
 
 function refineSummaryData(data: Optional<SummaryData>):PieModel[] {
     if(data) {
-        return Object.keys(data).map(item => ({
-            name: item,
-            data: getPieData(item, data)
-        }))
+        return [
+            {name : "Pending", data : getPieData("Pending", data)},
+            {name : "Approved", data : getPieData("Approved", data)},
+            {name : "Denied", data : getPieData("Denied", data)},
+        ]
     }
     return []
 }
