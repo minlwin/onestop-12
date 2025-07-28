@@ -2,7 +2,9 @@ import { Link, Outlet, useNavigate } from "react-router"
 import { authStore } from "../../model/store/auth-result.store"
 import ManagementPlanProvider from "../../model/provider/management-plan-provider"
 import ClientErrorMessage from "../../ui/client-error-message"
-import BusinessYearContextProvider from "../../model/provider/business-years-context-provider"
+import { useEffect, useState } from "react"
+import { getYears } from "../../model/client/management/dashboard-client"
+import { BusinessYearContext } from "../../model/provider/business-years-context"
 
 export default function AdminLayout() {
     return (
@@ -19,6 +21,25 @@ export default function AdminLayout() {
 
             <ClientErrorMessage anonymous={false} />
         </>
+    )
+}
+
+function BusinessYearContextProvider({children} : {children : React.ReactNode}) {
+
+    const [years, setYears] = useState<number[]>([])
+
+    useEffect(() => {
+        async function load() {
+            const response = await getYears()
+            setYears(response || [])
+        }
+        load()
+    }, [])
+
+    return (
+        <BusinessYearContext.Provider value={{years: years, setYears : setYears}}>
+            {children}
+        </BusinessYearContext.Provider>
     )
 }
 

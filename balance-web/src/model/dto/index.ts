@@ -57,6 +57,3 @@ export type SummaryData = {
     }
 }
 
-export type ProgressData = {
-    [key: string] : number
-}

@@ -1,6 +1,7 @@
 package com.jdc.balance.domain;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
@@ -21,9 +22,17 @@ public class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implem
 	}
 
 	@Override
-	public <R> R searchOne(Function<CriteriaBuilder, CriteriaQuery<R>> queryFunc) {
+	public <R> Optional<R> searchOne(Function<CriteriaBuilder, CriteriaQuery<R>> queryFunc) {
 		var criteriaQuery = queryFunc.apply(em.getCriteriaBuilder());
-		return em.createQuery(criteriaQuery).getSingleResult();
+		R result = null;
+		
+		try {
+			result = em.createQuery(criteriaQuery).getSingleResult();
+		} catch (Exception e) {
+			// No result found, return null
+		}
+		
+		return Optional.ofNullable(result);
 	}
 
 	@Override

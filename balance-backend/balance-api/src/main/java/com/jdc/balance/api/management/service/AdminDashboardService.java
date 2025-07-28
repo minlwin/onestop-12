@@ -110,7 +110,7 @@ public class AdminDashboardService {
 			);
 
 			return cq;
-		});
+		}).orElse(0L);
 	}	
 
 }

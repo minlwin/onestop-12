@@ -6,6 +6,9 @@ import ClientErrorMessage from "../../ui/client-error-message"
 import MemberPlanContextProvider from "../../model/provider/member-plan-context-provider"
 import MemberPaymentContextProvider from "../../model/provider/member-payment-context-provider"
 import type React from "react"
+import { useEffect, useState } from "react"
+import { getYears } from "../../model/client/member/dashboard-client"
+import { BusinessYearContext } from "../../model/provider/business-years-context"
 
 export default function MembersLayout() {
     return (
@@ -13,13 +16,34 @@ export default function MembersLayout() {
             <Navigation />
 
             <MasterDataProvider>
-                <main className="container-fluid mt-3 pb-3">
-                    <Outlet />
-                </main>
+                <BusinessYearContextProvider>
+                    <main className="container-fluid mt-3 pb-3">
+                        <Outlet />
+                    </main>
+                </BusinessYearContextProvider>
             </MasterDataProvider>
 
             <ClientErrorMessage anonymous={false} />
         </>
+    )
+}
+
+function BusinessYearContextProvider({children} : {children : React.ReactNode}) {
+
+    const [years, setYears] = useState<number[]>([])
+
+    useEffect(() => {
+        async function load() {
+            const response = await getYears()
+            setYears(response || [])
+        }
+        load()
+    }, [])
+
+    return (
+        <BusinessYearContext.Provider value={{years: years, setYears : setYears}}>
+            {children}
+        </BusinessYearContext.Provider>
     )
 }
 
@@ -45,7 +69,7 @@ function Navigation() {
     }
 
     return (
-        <nav className="navbar bg-secondary navbar-expand navbar-dark">
+        <nav className="navbar bg-light navbar-expand shadow-sm">
             <div className="container-fluid">
                 <Link to="/member" className="navbar-brand">
                     <i className="bi-bar-chart"></i> My Balance

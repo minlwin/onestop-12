@@ -1,4 +1,5 @@
-import type { ApiResponse, ProgressData, SummaryData, YearMonthData } from "../../dto";
+import type { ApiResponse, SummaryData, YearMonthData } from "../../dto";
+import type { ProgressData } from "../../dto/management/dashboard";
 import { handleError } from "../_error_handler";
 import { securedClient } from "../_instance";
 

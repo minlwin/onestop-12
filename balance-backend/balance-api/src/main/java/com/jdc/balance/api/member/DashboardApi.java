@@ -1,7 +1,6 @@
 package com.jdc.balance.api.member;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -11,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jdc.balance.api.member.output.MemberProgress;
 import com.jdc.balance.api.member.service.DashboardService;
 import com.jdc.balance.common.dto.YearMonthData;
-import com.jdc.balance.domain.entity.Ledger.Type;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,7 +37,7 @@ public class DashboardApi {
 	
 	@GetMapping("progress")
 	@PreAuthorize("authentication.name eq #username")
-	Map<Type, Map<LocalDate, BigDecimal>> getProgress(@PathVariable String username, YearMonthData data) {
+	List<MemberProgress> getProgress(@PathVariable String username, YearMonthData data) {
 		return service.getProgress(username, data);
 	}
 

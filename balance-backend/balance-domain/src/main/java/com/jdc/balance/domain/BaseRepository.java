@@ -1,6 +1,7 @@
 package com.jdc.balance.domain;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +15,7 @@ public interface BaseRepository<T, ID> extends JpaRepository<T, ID>{
 	
 	T create(T entity);
 
-	<R>R searchOne(Function<CriteriaBuilder, CriteriaQuery<R>> queryFunc);
+	<R>Optional<R> searchOne(Function<CriteriaBuilder, CriteriaQuery<R>> queryFunc);
 
 	<R>List<R> search(Function<CriteriaBuilder, CriteriaQuery<R>> queryFunc);
 	
